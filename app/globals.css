@@ -8,7 +8,7 @@
   /* Цвета */
   color-scheme: light;
   --bg: #f6f7f9;
-  --text: #212121;
+  --text: #555555;
   --muted: #6b7280;
   --accent: #1f7a8c;
   --accent-2: #145362; /* используется в hover и лентах */
@@ -62,7 +62,7 @@ body,
 #__next {
   min-height: 100%;
   margin: 0 auto;
-  max-width: var(--container);
+  max-width: var(--);
 }
 
 body {
@@ -109,6 +109,30 @@ a:focus-visible,
 
 ::selection {
   background: rgba(31, 122, 140, 0.18);
+}
+
+summary {
+  display: block;
+}
+
+summary:hover {
+  cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::marker {
+  color: var(--accent);
+}
+
+summary::before {
+  content: '➡ ';
+}
+
+details[open] > summary::before {
+  content: '⬇ ';
 }
 
 /*
@@ -173,18 +197,25 @@ h6 {
 }
 .page-title {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
+  font-style: italic;
   color: var(--text);
 }
 .page-sub {
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
+  font-style: italic;
   color: var(--text);
+}
+.page-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 /*
 ===========================================================
-––––––––––––––––CONTAINERS, BLOCKS, LAYOUT–––––––––––––––––
+––––––––––––––––S, BLOCKS, LAYOUT–––––––––––––––––
 ===========================================================
 */
 #__next {
@@ -195,16 +226,13 @@ h6 {
   row-gap: 20px;
 }
 
-.app-main {
+main {
   display: flex;
-  flex-direction: column;
   gap: 20px;
-}
-
-.container {
-  width: 100%;
+  flex-direction: column;
   max-width: var(--container);
   margin: 0 auto;
+  width: 100%;
 }
 
 .grid {
@@ -218,7 +246,7 @@ h6 {
   border-radius: var(--radius);
   border: var(--border);
   box-shadow: var(--box-shadow);
-  gap: 20px;
+  gap: 10px;
 }
 
 .screen {
@@ -239,16 +267,26 @@ h6 {
   border: 0;
 }
 
-.go-to-action {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: var(--border);
-    box-shadow: var(--box-shadow);
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+.call-to-action {
+  background: var(--gradient);
+  border-radius: var(--radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sub-wrapper {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--gradient);
+  box-shadow: var(--box-shadow);
 }
 
 /*
@@ -261,10 +299,20 @@ h6 {
   margin-bottom: 6px;
   color: var(--muted);
 }
-.input,
+.input {
+  width: 100%;
+  padding: 0px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: #fafbfc;
+  transition: border-color var(--transition), box-shadow var(--transition),
+    background var(--transition);
+  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+}
 .textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 10px 14px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: #fafbfc;
@@ -333,6 +381,7 @@ h6 {
   transition: background var(--transition), color var(--transition), box-shadow var(--transition),
     transform var(--transition);
   cursor: pointer;
+  line-height: 1;
 }
 .pill:hover {
   box-shadow: 0 6px 16px var(--shadow);
@@ -363,12 +412,13 @@ h6 {
   z-index: 100;
   width: 100%;
   inset-inline: 0;
-  background: var(--card);
+  background: var(--gradient);
   box-shadow: var(--box-shadow);
-  border: var(--border);
+  border-bottom: var(--border);
   padding: 20px;
   border-radius: var(--radius);
-  transition: background-color 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease, backdrop-filter 0.5s ease,
+    background 0.5s ease;
 }
 .header-inner {
   display: flex;
@@ -385,7 +435,7 @@ h6 {
 }
 
 .is-scrolled {
-  background: #ffffffee;
+  background: (var(--gradient), 0.5);
   backdrop-filter: blur(2px) saturate(180%);
   border-radius: 0px 0px 10px 10px;
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2), inset 0 4px 20px rgba(255, 255, 255, 0.3);
@@ -922,7 +972,7 @@ h6 {
 .pricing__hero {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .pricing__hero-title {
@@ -936,7 +986,7 @@ h6 {
 .pricing__hero-sub {
   display: block;
   font-size: 14px;
-  opacity: 0.5;
+  color: var(--muted);
 }
 
 /* Сервисная карточка */
@@ -1489,7 +1539,7 @@ h6 {
 
 /* footer */
 @media (max-width: 860px) {
-  .container-footer {
+  .-footer {
     justify-content: center;
     padding: 10px;
     text-align: center;

@@ -436,14 +436,14 @@ export function PricingClient() {
       {/* Титульный лист страницы */}
       <section className='card about__section about__section--soft'>
         <div className='pricing__hero'>
-          <h1 className='pricing__hero-title'>
-            <span className='pricing__hero-main'>
-              Прайс — выберите услуги и получите предварительный расчёт
-            </span>
-            <span className='pricing__hero-sub'>
-              <b>Кликабельно!</b> (нажмите на соответствующую услугу)
-            </span>
-          </h1>
+          <h1 className='page-title'>Прайс — выберите услуги и получите предварительный расчёт</h1>
+          <h2 className='page-sub'>
+            Для расчета стоимости работ и материалов, просто нажмите на соответствующую карточку,
+            все расчеты будут произведены ниже автоматически, с учетом выбранных Вами услуг!
+          </h2>
+          <p className='page-text'>
+            Чтобы учесть параметры выезда нажмите соответсвующий переключатель ниже
+          </p>
           <div className='pricing__region'>
             <button
               type='button'
@@ -516,12 +516,18 @@ export function PricingClient() {
 
       {/* Калькулятор — БЕЗ блока «Монтаж / Демонтаж» (только карточки) */}
       <section className='card about__section'>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Установите параметры полотна</h2>
+        </div>
         <div className='card'>
           <div className='calc grid'>
             {/* Размеры */}
             <div className='calc-field'>
-              <label className='label'>Ширина двери (в мм)</label>
+              <label htmlFor='field-1' className='label'>
+                Ширина полотна (в мм)
+              </label>
               <input
+                id='field-1'
                 suppressHydrationWarning
                 className='input'
                 type='number'
@@ -541,8 +547,11 @@ export function PricingClient() {
             </div>
 
             <div className='calc-field'>
-              <label className='label'>Высота двери (в мм)</label>
+              <label htmlFor='field-2' className='label'>
+                Высота полотна (в мм)
+              </label>
               <input
+                id='field-2'
                 suppressHydrationWarning
                 className='input'
                 type='number'
@@ -566,8 +575,11 @@ export function PricingClient() {
 
             {/* Кромка (отключится автоматически при стекле с включённым фацетом) */}
             <div className='calc-field'>
-              <label className='label'>Тип кромки зеркала</label>
+              <label htmlFor='field-3' className='label'>
+                Тип кромки зеркала
+              </label>
               <select
+                id='field-3'
                 suppressHydrationWarning
                 className='input'
                 value={state.edgeType}
@@ -597,8 +609,11 @@ export function PricingClient() {
             </div>
 
             <div className='calc-field'>
-              <label className='label'>Периметр кромки (в м)</label>
+              <label htmlFor='field-4' className='label'>
+                Периметр кромки (в м)
+              </label>
               <input
+                id='field-4'
                 suppressHydrationWarning
                 className='input'
                 type='number'
@@ -691,7 +706,7 @@ export function PricingClient() {
 
       {/* Форма заявки с расчетом */}
       <section className='card about__section'>
-        <div className='container'>
+        <div className=''>
           <QuoteLeadForm quote={quotePayload} />
         </div>
       </section>

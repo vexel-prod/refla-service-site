@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import 'app/globals.css'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
+import CallToActionSection from 'components/CallToActionSection'
 import './globals.css'
 import { Manrope, Nunito_Sans } from 'next/font/google'
 
@@ -26,7 +27,6 @@ export const metadata: Metadata = {
   description: 'REFLA — установка зеркал на входные двери. Красиво, безопасно, быстро.',
   icons: {
     icon: [
-      { url: '/favicon.ico' },
       {
         url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪞</text></svg>",
       },
@@ -38,11 +38,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='ru' data-theme='light'>
       <body className={`${manrope.variable} ${nunito.variable}`}>
-        <main className='container app-main'>
+        <main>
           <Header />
           {children}
           <SpeedInsights />
           <Analytics />
+          <CallToActionSection />
           <Footer />
         </main>
       </body>

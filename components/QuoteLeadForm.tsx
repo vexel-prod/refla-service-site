@@ -157,8 +157,9 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
           />
         </label>
       </div>
-
-      <h2 className='quoteform__title'>Оформить заявку с расчётом</h2>
+      <div className='sub-wrapper'>
+        <h2 className='page-sub'>Оформить заявку с расчётом</h2>
+      </div>
 
       <div className='quoteform__grid'>
         <div>

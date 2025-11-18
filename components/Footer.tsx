@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
-    <footer className='container container-footer footer__inner'>
+    <footer className='footer__inner'>
       <p className='footer-text'>
         <b className='brand-text'>REFLA</b> – установка зеркал на входные двери, все права защищены
         © {year} г. Created by «vexel»

@@ -44,7 +44,7 @@ export default function Header() {
 
   return (
     <header className={`header ${scrolled ? 'is-scrolled' : ''}`}>
-      <div className='container header-inner'>
+      <div className=' header-inner'>
         {/* Лого */}
         {onHome ? (
           <span className='header-logo' aria-current='page'>
@@ -100,7 +100,7 @@ export default function Header() {
 
       {/* Мобильное меню */}
       <div className={`mobile-menu ${open ? 'open' : ''}`}>
-        <div className='container'>
+        <div className=''>
           <Link
             href='/about/'
             onClick={() => setOpen(false)}

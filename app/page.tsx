@@ -1,17 +1,6 @@
 // pages/index.tsx
 import Link from 'next/link'
 
-export const lastBlock = (
-  <section className='go-to-action'>
-    <h2 className='home__pitch-title title-font'>Готовы обсудить проект?</h2>
-    <p className='home__pitch-subtitle'>
-      Оставьте заявку — мы предложим оптимальное решение под вашу дверь и интерьер.
-    </p>
-    <Link className='button button--outline' href='/request/'>
-      Оставить заявку
-    </Link>
-  </section>
-)
 // Главная страница с плотным контентом без примеров работ
 export default function Home() {
   // Карточки преимуществ
@@ -27,7 +16,7 @@ export default function Home() {
   // Шаги процесса
   const steps: Array<[string, string, string]> = [
     ['1', 'Заявка', 'Оставляете заявку — перезваниваем, обсуждаем задачу.'],
-    ['2', 'Замер', 'Приезжаем в удобное время, учитываем геометрию и фурнитуру двери.'],
+    ['2', 'Замер', 'Приезжаем в удобное время, учитываем геометрию и фурнитуру полотна.'],
     ['3', 'Подбор', 'Рекомендуем стекло, кромку и крепёж под ваш интерьер.'],
     ['4', 'Монтаж', 'Аккуратно ставим в согласованный день. Обычно 2–3 часа.'],
   ]
@@ -135,7 +124,7 @@ export default function Home() {
   // FAQ
   const faqs: Array<{ q: string; a: string }> = [
     {
-      q: 'Сколько стоит зеркало на дверь?',
+      q: 'Сколько стоит зеркало?',
       a: 'От 4 890 ₽/м² — точная стоимость зависит от размеров, кромки и монтажа. Вы можете рассчитать примерную стоимость в калькуляторе на странице «Прайс».',
     },
     {
@@ -143,7 +132,7 @@ export default function Home() {
       a: 'Да. Подбираем крепёж и клей с учётом материала полотна, веса зеркала и условий эксплуатации.',
     },
     {
-      q: 'Сколько занимает монтаж?',
+      q: 'Сколько времени займет монтаж?',
       a: 'Обычно – 2-3 часа. В сложных случаях (фацет, дополнительные работы) – занимает до 7-8 часов под ключ.',
     },
     {
@@ -157,7 +146,7 @@ export default function Home() {
       {/* HERO */}
       <section className='card home__hero about__section--soft'>
         <div className='home__hero-head'>
-          <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
+          <h1 className='page-title'>Зеркала на различные полотна под ключ</h1>
           <div className='home__hero-badges'>
             <span className='home-badge home-badge--city'>СПБ и область</span>
             <span className='home-badge home-badge--fast'>Быстрый монтаж</span>
@@ -165,7 +154,7 @@ export default function Home() {
           </div>
         </div>
 
-        <p className='home__hero-text'>
+        <p className='page-text'>
           Преобразите прихожую: визуально расширим пространство, подберём безопасное стекло,
           аккуратно смонтируем. Работаем чисто и быстро.
         </p>
@@ -188,7 +177,9 @@ export default function Home() {
 
       {/* Почему с нами удобно */}
       <section className='card home__why'>
-        <h2 className='page-sub'>Почему с нами удобно</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Почему с нами удобно</h2>
+        </div>
         <div className='grid'>
           {features.map(([title, text], i) => (
             <div key={i} className='card home__why-item home-ribbon'>
@@ -202,7 +193,9 @@ export default function Home() {
 
       {/* Как мы работаем — 4 шага */}
       <section className='card home__why'>
-        <h2 className='page-sub'>Как мы работаем</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Как мы работаем</h2>
+        </div>
         <div className='grid'>
           {steps.map(([num, title, text]) => (
             <div key={num} className='card home__why-item'>
@@ -230,11 +223,13 @@ export default function Home() {
 
       {/* Отзывы (текстовые) */}
       <section className='card home__why'>
-        <h2 className='page-sub'>Отзывы клиентов</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Отзывы клиентов</h2>
+        </div>
         <div className='grid'>
           {reviews.slice(0, 7).map((r, i) => (
             <blockquote key={i} className='card home__why-item'>
-              <p className='home__why-item-text'>«{r.text}»</p>
+              <p className='page-text'>«{r.text}»</p>
               <cite className='about__review-author' style={{ display: 'block' }}>
                 {r.name}
               </cite>
@@ -245,7 +240,9 @@ export default function Home() {
 
       {/* FAQ — на details/summary, без JS */}
       <section className='card home__why'>
-        <h2 className='page-sub'>Частые вопросы</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Частые вопросы</h2>
+        </div>
         <div className='grid'>
           {faqs.map((f, i) => (
             <details key={i} className='card home__why-item'>
@@ -257,9 +254,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* Заключительный призыв */}
-      {lastBlock}
     </div>
   )
 }

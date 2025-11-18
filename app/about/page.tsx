@@ -1,4 +1,3 @@
-import { lastBlock } from 'app/page'
 import type { Metadata } from 'next'
 
 // Страница «О нас» — с бейджами, цветными плашками и живыми элементами
@@ -74,12 +73,11 @@ export default function About() {
     <div className='home home__grid'>
       {/* О нас, описание, миссия */}
       <section className='card about__section about__section--soft'>
-        <h1 className='about__title'>
-          REFLA – команда мастеров, которая превращает входную дверь в элегантную и функциональную
+        <h1 className='page-title'>
+          REFLA – команда мастеров, которая превращает Ваше полотно в элегантную и функциональную
           деталь интерьера.
         </h1>
-        <h2 className='about__section-title title-font'>Миссия и ценности:</h2>
-        <p className='about__text'>
+        <p className='page-text'>
           Наша миссия — сделать прихожую Вашего дома стильной, удобной и безопасной, ценим качество,
           честность и индивидуальный подход. Мы работаем с разными типами полотен и покрытий,
           подбираем безопасные крепёжные решения и учитываем особенности вашего пространства.
@@ -88,7 +86,9 @@ export default function About() {
 
       {/* Цифры и факты — карточки с лентами */}
       <section className='card about__section'>
-        <h2 className='about__section-title title-font'>Цифры и факты</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Цифры и факты</h2>
+        </div>
         <div className='grid'>
           {stats.map((s, i) => (
             <div key={i} className='card about__stat about-ribbon'>
@@ -103,13 +103,15 @@ export default function About() {
 
       {/* Как мы работаем — «дорожка» шагов */}
       <section className='card about__section'>
-        <h2 className='about__section-title title-font'>Как мы работаем</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Как мы работаем</h2>
+        </div>
         <ol className='about-steps'>
           {steps.map(([title, text], i) => (
             <li key={i} className='about-step card'>
               <div className='about-step__head'>
                 <span className='about-step__num'>{i + 1}</span>
-                <div className='about-step__title title-font'>{title}</div>
+                <p className='about-step__title title-font'>{title}</p>
               </div>
               <div className='about-step__text'>{text}</div>
             </li>
@@ -119,7 +121,9 @@ export default function About() {
 
       {/* Материалы и безопасность — со «галочками» */}
       <section className='card about__section'>
-        <h2 className='about__section-title title-font'>Материалы и безопасность</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Материалы и безопасность</h2>
+        </div>
         <ul className='about__list about-list'>
           <li>Закалённое и тонированное стекло, полировка или фацетная кромка.</li>
           <li>Надёжные крепления с учётом геометрии двери и расположения фурнитуры.</li>
@@ -129,9 +133,11 @@ export default function About() {
 
       {/* Команда / ценности — мини-карточки с акцентной кромкой */}
       <section className='card about__section'>
-        <h2 className='about__section-title title-font'>Команда</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Команда</h2>
+        </div>
         <div className='about__team'>
-          <p className='about__text'>
+          <p className='page-text'>
             В нашей команде — мастера со стекольным, мебельным и отделочным опытом. Мы ценим
             аккуратность, работаем с ювелирной точностью и внимательно относимся к деталям.
           </p>
@@ -159,19 +165,18 @@ export default function About() {
 
       {/* Отзывы — карточки с цитатной кавычкой */}
       <section className='card about__section'>
-        <h2 className='about__section-title title-font'>Отзывы клиентов</h2>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Отзывы клиентов</h2>
+        </div>
         <div className='grid'>
           {reviews.map((r, i) => (
             <blockquote key={i} className='card about__review about-quote'>
-              <p className='about__review-text'>«{r.text}»</p>
+              <p className='page-text'>«{r.text}»</p>
               <cite className='about__review-author title-font'>{r.name}</cite>
             </blockquote>
           ))}
         </div>
       </section>
-
-      {/* Финальный CTA */}
-      {lastBlock}
     </div>
   )
 }
