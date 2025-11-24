@@ -1,0 +1,98 @@
+.callToAction {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+
+  background: var(--gradient);
+  border-radius: var(--radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+}
+
+/* Левая колонка с текстом */
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Заголовок */
+.pageSub {
+  font-size: 18px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--accent-3);
+  margin: 0;
+}
+
+/* Подзаголовок / текст */
+.pageText {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Кнопка */
+.buttonCTA {
+  margin-left: auto; /* толкаем кнопку вправо на десктопе */
+  display: inline-block;
+  padding: 8px 14px;
+
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+
+  transition: transform var(--transition), background var(--transition),
+    box-shadow var(--transition), color var(--transition);
+
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.buttonCTA:hover {
+  background: var(--accent-2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.buttonCTA:active {
+  transform: translateY(0);
+  box-shadow: var(--box-shadow);
+}
+
+/* Мобилка */
+@media (max-width: 860px) {
+  .callToAction {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .textBlock {
+    align-items: center;
+  }
+
+  .pageSub {
+    font-size: 20px;
+  }
+
+  .pageText {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  .buttonCTA {
+    margin-left: 0;
+    width: 100%;
+    padding: 10px 0;
+  }
+}

@@ -1,10 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import QuoteLeadForm from '../../components/QuoteLeadForm.client'
+import QuoteLeadForm from 'components/QuoteLeadForm/QuoteLeadForm'
+import styles from './PricingClient.module.css'
 
 /* ============================================
-   Типы и утилиты
+   Типы
    ============================================ */
 type Region = 'spb' | 'area'
 
@@ -15,21 +16,19 @@ type Price =
   | { kind: 'custom' }
   | { kind: 'na' }
 
-// Базовые сервисы работ
 type BaseServiceId = 'measure' | 'edge' | 'mount' | 'demount'
 
-// Материалы (стекло/зеркала) — ВЗАИМНО ИСКЛЮЧАЮТСЯ
 type GlassId =
-  | 'glass_tempered' // закалённое (изначальный вариант)
-  | 'glass_clear' // простое прозрачное
-  | 'glass_tinted' // тонированное (бронза/графит)
-  | 'glass_satin' // сатин (матированное)
-  | 'glass_pattern' // узор / пескоструй
-  | 'glass_facet_incl' // зеркало с фацетом (фацет включён)
-  | 'glass_acrylic' // акриловое (пластиковое)
-  | 'glass_titanium' // титановое / хромовое
-  | 'glass_aluminum' // алюминиевое
-  | 'glass_silvered' // посеребрённое
+  | 'glass_tempered'
+  | 'glass_clear'
+  | 'glass_tinted'
+  | 'glass_satin'
+  | 'glass_pattern'
+  | 'glass_facet_incl'
+  | 'glass_acrylic'
+  | 'glass_titanium'
+  | 'glass_aluminum'
+  | 'glass_silvered'
 
 type ServiceId = BaseServiceId | GlassId
 
@@ -45,6 +44,9 @@ type Service = {
   kind: 'work' | 'glass'
 }
 
+/* ============================================
+   Утилиты
+   ============================================ */
 const fmt = (n: number) =>
   new Intl.NumberFormat('ru-RU', {
     style: 'currency',
@@ -52,27 +54,52 @@ const fmt = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n)
 
-// Надбавка в области — только на РАБОТЫ (edge/mount/demount), 9%
-const UPLIFT_AREA = 1.09
-const applyAreaUplift = (base: number, region: Region, affects?: boolean, uplift = UPLIFT_AREA) =>
-  region === 'area' && affects ? Math.round(base * uplift) : Math.round(base)
-
-/* ============================================
-   Прайс-лист (карточки)
-   Цены: «чуть ниже средних по рынку СПБ»
-   Для стекла м²: без надбавки по региону
-   ============================================ */
 const RUB_M2 = (amount: number): Price => ({ kind: 'from', amount, unit: 'м²' })
 
+const UPLIFT_AREA = 1.09
+const applyAreaUplift = (base: number, region: Region, affects?: boolean, uf = UPLIFT_AREA) =>
+  region === 'area' && affects ? Math.round(base * uf) : Math.round(base)
+
+const isGlass = (id: ServiceId): id is GlassId =>
+  [
+    'glass_tempered',
+    'glass_clear',
+    'glass_tinted',
+    'glass_satin',
+    'glass_pattern',
+    'glass_facet_incl',
+    'glass_acrylic',
+    'glass_titanium',
+    'glass_aluminum',
+    'glass_silvered',
+  ].includes(id)
+
+function getSelectedGlass(set: Set<ServiceId>): GlassId | null {
+  for (const id of set) {
+    if (isGlass(id)) return id
+  }
+  return null
+}
+
+function getGlassPricePerM2(id: GlassId, region: Region) {
+  const svc = SERVICES.find((s) => s.id === id)!
+  const p = svc.pricing[region]
+  if (p.kind === 'from') return p.amount
+  return 0
+}
+
+/* ============================================
+   ПРАЙС
+   ============================================ */
 const SERVICES: Service[] = [
-  // ==== Работы / выезды ====
+  // работы
   {
     id: 'measure',
     kind: 'work',
     name: 'Замер и консультация',
     pricing: { spb: { kind: 'free' }, area: { kind: 'perKm', rate: 27 } },
-    description: 'Снимем точные размеры и подскажем по материалам/крепежу.',
-    included: ['Замер полотна и проёма', 'Подбор толщины и кромки', 'Черновая смета и сроки'],
+    description: 'Снимаем размеры и даём рекомендации.',
+    included: ['Замер', 'Подбор варианта', 'Черновая смета'],
   },
   {
     id: 'edge',
@@ -82,279 +109,199 @@ const SERVICES: Service[] = [
       spb: { kind: 'from', amount: 870, unit: 'м', affectsArea: true },
       area: { kind: 'from', amount: 870, unit: 'м', affectsArea: true },
     },
-    description: 'Полировка — безопасно и лаконично. Фацет — выразительный акцент.',
-    included: ['Шлифовка и полировка', 'Контроль безопасности торца'],
-    note: 'Фацет рассчитывается по ширине/рисунку отдельно.',
+    description: 'Полировка или фацет.',
   },
   {
     id: 'mount',
     kind: 'work',
-    name: 'Монтаж на дверное полотно',
-    highlight: 'best',
+    name: 'Монтаж',
     pricing: {
       spb: { kind: 'from', amount: 3750, affectsArea: true },
       area: { kind: 'from', amount: 3750, affectsArea: true },
     },
-    description: 'Аккуратная посадка на клей/крепёж, ровно по уровню.',
-    included: ['Подготовка поверхности', 'Разметка', 'Фиксация (клей/скобы/профиль)'],
-    note: 'Зависит от материала и состояния полотна.',
   },
   {
     id: 'demount',
     kind: 'work',
-    name: 'Демонтаж старого зеркала',
+    name: 'Демонтаж',
     pricing: {
       spb: { kind: 'from', amount: 1650, affectsArea: true },
       area: { kind: 'from', amount: 1650, affectsArea: true },
     },
-    description: 'Снимем бережно и подготовим под новый монтаж.',
-    included: ['Защита поверхности', 'Снятие клея/крепежа', 'Подготовка под новое зеркало'],
   },
 
-  // ==== Материалы / зеркала (м²) — эксклюзивный выбор ====
+  // материалы
   {
     id: 'glass_tempered',
     kind: 'glass',
     name: 'Зеркало закалённое',
     pricing: { spb: RUB_M2(6590), area: RUB_M2(6590) },
-    description: 'Безопасное 4–6 мм: устойчиво к перепадам и повседневной нагрузке.',
-    included: ['Оптический класс стекла', 'Контроль геометрии и кромки'],
   },
   {
     id: 'glass_clear',
     kind: 'glass',
-    name: 'Зеркало прозрачное (обычное)',
+    name: 'Прозрачное',
     pricing: { spb: RUB_M2(5490), area: RUB_M2(5490) },
-    description: 'Классическое решение без окраса. Экономично и универсально.',
   },
   {
     id: 'glass_tinted',
     kind: 'glass',
-    name: 'Зеркало тонированное (бронза/графит)',
+    name: 'Тонированное',
     pricing: { spb: RUB_M2(6290), area: RUB_M2(6290) },
-    description: 'Бронзовый, графитовый и другие тона — для мягкого акцента.',
   },
   {
     id: 'glass_satin',
     kind: 'glass',
-    name: 'Зеркало матированное (Satinato)',
+    name: 'Satinato',
     pricing: { spb: RUB_M2(6790), area: RUB_M2(6790) },
-    description: 'Мягкая рассеивающая поверхность, меньше бликов и отпечатков.',
   },
   {
     id: 'glass_pattern',
     kind: 'glass',
-    name: 'Зеркало с узором / пескоструй',
+    name: 'С узором',
     pricing: { spb: RUB_M2(7290), area: RUB_M2(7290) },
-    description: 'Декоративный рисунок, индивидуальный характер входной двери.',
-    note: 'Сложные макеты и маски оцениваются отдельно.',
   },
   {
     id: 'glass_facet_incl',
     kind: 'glass',
-    name: 'Зеркало с фацетом (включён)',
+    name: 'С фацетом (включён)',
     pricing: { spb: RUB_M2(7990), area: RUB_M2(7990) },
-    description: 'Декоративная фаска уже включена в стоимость — без доплаты за кромку.',
-    note: 'При выборе этого варианта «Обработка кромки» отключается.',
   },
   {
     id: 'glass_acrylic',
     kind: 'glass',
-    name: 'Зеркало акриловое (пластиковое)',
+    name: 'Акрил',
     pricing: { spb: RUB_M2(4890), area: RUB_M2(4890) },
-    description: 'Лёгкое и ударостойкое. Хорошо для мест с повышенной безопасностью.',
   },
   {
     id: 'glass_titanium',
     kind: 'glass',
-    name: 'Зеркало титановое / хромовое',
+    name: 'Титановое',
     pricing: { spb: RUB_M2(8890), area: RUB_M2(8890) },
-    description: 'Эффектное отражение с холодным металлическим отливом.',
   },
   {
     id: 'glass_aluminum',
     kind: 'glass',
-    name: 'Зеркало алюминиевое',
+    name: 'Алюминиевое',
     pricing: { spb: RUB_M2(5790), area: RUB_M2(5790) },
-    description: 'Классическая технология напыления. Хорошее соотношение цена/качество.',
   },
   {
     id: 'glass_silvered',
     kind: 'glass',
-    name: 'Зеркало посеребрённое',
+    name: 'Посеребрённое',
     pricing: { spb: RUB_M2(6990), area: RUB_M2(6990) },
-    description: 'Более глубокое отражение, благородный оттенок.',
   },
 ]
 
 /* ============================================
-   Калькулятор (константы/состояние)
+   Калькуляция
    ============================================ */
-type EdgeType = 'polish' | 'facet' | 'none'
-
-type CalcState = {
-  region: Region
-  width: number // допускаем NaN для удобного редактирования
-  height: number
-  edgeType: EdgeType
-  edgeMeters: number // 0 — авто по периметру
-  includeMount: boolean
-  includeDemount: boolean
-  kmFromKAD: number // км в одну сторону
-  selected: Set<ServiceId> // изначально пусто
+function mmToM2(w: number, h: number) {
+  return (Math.max(w, 0) * Math.max(h, 0)) / 1_000_000
 }
 
-const RATE_PER_KM = 27
-const EDGE_FROM = 870
-const FACET_EXTRA = 1.6
-const MOUNT_FROM = 3750
-const DEMOUNT_FROM = 1650
-
-const mmToM2 = (wMm: number, hMm: number) => (Math.max(wMm, 0) * Math.max(hMm, 0)) / 1_000_000
-
-const perimeterMeters = (wMm: number, hMm: number) =>
-  ((Math.max(wMm, 0) + Math.max(hMm, 0)) * 2) / 1000
-
-// Хелперы по материалам
-const isGlass = (id: ServiceId): id is GlassId =>
-  (
-    [
-      'glass_tempered',
-      'glass_clear',
-      'glass_tinted',
-      'glass_satin',
-      'glass_pattern',
-      'glass_facet_incl',
-      'glass_acrylic',
-      'glass_titanium',
-      'glass_aluminum',
-      'glass_silvered',
-    ] as ServiceId[]
-  ).includes(id)
-
-function getGlassPricePerM2(id: GlassId, region: Region): number {
-  const svc = SERVICES.find((s) => s.id === id)!
-  const price = svc.pricing[region]
-  if (price.kind === 'from') return price.amount
-  return 0
-}
-
-function getSelectedGlass(selected: Set<ServiceId>): GlassId | null {
-  for (const id of selected) if (isGlass(id)) return id
-  return null
+function perimeter(w: number, h: number) {
+  return ((Math.max(w, 0) + Math.max(h, 0)) * 2) / 1000
 }
 
 function calcTotal(s: CalcState) {
-  const w = Number.isFinite(s.width) ? (s.width as number) : 0
-  const h = Number.isFinite(s.height) ? (s.height as number) : 0
-  const edgeM = Number.isFinite(s.edgeMeters) ? (s.edgeMeters as number) : 0
-  const km = Number.isFinite(s.kmFromKAD) ? (s.kmFromKAD as number) : 0
+  const m2 = mmToM2(s.width, s.height)
+  const perim = s.edgeMeters > 0 ? s.edgeMeters : perimeter(s.width, s.height)
 
-  const m2 = mmToM2(w, h)
-  const perim = edgeM > 0 ? edgeM : perimeterMeters(w, h)
-
-  // ==== стекло: берём РОВНО ОДИН выбранный материал
-  let glass = 0
   const glassId = getSelectedGlass(s.selected)
+  let glass = 0
   if (glassId) {
     const rate = getGlassPricePerM2(glassId, s.region)
-    glass = Math.max(0, Math.round(m2 * rate)) // без надбавки за регион
+    glass = Math.round(m2 * rate)
   }
 
-  // ==== кромка: если выбран вариант с включенным фацетом — не считаем
-  let edge = 0
   const facetIncluded = glassId === 'glass_facet_incl'
+
+  let edge = 0
   if (!facetIncluded && s.selected.has('edge') && s.edgeType !== 'none') {
-    const base = s.edgeType === 'facet' ? perim * EDGE_FROM * FACET_EXTRA : perim * EDGE_FROM
+    const base = s.edgeType === 'facet' ? perim * 870 * 1.6 : perim * 870
     edge = applyAreaUplift(base, s.region, true)
   }
 
-  // ==== монтаж / демонтаж (выбираются карточками)
-  let mount = 0
-  if (s.selected.has('mount') || s.includeMount) {
-    mount = applyAreaUplift(MOUNT_FROM, s.region, true)
-  }
+  let mount = s.selected.has('mount') ? applyAreaUplift(3750, s.region, true) : 0
+  let demount = s.selected.has('demount') ? applyAreaUplift(1650, s.region, true) : 0
 
-  let demount = 0
-  if (s.selected.has('demount') || s.includeDemount) {
-    demount = applyAreaUplift(DEMOUNT_FROM, s.region, true)
-  }
-
-  // ==== выезд/замер (только область + выбран «Замер»)
   let travel = 0
-  const travelEnabled = s.selected.has('measure') && s.region === 'area'
-  if (travelEnabled) {
-    travel = Math.round(Math.max(km, 0) * RATE_PER_KM * 2)
+  if (s.region === 'area' && s.selected.has('measure')) {
+    travel = Math.round(Math.max(s.kmFromKAD, 0) * 27 * 2)
   }
 
-  const subtotal = glass + edge + mount + demount
-  const total = subtotal + travel
+  const total = glass + edge + mount + demount + travel
 
   return {
     m2,
     perim,
-    facetIncluded,
+    parts: { glass, edge, mount, demount, travel },
     enabled: {
       edge: !!edge,
       mount: !!mount,
       demount: !!demount,
-      travel: travelEnabled,
+      travel: travel > 0,
     },
-    parts: { glass, edge, mount, demount, travel },
-    subtotal,
     total,
   }
 }
 
 /* ============================================
-   Мелкие UI-хелперы
+   Состояние
    ============================================ */
-function Badge({
-  children,
-  tone,
-}: {
-  children: React.ReactNode
-  tone: 'free' | 'from' | 'custom'
-}) {
-  const cls = tone === 'free' ? 'badge-free' : tone === 'custom' ? 'badge-custom' : 'badge-from'
-  return <span className={`badge ${cls}`}>{children}</span>
-}
+type EdgeType = 'polish' | 'facet' | 'none'
 
-function PriceView({ price, region }: { price: Price; region: Region }) {
-  switch (price.kind) {
-    case 'free':
-      return <Badge tone='free'>бесплатно</Badge>
-    case 'custom':
-      return <Badge tone='custom'>индивидуально</Badge>
-    case 'na':
-      return <span className='muted'>—</span>
-    case 'perKm':
-      return (
-        <span className='price'>
-          <strong>{fmt(price.rate)}</strong>
-          <span className='unit'> / км</span>
-        </span>
-      )
-    case 'from': {
-      const val = applyAreaUplift(price.amount, region, price.affectsArea)
-      return (
-        <span className='price'>
-          <Badge tone='from'>от </Badge>
-          <strong>{fmt(val)}</strong>
-          {price.unit ? <span className='unit'> / {price.unit}</span> : null}
-        </span>
-      )
-    }
-  }
+type CalcState = {
+  region: Region
+  width: number
+  height: number
+  edgeType: EdgeType
+  edgeMeters: number
+  includeMount: boolean
+  includeDemount: boolean
+  kmFromKAD: number
+  selected: Set<ServiceId>
 }
 
 /* ============================================
-   Компонент (клиент)
+   UI helpers
+   ============================================ */
+function Badge({ children }: { children: React.ReactNode }) {
+  return <span className={styles.badge}>{children}</span>
+}
+
+function PriceView({ price, region }: { price: Price; region: Region }) {
+  if (price.kind === 'free') return <Badge>бесплатно</Badge>
+  if (price.kind === 'custom') return <Badge>индивидуально</Badge>
+  if (price.kind === 'na') return <span className='muted'>—</span>
+
+  if (price.kind === 'perKm') {
+    return (
+      <span className={styles.price}>
+        <strong>{fmt(price.rate)}</strong>
+        <span className={styles.unit}> / км</span>
+      </span>
+    )
+  }
+
+  const val = applyAreaUplift(price.amount, region, price.affectsArea)
+
+  return (
+    <span className={styles.price}>
+      <span className={styles.pricePart}>от </span>
+      <strong>{fmt(val)}</strong>
+      {price.unit ? <span className={styles.unit}> / {price.unit}</span> : null}
+    </span>
+  )
+}
+
+/* ============================================
+   КОМПОНЕНТ
    ============================================ */
 export function PricingClient() {
   const [region, setRegion] = React.useState<Region>('spb')
 
-  // Старт: ничего не выбрано, итог = 0 ₽. Поля допускают NaN для удобного редактирования.
   const [state, setState] = React.useState<CalcState>({
     region,
     width: 0,
@@ -364,53 +311,81 @@ export function PricingClient() {
     includeMount: false,
     includeDemount: false,
     kmFromKAD: 0,
-    selected: new Set<ServiceId>(),
+    selected: new Set(),
   })
 
   React.useEffect(() => {
     setState((p) => ({ ...p, region }))
   }, [region])
 
-  const res = React.useMemo(() => calcTotal(state), [state])
-  const services = React.useMemo(() => SERVICES, [])
-
-  // Тоггл карточек: материалы — эксклюзивный выбор; «фацет включён» отключает кромку
+  /* ========== ГЛАВНЫЙ ФИКС – НОВЫЙ toggleService (правильный!) ========== */
   function toggleService(id: ServiceId) {
     setState((prev) => {
-      const nextSel = new Set(prev.selected)
+      const next = new Set(prev.selected)
 
-      // Клик по материалу — эксклюзивный выбор
+      // клик по материалу — эксклюзивный
       if (isGlass(id)) {
-        for (const sid of Array.from(nextSel)) if (isGlass(sid)) nextSel.delete(sid)
-        if (!prev.selected.has(id)) nextSel.add(id)
-
-        if (id === 'glass_facet_incl') {
-          nextSel.delete('edge')
-          return { ...prev, selected: nextSel, edgeType: 'none' }
+        for (const sid of next) {
+          if (isGlass(sid)) next.delete(sid)
         }
-        return { ...prev, selected: nextSel }
+
+        if (prev.selected.has(id)) {
+          next.delete(id)
+          return {
+            ...prev,
+            selected: new Set(next),
+            edgeType: prev.edgeType,
+          }
+        }
+
+        next.add(id)
+
+        // выбран материал с фацетом — отключаем edge
+        if (id === 'glass_facet_incl') {
+          next.delete('edge')
+          return { ...prev, selected: new Set(next), edgeType: 'none' }
+        }
+
+        return { ...prev, selected: new Set(next) }
       }
 
-      // Обычный тоггл для работ
-      nextSel.has(id) ? nextSel.delete(id) : nextSel.add(id)
+      // обычная услуга (работы)
+      if (next.has(id)) {
+        next.delete(id)
 
-      // «умные» подстройки
-      let { includeMount, includeDemount, edgeType } = prev
-      if (id === 'edge' && nextSel.has('edge') && edgeType === 'none') edgeType = 'polish'
-      if (id === 'mount' && nextSel.has('mount')) includeMount = true
-      if (id === 'demount' && nextSel.has('demount')) includeDemount = true
+        // если edge снят — обнуляем edgeType
+        if (id === 'edge') {
+          return {
+            ...prev,
+            selected: new Set(next),
+            edgeType: 'none',
+          }
+        }
+
+        return { ...prev, selected: new Set(next) }
+      }
+
+      // ▶ добавляем новую услугу
+      next.add(id)
+
+      let edgeType = prev.edgeType
+      if (id === 'edge' && edgeType === 'none') {
+        edgeType = 'polish'
+      }
 
       return {
         ...prev,
-        selected: nextSel,
-        includeMount,
-        includeDemount,
+        selected: new Set(next),
         edgeType,
       }
     })
   }
 
+  const res = React.useMemo(() => calcTotal(state), [state])
+  const services = React.useMemo(() => SERVICES, [])
+
   const selectedNames = services.filter((s) => state.selected.has(s.id)).map((s) => s.name)
+
   const canSubmit = selectedNames.length >= 1
 
   const safe = (n: number, d = 0) => (Number.isFinite(n) ? n : d)
@@ -420,8 +395,8 @@ export function PricingClient() {
     width: safe(state.width),
     height: safe(state.height),
     edgeType: state.edgeType,
-    includeMount: state.includeMount || state.selected.has('mount'),
-    includeDemount: state.includeDemount || state.selected.has('demount'),
+    includeMount: state.selected.has('mount'),
+    includeDemount: state.selected.has('demount'),
     kmFromKAD: safe(state.kmFromKAD),
     m2: Number(res.m2.toFixed(3)),
     perim: Number(res.perim.toFixed(3)),
@@ -431,30 +406,28 @@ export function PricingClient() {
     canSubmit,
   }
 
+  /* ============================================
+     JSX
+     ============================================ */
   return (
-    <div className='home home__grid'>
-      {/* Титульный лист страницы */}
-      <section className='card about__section about__section--soft'>
-        <div className='pricing__hero'>
-          <h1 className='page-title'>Прайс — выберите услуги и получите предварительный расчёт</h1>
-          <h2 className='page-sub'>
-            Для расчета стоимости работ и материалов, просто нажмите на соответствующую карточку,
-            все расчеты будут произведены ниже автоматически, с учетом выбранных Вами услуг!
-          </h2>
-          <p className='page-text'>
-            Чтобы учесть параметры выезда нажмите соответсвующий переключатель ниже
-          </p>
-          <div className='pricing__region'>
+    <main>
+      <section className='topSection'>
+        <div className={styles.hero}>
+          <h1 className='page-title'>Прайс — выберите услуги для расчёта</h1>
+          <h2 className='page-sub'>Стоимость учитывается автоматически</h2>
+
+          <p className='page-text'>Выберите ваш регион:</p>
+          <div className={styles.region}>
             <button
               type='button'
-              className={`pill ${region === 'spb' ? 'active' : ''}`}
+              className={`${styles.pill} ${region === 'spb' ? styles.pillActive : ''}`}
               onClick={() => setRegion('spb')}
             >
               СПБ
             </button>
             <button
               type='button'
-              className={`pill ${region === 'area' ? 'active' : ''}`}
+              className={`${styles.pill} ${region === 'area' ? styles.pillActive : ''}`}
               onClick={() => setRegion('area')}
             >
               Область
@@ -463,71 +436,50 @@ export function PricingClient() {
         </div>
       </section>
 
-      {/* Кликабельные карточки услуг (и материалов) */}
-      <section className='card about__section'>
-        <div className='pricing__cards'>
+      {/* Карточки услуг */}
+      <section>
+        <div className={styles.cards}>
           {services.map((s) => {
             const price = s.pricing[region]
             const active = state.selected.has(s.id)
+
             return (
               <button
                 key={s.id}
                 type='button'
-                className={`card service ${active ? 'active' : ''}`}
+                className={`${styles.card} ${styles.service} ${active ? styles.serviceActive : ''}`}
                 onClick={() => toggleService(s.id)}
                 aria-pressed={active}
-                aria-label={`${active ? 'Убрать' : 'Выбрать'}: ${s.name}`}
               >
-                {/* {s.highlight ? (
-								<div
-									className={`ribbon ${
-										s.highlight === 'best' ? 'ribbon-best' : 'ribbon-pop'
-									}`}
-								>
-									{s.highlight === 'best' ? 'Лучший выбор' : 'Популярно'}
-								</div>
-							) : null} */}
-
-                <div className='checkmark' aria-hidden>
+                <div className={styles.checkMark} aria-hidden>
                   {active ? '✔' : ''}
                 </div>
 
-                <div className='service-title'>{s.name}</div>
+                <div className={styles.serviceTitle}>{s.name}</div>
+                {s.description && <div className={styles.serviceDesc}>{s.description}</div>}
 
-                {s.description ? <div className='service-desc'>{s.description}</div> : null}
-
-                {s.included?.length ? (
-                  <ul className='included'>
-                    {s.included.map((it, i) => (
-                      <li key={i}>{it}</li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                {s.note ? <div className='note'>ℹ️ {s.note}</div> : null}
-                <div className='service-price'>
+                <div className={styles.servicePrice}>
                   <PriceView price={price} region={region} />
                 </div>
+
+                {s.note && <div className={styles.note}>* {s.note}</div>}
               </button>
             )
           })}
         </div>
       </section>
 
-      {/* Калькулятор — БЕЗ блока «Монтаж / Демонтаж» (только карточки) */}
-      <section className='card about__section'>
+      {/* Калькулятор */}
+      <section>
         <div className='sub-wrapper'>
-          <h2 className='page-sub'>Установите параметры полотна</h2>
+          <h2 className='page-sub'>Параметры полотна</h2>
         </div>
-        <div className='card'>
-          <div className='calc grid'>
-            {/* Размеры */}
-            <div className='calc-field'>
-              <label htmlFor='field-1' className='label'>
-                Ширина полотна (в мм)
-              </label>
+
+        <div>
+          <div className={styles.calc}>
+            <div className={styles.calcField}>
+              <label className='label'>Ширина (мм)</label>
               <input
-                id='field-1'
                 suppressHydrationWarning
                 className='input'
                 type='number'
@@ -535,23 +487,23 @@ export function PricingClient() {
                 max={1200}
                 step={10}
                 value={Number.isFinite(state.width) ? state.width : ''}
-                onChange={(e) => {
-                  const v = e.target.value
-                  setState((p) => ({ ...p, width: v === '' ? NaN : Number(v) }))
-                }}
+                onChange={(e) =>
+                  setState((p) => ({
+                    ...p,
+                    width: e.target.value === '' ? NaN : Number(e.target.value),
+                  }))
+                }
                 onBlur={(e) => {
-                  if (e.target.value === '') setState((p) => ({ ...p, width: 500 }))
+                  if (e.target.value === '') {
+                    setState((p) => ({ ...p, width: 500 }))
+                  }
                 }}
               />
-              <div className='helper'>Обычно 500–800 мм</div>
             </div>
 
-            <div className='calc-field'>
-              <label htmlFor='field-2' className='label'>
-                Высота полотна (в мм)
-              </label>
+            <div className={styles.calcField}>
+              <label className='label'>Высота (мм)</label>
               <input
-                id='field-2'
                 suppressHydrationWarning
                 className='input'
                 type='number'
@@ -559,86 +511,58 @@ export function PricingClient() {
                 max={2300}
                 step={10}
                 value={Number.isFinite(state.height) ? state.height : ''}
-                onChange={(e) => {
-                  const v = e.target.value
-                  setState((p) => ({
-                    ...p,
-                    height: v === '' ? NaN : Number(v),
-                  }))
-                }}
-                onBlur={(e) => {
-                  if (e.target.value === '') setState((p) => ({ ...p, height: 1600 }))
-                }}
-              />
-              <div className='helper'>Обычно 1500–2000 мм</div>
-            </div>
-
-            {/* Кромка (отключится автоматически при стекле с включённым фацетом) */}
-            <div className='calc-field'>
-              <label htmlFor='field-3' className='label'>
-                Тип кромки зеркала
-              </label>
-              <select
-                id='field-3'
-                suppressHydrationWarning
-                className='input'
-                value={state.edgeType}
                 onChange={(e) =>
                   setState((p) => ({
                     ...p,
-                    edgeType: e.target.value as typeof p.edgeType,
+                    height: e.target.value === '' ? NaN : Number(e.target.value),
                   }))
                 }
-                disabled={getSelectedGlass(state.selected) === 'glass_facet_incl'}
-                aria-disabled={getSelectedGlass(state.selected) === 'glass_facet_incl'}
-                title={
-                  getSelectedGlass(state.selected) === 'glass_facet_incl'
-                    ? 'Фацет уже включён в выбранный тип зеркала'
-                    : undefined
-                }
-              >
-                <option value='none'>Без обработки</option>
-                <option value='polish'>Полировка (базово)</option>
-                <option value='facet'>Фацет (декоративно)</option>
-              </select>
-              <div className='helper'>
-                Кромка учитывается в расчёте, если включена карточка «Обработка кромки».
-                {getSelectedGlass(state.selected) === 'glass_facet_incl' &&
-                  ' (для выбранного материала фацет уже включён)'}
-              </div>
+                onBlur={(e) => {
+                  if (e.target.value === '') {
+                    setState((p) => ({ ...p, height: 1600 }))
+                  }
+                }}
+              />
             </div>
 
-            <div className='calc-field'>
-              <label htmlFor='field-4' className='label'>
-                Периметр кромки (в м)
-              </label>
+            {/* Кромка */}
+            <div className={styles.calcField}>
+              <label className='label'>Тип кромки</label>
+              <select
+                suppressHydrationWarning
+                className='input'
+                value={state.edgeType}
+                onChange={(e) => setState((p) => ({ ...p, edgeType: e.target.value as EdgeType }))}
+                disabled={getSelectedGlass(state.selected) === 'glass_facet_incl'}
+              >
+                <option value='none'>Без обработки</option>
+                <option value='polish'>Полировка</option>
+                <option value='facet'>Фацет</option>
+              </select>
+            </div>
+
+            <div className={styles.calcField}>
+              <label className='label'>Периметр (м)</label>
               <input
-                id='field-4'
                 suppressHydrationWarning
                 className='input'
                 type='number'
                 min={0}
                 step={0.1}
                 value={Number.isFinite(state.edgeMeters) ? state.edgeMeters : ''}
-                onChange={(e) => {
-                  const v = e.target.value
+                onChange={(e) =>
                   setState((p) => ({
                     ...p,
-                    edgeMeters: v === '' ? NaN : Number(v),
+                    edgeMeters: e.target.value === '' ? NaN : Number(e.target.value),
                   }))
-                }}
-                onBlur={(e) => {
-                  if (e.target.value === '') setState((p) => ({ ...p, edgeMeters: 0 }))
-                }}
-                disabled={getSelectedGlass(state.selected) === 'glass_facet_incl'}
+                }
               />
-              <div className='helper'>0 — посчитаем по периметру размера</div>
+              <div className='helper'>0 — рассчитывается автоматически</div>
             </div>
 
-            {/* Расстояние — только для «Область» */}
             {region === 'area' && (
-              <div className='calc-field'>
-                <label className='label'>Расстояние от КАД (км, в одну сторону)</label>
+              <div className={styles.calcField}>
+                <label className='label'>Расстояние от КАД (км)</label>
                 <input
                   suppressHydrationWarning
                   className='input'
@@ -646,57 +570,55 @@ export function PricingClient() {
                   min={0}
                   step={1}
                   value={Number.isFinite(state.kmFromKAD) ? state.kmFromKAD : ''}
-                  onChange={(e) => {
-                    const v = e.target.value
+                  onChange={(e) =>
                     setState((p) => ({
                       ...p,
-                      kmFromKAD: v === '' ? NaN : Number(v),
+                      kmFromKAD: e.target.value === '' ? NaN : Number(e.target.value),
                     }))
-                  }}
-                  onBlur={(e) => {
-                    if (e.target.value === '') setState((p) => ({ ...p, kmFromKAD: 0 }))
-                  }}
+                  }
                 />
-                <div className='helper'>
-                  Учитывается, если выбран «Замер» (считаем туда-обратно).
-                </div>
               </div>
             )}
           </div>
 
-          {/* Разбивка суммы */}
-          <div className='breakdown'>
-            {res.parts.glass ? (
-              <div className='line'>
-                <span>Зеркало, ~{res.m2.toFixed(2)} м²</span>
+          {/* Разбивка */}
+          <div className={styles.breakdown}>
+            {res.parts.glass > 0 && (
+              <div className={styles.line}>
+                <span>Зеркало</span>
                 <b>{fmt(res.parts.glass)}</b>
               </div>
-            ) : null}
-            {res.enabled.edge ? (
-              <div className='line'>
-                <span>Кромка, ~{res.perim.toFixed(2)} м</span>
+            )}
+
+            {res.enabled.edge && (
+              <div className={styles.line}>
+                <span>Кромка</span>
                 <b>{fmt(res.parts.edge)}</b>
               </div>
-            ) : null}
-            {res.enabled.mount ? (
-              <div className='line'>
+            )}
+
+            {res.enabled.mount && (
+              <div className={styles.line}>
                 <span>Монтаж</span>
                 <b>{fmt(res.parts.mount)}</b>
               </div>
-            ) : null}
-            {res.enabled.demount ? (
-              <div className='line'>
+            )}
+
+            {res.enabled.demount && (
+              <div className={styles.line}>
                 <span>Демонтаж</span>
                 <b>{fmt(res.parts.demount)}</b>
               </div>
-            ) : null}
-            {res.enabled.travel ? (
-              <div className='line'>
-                <span>Выезд/замер</span>
+            )}
+
+            {res.enabled.travel && (
+              <div className={styles.line}>
+                <span>Выезд</span>
                 <b>{fmt(res.parts.travel)}</b>
               </div>
-            ) : null}
-            <div className='line total'>
+            )}
+
+            <div className={`${styles.line} ${styles.total}`}>
               <span>Итого</span>
               <b>{fmt(res.total)}</b>
             </div>
@@ -704,12 +626,13 @@ export function PricingClient() {
         </div>
       </section>
 
-      {/* Форма заявки с расчетом */}
-      <section className='card about__section'>
-        <div className=''>
-          <QuoteLeadForm quote={quotePayload} />
+      {/* Форма */}
+      <section>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Оформить заявку</h2>
         </div>
+        <QuoteLeadForm quote={quotePayload} />
       </section>
-    </div>
+    </main>
   )
 }

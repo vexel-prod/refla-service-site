@@ -1,0 +1,183 @@
+/* ===== Цифры и факты ===== */
+
+.statsGrid {
+  gap: 20px;
+}
+
+.stat {
+  padding: 18px 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.statValue {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.statLabel {
+  color: var(--muted);
+}
+
+/* ленточка */
+.ribbonStripe {
+  width: 30px;
+  position: absolute;
+  top: -120px;
+  bottom: 0px;
+  right: 0px;
+  transform: rotate(315deg);
+  background: var(--accent);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+/* разные цвета для карточек 2–4 */
+.statsGrid > :nth-child(2) .ribbonStripe {
+  background: var(--accent-3);
+}
+.statsGrid > :nth-child(3) .ribbonStripe {
+  background: #0ea5e9;
+}
+.statsGrid > :nth-child(4) .ribbonStripe {
+  background: #10b981;
+}
+
+/* ===== Шаги (как мы работаем) ===== */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.step {
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.stepHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepNum {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: #eef7fa;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.stepTitle {
+  font-weight: 600;
+}
+
+.stepText {
+  color: var(--muted);
+}
+
+/* ===== Материалы и безопасность (чек-лист) ===== */
+
+.list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.listItem {
+  position: relative;
+  padding-left: 26px;
+  color: var(--muted);
+}
+
+.listItem::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: #ecfdf5;
+  color: #15803d;
+  font-size: 12px;
+}
+
+/* ===== Команда / ценности ===== */
+
+.team {
+  display: grid;
+  gap: 16px;
+}
+
+.teamGrid {
+  gap: 16px;
+}
+
+.valueCard {
+  position: relative;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.valueCardEdge {
+  width: 30px;
+  position: absolute;
+  top: -145px;
+  bottom: 0px;
+  right: 0px;
+  transform: rotate(315deg);
+  background: var(--accent);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.cardTitle {
+  font-size: 16px;
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.aboutText {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ===== Отзывы ===== */
+
+.review {
+  padding: 16px;
+  position: relative;
+  margin: 0;
+}
+
+/* адаптив по мелочи можно при желании сюда добавить */
+@media (max-width: 640px) {
+  .valueCardEdge {
+    width: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: rotate(0deg);
+    background: var(--accent);
+  }
+}

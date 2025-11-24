@@ -2,7 +2,7 @@
 'use client'
 import dynamic from 'next/dynamic'
 
-const QuoteLeadForm = dynamic(() => import('./QuoteLeadForm'), {
+const QuoteLeadForm = dynamic(() => import('components/QuoteLeadForm/QuoteLeadForm'), {
   ssr: false, // 👈 форма рендерится только на клиенте
 })
 

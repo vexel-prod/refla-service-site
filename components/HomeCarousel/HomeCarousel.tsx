@@ -1,10 +1,13 @@
 // components/HomeCarousel.tsx
+'use client'
+
 import * as React from 'react'
 import Link from 'next/link'
-import { GALLERY_ITEMS } from './Gallery' // ⬅️ берём общие данные
+import { GALLERY_ITEMS } from 'components/Gallery/Gallery'
+import styles from './HomeCarousel.module.css'
 
 export default function HomeCarousel() {
-  // Берём первые 5 работ (можешь поменять количество)
+  // Берём первые 5 работ
   const SLIDES = React.useMemo(() => GALLERY_ITEMS.slice(0, 5), [])
 
   const [index, setIndex] = React.useState(0)
@@ -24,6 +27,7 @@ export default function HomeCarousel() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index])
 
   // Тач-свайпы
@@ -68,6 +72,7 @@ export default function HomeCarousel() {
       el.removeEventListener('touchmove', onTouchMove)
       el.removeEventListener('touchend', onTouchEnd)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index])
 
   // Синхронизация transform
@@ -77,21 +82,21 @@ export default function HomeCarousel() {
   }, [index])
 
   return (
-    <section className='card home-carousel' aria-label='Примеры работ'>
-      <div className='home-carousel__viewport'>
-        <div className='home-carousel__track' ref={trackRef}>
+    <section className={`card ${styles.root}`} aria-label='Примеры работ'>
+      <div className={styles.viewport}>
+        <div className={styles.track} ref={trackRef}>
           {SLIDES.map((s, i) => (
-            <figure className='home-carousel__slide' key={i} aria-hidden={i !== index}>
+            <figure className={styles.slide} key={i} aria-hidden={i !== index}>
               <img
-                className='home-carousel__img'
+                className={styles.img}
                 src={s.image}
                 alt={s.title}
                 loading={i === 0 ? 'eager' : 'lazy'}
                 decoding='async'
               />
-              <figcaption className='home-carousel__caption'>
-                <div className='home-carousel__caption-title title-font'>{s.title}</div>
-                <div className='home-carousel__caption-text muted'>{s.description}</div>
+              <figcaption className={styles.caption}>
+                <div className={`${styles.captionTitle} title-font`}>{s.title}</div>
+                <div className={`${styles.captionText} muted`}>{s.description}</div>
               </figcaption>
             </figure>
           ))}
@@ -99,14 +104,14 @@ export default function HomeCarousel() {
 
         {/* Стрелки */}
         <button
-          className='home-carousel__nav home-carousel__nav--prev'
+          className={`${styles.nav} ${styles.navPrev}`}
           onClick={prev}
           aria-label='Предыдущая работа'
         >
           ‹
         </button>
         <button
-          className='home-carousel__nav home-carousel__nav--next'
+          className={`${styles.nav} ${styles.navNext}`}
           onClick={next}
           aria-label='Следующая работа'
         >
@@ -115,21 +120,21 @@ export default function HomeCarousel() {
       </div>
 
       {/* Точки */}
-      <div className='home-carousel__dots' role='tablist' aria-label='Слайды'>
+      <div className={styles.dots} role='tablist' aria-label='Слайды'>
         {SLIDES.map((_, i) => (
           <button
             key={i}
             role='tab'
             aria-selected={i === index}
             aria-label={`Слайд ${i + 1}`}
-            className={`home-carousel__dot ${i === index ? 'is-active' : ''}`}
+            className={`${styles.dot} ${i === index ? styles.dotActive : ''}`}
             onClick={() => go(i)}
           />
         ))}
       </div>
 
       {/* Ссылка на полную галерею */}
-      <div className='home-carousel__more'>
+      <div className={styles.more}>
         <Link href='/examples/'>
           <span className='button button--outline'>Смотреть все примеры</span>
         </Link>

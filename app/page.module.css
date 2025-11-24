@@ -1,0 +1,188 @@
+/* HERO */
+.hero {
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(31, 122, 140, 0.06), rgba(31, 122, 140, 0));
+  pointer-events: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  min-height: 140px;
+}
+
+.cardTitle {
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.cardSubtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.heroHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: column;
+  row-gap: 14px;
+}
+
+/* Бейджи в HERO */
+.heroBadges {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  opacity: 0.5;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  border: var(--border);
+  background: var(--bg);
+}
+
+.badgeCity {
+  background: #eef2ff;
+  color: #3730a3;
+  border-color: #c7d2fe;
+}
+
+.badgeFast {
+  background: #ecfdf5;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.badgeSafe {
+  background: #fff7ed;
+  color: #92400e;
+  border-color: #fed7aa;
+}
+
+/* CTA под HERO */
+.cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Блоки «Почему с нами», «Как мы работаем», отзывы, FAQ */
+.why {
+  padding: 20px;
+}
+
+.whyTitle {
+  font-size: 26px;
+  margin: 0 0 12px;
+}
+
+.whyItem {
+  margin: 0;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  max-height: max-content;
+  min-height: 130px;
+}
+
+.whyItemTitle {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.whyItemText {
+  color: var(--muted);
+}
+
+/* Лента (ribbon) на карточках преимуществ */
+.ribbonStripe {
+  width: 30px;
+  position: absolute;
+  top: -145px;
+  bottom: 0px;
+  right: 0px;
+  transform: rotate(315deg);
+  background: var(--accent);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.ribbon {
+  position: relative;
+}
+
+.cardsWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Цвета лент по порядку карточек */
+.grid > .ribbon:nth-child(2) .ribbonStripe {
+  background: var(--accent-2);
+}
+.grid > .ribbon:nth-child(3) .ribbonStripe {
+  background: #0ea5e9;
+}
+.grid > .ribbon:nth-child(4) .ribbonStripe {
+  background: #10b981;
+}
+.grid > .ribbon:nth-child(5) .ribbonStripe {
+  background: #8b5cf6;
+}
+.grid > .ribbon:nth-child(6) .ribbonStripe {
+  background: #f59e0b;
+}
+
+/* Адаптив — то, что касается именно home */
+@media (max-width: 860px) {
+  .whyTitle {
+    font-size: 24px;
+  }
+  .cardsWrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .whyItem {
+    max-height: fit-content;
+    min-height: auto;
+  }
+  .card {
+    gap: 0px;
+    min-height: max-content;
+  }
+  .ribbonStripe {
+    transform: rotate(0deg);
+    left: 0;
+    top: 0;
+    width: 10px;
+  }
+}
+

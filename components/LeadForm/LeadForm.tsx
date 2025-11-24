@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import styles from './LeadForm.module.css'
 
 const API_ENDPOINT = 'https://refla.ru/api/lead.php'
 
@@ -88,7 +89,7 @@ export default function LeadForm() {
         setContact('')
         setAddress('')
         setComment('')
-        ftRef.current = Date.now() // обновим таймстамп для повторной отправки
+        ftRef.current = Date.now()
       } else {
         setError(data?.error || `Ошибка отправки (${resp.status}). Попробуйте позже.`)
       }
@@ -102,7 +103,7 @@ export default function LeadForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className='card leadform' noValidate>
+    <form onSubmit={onSubmit} className={`card ${styles.root}`} noValidate>
       {/* honeypot */}
       <div
         style={{
@@ -125,7 +126,7 @@ export default function LeadForm() {
         </label>
       </div>
 
-      <div className='leadform-grid'>
+      <div className={styles.grid}>
         <div>
           <label className='label' htmlFor='name'>
             Ваше имя *
@@ -214,12 +215,12 @@ export default function LeadForm() {
           )}
         </div>
 
-        <div className='leadform-actions'>
+        <div className={styles.actions}>
           <button className='button' type='submit' disabled={!formValid}>
             {loading ? 'Отправка...' : 'Отправить заявку'}
           </button>
           <a
-            className='button telegram-button'
+            className={`button ${styles.telegramButton}`}
             href='https://t.me/refla_bot?start=lead'
             target='_blank'
             rel='noreferrer'
@@ -231,6 +232,7 @@ export default function LeadForm() {
         {success && <div className='success'>{success}</div>}
         {error && <div className='error'>{error}</div>}
       </div>
+
       <div className='helper'>
         * Нажимая «Отправить заявку», вы соглашаетесь с политикой обработки персональных данных.
       </div>

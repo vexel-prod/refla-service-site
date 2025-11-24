@@ -1,4 +1,5 @@
 import * as React from 'react'
+import styles from './QuoteLeadForm.module.css'
 
 type Region = 'spb' | 'area'
 type Parts = {
@@ -134,136 +135,141 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
     }
   }
 
+  /**
+   * ! ===============================================
+   * ?                     RETURN
+   * ! ===============================================
+   */
+
   return (
-    <form onSubmit={onSubmit} className='card quoteform' noValidate>
-      {/* honeypot */}
-      <div
-        style={{
-          position: 'absolute',
-          left: -9999,
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-        }}
-      >
-        <label>
-          Не заполняйте это поле
-          <input
-            suppressHydrationWarning
-            tabIndex={-1}
-            autoComplete='off'
-            value={hp}
-            onChange={(e) => setHp(e.target.value)}
-          />
-        </label>
-      </div>
-      <div className='sub-wrapper'>
-        <h2 className='page-sub'>Оформить заявку с расчётом</h2>
-      </div>
-
-      <div className='quoteform__grid'>
-        <div>
-          <label className='label' htmlFor='name'>
-            Ваше имя *
+    <div>
+      <form onSubmit={onSubmit} noValidate suppressHydrationWarning>
+        {/* honeypot */}
+        <div
+          style={{
+            position: 'absolute',
+            left: -9999,
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+          }}
+        >
+          <label>
+            Не заполняйте это поле
+            <input
+              suppressHydrationWarning
+              tabIndex={-1}
+              autoComplete='off'
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
+            />
           </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='name'
-            required
-            placeholder='Иван'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
         </div>
 
-        <div>
-          <label className='label' htmlFor='contact'>
-            Контакт (телефон или e-mail) *
-          </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='contact'
-            required
-            placeholder='+7 900 000-00-00'
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-          />
-          {!contactValid && contact.trim() !== '' && (
-            <div className='error' style={{ marginTop: 6 }}>
-              Укажите телефон или e-mail.
-            </div>
+        <div className={styles.formWrapper}>
+          <div>
+            <label className='label' htmlFor='name'>
+              Ваше имя *
+            </label>
+            <input
+              suppressHydrationWarning
+              className='input'
+              id='name'
+              required
+              placeholder='Иван'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className='label' htmlFor='contact'>
+              Контакт (телефон или e-mail) *
+            </label>
+            <input
+              suppressHydrationWarning
+              className='input'
+              id='contact'
+              required
+              placeholder='+7 900 000-00-00'
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+            />
+            {!contactValid && contact.trim() !== '' && (
+              <div className='error' style={{ marginTop: 6 }}>
+                Укажите телефон или e-mail.
+              </div>
+            )}
+            <div className='helper'>Мы используем контакт только для связи по заявке.</div>
+          </div>
+
+          <div>
+            <label className='label' htmlFor='address'>
+              Адрес установки *
+            </label>
+            <input
+              suppressHydrationWarning
+              className='input'
+              id='address'
+              required
+              placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className='label' htmlFor='estimate'>
+              Смета (автоматически)
+            </label>
+            <textarea
+              suppressHydrationWarning
+              id='estimate'
+              className='textarea'
+              rows={10}
+              readOnly
+              value={estimate}
+              aria-readonly='true'
+            />
+          </div>
+          <div className='helper'>ℹ смета формируется автоматически из выбранных параметров.</div>
+
+          <div>
+            <label className='label' htmlFor='notes'>
+              Ваши пожелания
+            </label>
+            <textarea
+              suppressHydrationWarning
+              id='notes'
+              className='textarea'
+              rows={6}
+              placeholder='Пожелания к оттенку, срокам и т.д.'
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.leadWrapper}>
+            <button className='button' type='submit' disabled={loading || !quote.canSubmit}>
+              {loading ? 'Отправка...' : 'Отправить заявку'}
+            </button>
+            <a
+              className='button telegram-button'
+              href='https://t.me/refla_bot?start=lead'
+              target='_blank'
+              rel='noreferrer'
+            >
+              Оформить заявку в Telegram
+            </a>
+          </div>
+
+          {!quote.canSubmit && (
+            <div className='error'>Выберите хотя бы одну услугу (например, «Замер»).</div>
           )}
-          <div className='helper'>Мы используем контакт только для связи по заявке.</div>
+          {success && <div className='success'>{success}</div>}
+          {error && <div className='error'>{error}</div>}
         </div>
-
-        <div>
-          <label className='label' htmlFor='address'>
-            Адрес установки *
-          </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='address'
-            required
-            placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className='label' htmlFor='estimate'>
-            Смета (автоматически)
-          </label>
-          <textarea
-            suppressHydrationWarning
-            id='estimate'
-            className='textarea'
-            rows={10}
-            readOnly
-            value={estimate}
-            aria-readonly='true'
-          />
-          <div className='helper'>Смета формируется автоматически из выбранных параметров.</div>
-        </div>
-
-        <div>
-          <label className='label' htmlFor='notes'>
-            Ваши пожелания
-          </label>
-          <textarea
-            suppressHydrationWarning
-            id='notes'
-            className='textarea'
-            rows={6}
-            placeholder='Пожелания к оттенку, срокам и т.д.'
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
-
-        <div className='lead-1'>
-          <button className='button' type='submit' disabled={loading || !quote.canSubmit}>
-            {loading ? 'Отправка...' : 'Отправить заявку'}
-          </button>
-          <a
-            className='button telegram-button'
-            href='https://t.me/refla_bot?start=lead'
-            target='_blank'
-            rel='noreferrer'
-          >
-            Оформить заявку в Telegram
-          </a>
-        </div>
-
-        {!quote.canSubmit && (
-          <div className='error'>Выберите хотя бы одну услугу (например, «Замер»).</div>
-        )}
-        {success && <div className='success'>{success}</div>}
-        {error && <div className='error'>{error}</div>}
-      </div>
-    </form>
+      </form>
+    </div>
   )
 }

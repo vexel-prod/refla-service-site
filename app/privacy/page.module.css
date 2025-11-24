@@ -1,0 +1,18 @@
+.root {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  max-width: var(--container);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 28px;
+  margin-top: 0;
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: 600;
+}

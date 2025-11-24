@@ -1,5 +1,6 @@
-// pages/index.tsx
 import Link from 'next/link'
+import styles from './page.module.css'
+import CallToActionSection from 'components/CallToActionSection/CallToActionSection'
 
 // Главная страница с плотным контентом без примеров работ
 export default function Home() {
@@ -11,22 +12,6 @@ export default function Home() {
     ['Сроки', 'Большинство работ — за 1 день.'],
     ['Гарантия', 'Даём гарантию на монтаж и материалы.'],
     ['Честная смета', 'Прозрачные цены без скрытых платежей.'],
-  ]
-
-  // Шаги процесса
-  const steps: Array<[string, string, string]> = [
-    ['1', 'Заявка', 'Оставляете заявку — перезваниваем, обсуждаем задачу.'],
-    ['2', 'Замер', 'Приезжаем в удобное время, учитываем геометрию и фурнитуру полотна.'],
-    ['3', 'Подбор', 'Рекомендуем стекло, кромку и крепёж под ваш интерьер.'],
-    ['4', 'Монтаж', 'Аккуратно ставим в согласованный день. Обычно 2–3 часа.'],
-  ]
-
-  // Гарантии
-  const guarantees: string[] = [
-    'Гарантия 12 месяцев на монтаж и материалы',
-    'Замер в Санкт-Петербурге — бесплатно',
-    'Прозрачная смета до работ',
-    'Чистый монтаж и бережное отношение к отделке',
   ]
 
   // Отзывы (текстовые)
@@ -141,31 +126,33 @@ export default function Home() {
     },
   ]
 
+  /**
+   * ! ===============================================
+   * ?                     RETURN
+   * ! ===============================================
+   */
+
   return (
-    <div className='home home__grid'>
+    <main>
       {/* HERO */}
-      <section className='card home__hero about__section--soft'>
-        <div className='home__hero-head'>
-          <h1 className='page-title'>Зеркала на различные полотна под ключ</h1>
-          <div className='home__hero-badges'>
-            <span className='home-badge home-badge--city'>СПБ и область</span>
-            <span className='home-badge home-badge--fast'>Быстрый монтаж</span>
-            <span className='home-badge home-badge--safe'>Безопасно</span>
+      <section className='topSection'>
+        <div className={styles.heroHead}>
+          <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
+          <div className={styles.heroBadges}>
+            <span className={`${styles.badge} ${styles.badgeFast}`}>Замер бесплатно в СПБ</span>
+            <span className={`${styles.badge} ${styles.badgeSafe}`}>Быстрый монтаж</span>
+            <span className={`${styles.badge} ${styles.badgeSafe}`}>Гарантия 12 месяцев</span>
+            <span className={`${styles.badge} ${styles.badgeSafe}`}>Индивидуальная смета</span>
+            <span className={`${styles.badge} ${styles.badgeSafe}`}>СПБ и область</span>
           </div>
         </div>
 
         <p className='page-text'>
           Преобразите прихожую: визуально расширим пространство, подберём безопасное стекло,
-          аккуратно смонтируем. Работаем чисто и быстро.
+          аккуратно смонтируем.
         </p>
 
-        <div className='home__chips'>
-          <span className='chip'>Замер бесплатно в СПБ</span>
-          <span className='chip'>Индивидуальная смета</span>
-          <span className='chip'>Гарантия 12 месяцев</span>
-        </div>
-
-        <div className='home__cta'>
+        <div className={styles.cta}>
           <Link className='button' href='/request/'>
             Оставить заявку
           </Link>
@@ -176,59 +163,46 @@ export default function Home() {
       </section>
 
       {/* Почему с нами удобно */}
-      <section className='card home__why'>
+      <section>
         <div className='sub-wrapper'>
-          <h2 className='page-sub'>Почему с нами удобно</h2>
+          <h2 className='page-sub'>Почему с нами удобно:</h2>
         </div>
-        <div className='grid'>
+        <div className={styles.cardsWrapper}>
           {features.map(([title, text], i) => (
-            <div key={i} className='card home__why-item home-ribbon'>
-              <div className='home__why-item-title title-font'>{title}</div>
-              <div className='home__why-item-text'>{text}</div>
-              <span className='home-ribbon__stripe' aria-hidden />
+            <div key={i} className={styles.card}>
+              <div className={styles.cardTitle}>{title}</div>
+              <div className={styles.cardSubtitle}>{text}</div>
+              <span className={styles.ribbonStripe} aria-hidden />
             </div>
           ))}
         </div>
       </section>
 
-      {/* Как мы работаем — 4 шага */}
-      <section className='card home__why'>
+      {/* FAQ — на details/summary, без JS */}
+      <section>
         <div className='sub-wrapper'>
-          <h2 className='page-sub'>Как мы работаем</h2>
+          <h2 className='page-sub'>Частые вопросы:</h2>
         </div>
         <div className='grid'>
-          {steps.map(([num, title, text]) => (
-            <div key={num} className='card home__why-item'>
-              <div className='title-font' aria-hidden>
-                Шаг {num}
-              </div>
-              <div className='home__why-item-title title-font'>{title}</div>
-              <div className='home__why-item-text'>{text}</div>
-            </div>
+          {faqs.map((f, i) => (
+            <details key={i} className={`card ${styles.whyItem}`}>
+              <summary className={`${styles.whyItemTitle} title-font`} role='button'>
+                {f.q}
+              </summary>
+              <div className={styles.whyItemText}>{f.a}</div>
+            </details>
           ))}
         </div>
       </section>
-
-      {/* Гарантии */}
-      {/* <section className='card home__why'>
-				<h2 className='home__why-title'>Наши гарантии</h2>
-				<div className='home__chips'>
-					{guarantees.map((g, i) => (
-						<span key={i} className='chip'>
-							{g}
-						</span>
-					))}
-				</div>
-			</section> */}
 
       {/* Отзывы (текстовые) */}
-      <section className='card home__why'>
+      <section>
         <div className='sub-wrapper'>
-          <h2 className='page-sub'>Отзывы клиентов</h2>
+          <h2 className='page-sub'>Отзывы клиентов:</h2>
         </div>
         <div className='grid'>
           {reviews.slice(0, 7).map((r, i) => (
-            <blockquote key={i} className='card home__why-item'>
+            <blockquote key={i} className={`card ${styles.whyItem}`}>
               <p className='page-text'>«{r.text}»</p>
               <cite className='about__review-author' style={{ display: 'block' }}>
                 {r.name}
@@ -237,23 +211,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* FAQ — на details/summary, без JS */}
-      <section className='card home__why'>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Частые вопросы</h2>
-        </div>
-        <div className='grid'>
-          {faqs.map((f, i) => (
-            <details key={i} className='card home__why-item'>
-              <summary className='home__why-item-title title-font' role='button'>
-                {f.q}
-              </summary>
-              <div className='home__why-item-text'>{f.a}</div>
-            </details>
-          ))}
-        </div>
-      </section>
-    </div>
+      <CallToActionSection />
+    </main>
   )
 }

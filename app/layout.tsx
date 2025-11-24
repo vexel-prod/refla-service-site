@@ -2,9 +2,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import 'app/globals.css'
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import CallToActionSection from 'components/CallToActionSection'
+import Header from 'components/Header/Header'
+import Footer from 'components/Footer/Footer'
 import './globals.css'
 import { Manrope, Nunito_Sans } from 'next/font/google'
 
@@ -36,16 +35,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ru' data-theme='light'>
+    <html lang='ru' data-theme='dark'>
       <body className={`${manrope.variable} ${nunito.variable}`}>
-        <main>
-          <Header />
-          {children}
-          <SpeedInsights />
-          <Analytics />
-          <CallToActionSection />
-          <Footer />
-        </main>
+        <Header />
+        {children}
+        <Footer />
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )

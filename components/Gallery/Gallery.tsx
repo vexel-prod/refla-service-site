@@ -1,4 +1,5 @@
 // components/Gallery.tsx
+import styles from './Gallery.module.css'
 
 type Item = { title: string; image: string; description: string }
 
@@ -67,15 +68,15 @@ export const GALLERY_ITEMS: Item[] = [
   },
 ]
 
-// Оригинальная галерея — без изменений, но теперь использует общий массив
+// Оригинальная галерея — но стили теперь локальные
 export default function Gallery() {
   return (
     <div className='grid'>
       {GALLERY_ITEMS.map((it, idx) => (
-        <figure key={idx} className='card gallery__item'>
-          <img className='gallery__image' src={it.image} alt={it.title} />
-          <figcaption className='gallery__caption'>
-            <div className='gallery__description title-font'>{it.description}</div>
+        <figure key={idx} className={`card ${styles.item}`}>
+          <img className={styles.image} src={it.image} alt={it.title} />
+          <figcaption className={styles.caption}>
+            <div className={`${styles.description} title-font`}>{it.description}</div>
           </figcaption>
         </figure>
       ))}

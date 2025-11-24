@@ -1,0 +1,9 @@
+/* Контейнер страницы */
+.root {
+  display: grid;
+  gap: 20px;
+  max-width: var(--container);
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}

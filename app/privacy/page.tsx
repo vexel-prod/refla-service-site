@@ -1,8 +1,9 @@
+import styles from './page.module.css'
+
 export default function Privacy() {
   return (
-    <article className='card privacy space-y-4'>
-      {/* Заголовок страницы */}
-      <h1 className='privacy__title text-2xl font-bold'>Политика конфиденциальности</h1>
+    <article className={`card ${styles.root}`}>
+      <h1 className={styles.title}>Политика конфиденциальности</h1>
 
       <p>
         Настоящая Политика конфиденциальности разработана в соответствии с Федеральным законом
@@ -10,13 +11,13 @@ export default function Privacy() {
         персональных данных пользователей сайта refla.ru.
       </p>
 
-      <h2 className='text-xl font-semibold'>1. Общие положения</h2>
+      <h2 className={styles.subtitle}>1. Общие положения</h2>
       <p>
         Оператором персональных данных является сайт refla.ru. Используя сайт refla.ru, вы
         соглашаетесь с условиями настоящей Политики.
       </p>
 
-      <h2 className='text-xl font-semibold'>2. Обрабатываемые данные</h2>
+      <h2 className={styles.subtitle}>2. Обрабатываемые данные</h2>
       <ul className='list-disc ml-6 space-y-1'>
         <li>ФИО;</li>
         <li>номер телефона;</li>
@@ -25,7 +26,7 @@ export default function Privacy() {
         <li>техническая информация (IP-адрес, cookies, данные о браузере).</li>
       </ul>
 
-      <h2 className='text-xl font-semibold'>3. Цели обработки данных</h2>
+      <h2 className={styles.subtitle}>3. Цели обработки данных</h2>
       <ul className='list-disc ml-6 space-y-1'>
         <li>обработка заявок и обратная связь с клиентами;</li>
         <li>заключение и исполнение договоров;</li>
@@ -33,20 +34,20 @@ export default function Privacy() {
         <li>улучшение качества сервиса и аналитика посещений сайта.</li>
       </ul>
 
-      <h2 className='text-xl font-semibold'>4. Передача данных третьим лицам</h2>
+      <h2 className={styles.subtitle}>4. Передача данных третьим лицам</h2>
       <p>
         Мы не передаем персональные данные третьим лицам, за исключением случаев, предусмотренных
         законодательством Российской Федерации, а также передачи сообщений в Telegram в рамках
         обработки заявки.
       </p>
 
-      <h2 className='text-xl font-semibold'>5. Сроки хранения</h2>
+      <h2 className={styles.subtitle}>5. Сроки хранения</h2>
       <p>
         Персональные данные хранятся в течение срока, необходимого для достижения целей обработки,
         либо до момента отзыва согласия субъектом персональных данных.
       </p>
 
-      <h2 className='text-xl font-semibold'>6. Права пользователя</h2>
+      <h2 className={styles.subtitle}>6. Права пользователя</h2>
       <p>Вы имеете право:</p>
       <ul className='list-disc ml-6 space-y-1'>
         <li>получать информацию о том, как обрабатываются ваши данные;</li>
@@ -55,20 +56,20 @@ export default function Privacy() {
         <li>обращаться в Роскомнадзор или в суд для защиты своих прав.</li>
       </ul>
 
-      <h2 className='text-xl font-semibold'>7. Меры по защите данных</h2>
+      <h2 className={styles.subtitle}>7. Меры по защите данных</h2>
       <p>
         Мы принимаем необходимые технические и организационные меры для защиты персональных данных
         от неправомерного или случайного доступа, уничтожения, изменения, блокировки, копирования и
         распространения.
       </p>
 
-      <h2 className='text-xl font-semibold'>8. Изменения политики</h2>
+      <h2 className={styles.subtitle}>8. Изменения политики</h2>
       <p>
         Мы можем обновлять настоящую Политику. Новая редакция вступает в силу с момента её
         размещения на сайте refla.ru.
       </p>
 
-      <h2 className='text-xl font-semibold'>9. Контактная информация</h2>
+      <h2 className={styles.subtitle}>9. Контактная информация</h2>
       <p>
         По вопросам, связанным с обработкой персональных данных, вы можете связаться с нами по
         контактам из соответствующего раздела на сайте refla.ru.

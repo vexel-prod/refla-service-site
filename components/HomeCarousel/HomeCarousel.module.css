@@ -1,0 +1,122 @@
+/* components/HomeCarousel.module.css */
+
+.root {
+  overflow: hidden;
+}
+
+/* Вьюпорт */
+.viewport {
+  position: relative;
+  border-radius: var(--radius);
+}
+
+/* Лента слайдов */
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  transition: transform var(--transition);
+  will-change: transform;
+}
+
+/* Слайд */
+.slide {
+  margin: 0;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: var(--card);
+}
+
+/* Картинка */
+.img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Подпись */
+.caption {
+  padding: 12px 14px;
+}
+
+.captionTitle {
+  margin-bottom: 6px;
+}
+
+.captionText {
+  color: var(--muted);
+}
+
+/* Навигационные стрелки */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--card);
+  box-shadow: 0 8px 24px var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nav:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.navPrev {
+  left: 10px;
+}
+
+.navNext {
+  right: 10px;
+}
+
+/* Точки */
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg);
+  transition: transform var(--transition), background var(--transition),
+    border-color var(--transition);
+}
+
+.dotActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.2);
+}
+
+/* Кнопка «Смотреть все» */
+.more {
+  display: flex;
+  justify-content: center;
+  padding: 0 14px 16px 14px;
+}
+
+/* Адаптив — прячем стрелки на мобилках */
+@media (max-width: 640px) {
+  .nav {
+    display: none;
+  }
+}

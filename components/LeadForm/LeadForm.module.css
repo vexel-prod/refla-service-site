@@ -1,0 +1,22 @@
+/* components/LeadForm.module.css */
+
+.root {
+  padding: 18px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.telegramButton {
+  display: inline-block;
+  max-width: fit-content;
+  text-align: center;
+}

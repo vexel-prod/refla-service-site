@@ -1,0 +1,20 @@
+/* components/Gallery.module.css */
+
+.item {
+  overflow: hidden;
+  margin: 0;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.caption {
+  padding: 12px 14px;
+}
+
+.description {
+  margin-bottom: 6px;
+}

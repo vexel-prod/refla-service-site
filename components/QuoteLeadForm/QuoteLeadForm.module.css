@@ -1,0 +1,11 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.leadWrapper {
+  display: flex;
+  text-align: center;
+  gap: 20px;
+}

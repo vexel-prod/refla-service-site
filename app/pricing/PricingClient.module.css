@@ -1,0 +1,160 @@
+/* HERO */
+.hero {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  min-height: 140px;
+}
+
+.region {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pill {
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pillActive {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* Cards grid */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.service {
+  border-radius: var(--radius);
+  text-align: left;
+  cursor: pointer;
+  border: var(--border);
+  background: var(--gradient);
+  box-shadow: var(--box-shadow);
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  transition: all 0.2s;
+  display: flex;
+  max-height: fit-content;
+  position: relative;
+}
+
+.checkMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 25px;
+  height: 25px;
+  border: var(--border);
+
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+
+  transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease,
+    transform 0.25s cubic-bezier(0.35, 0.8, 0.45, 1.2); /* немного упругости */
+}
+
+/* Активная карточка → галка оживает */
+.serviceActive .checkMark {
+  transform: scale(1.35);
+  border-color: var(--accent-3);
+}
+
+.serviceTitle {
+  font-size: 16px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--accent);
+}
+
+.serviceDesc {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.included li {
+  font-size: 14px;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.servicePrice {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff840076;
+}
+
+.pricePart {
+  color: var(--accent);
+}
+
+/* Calculator */
+.calc {
+  display: grid;
+  gap: 20px;
+}
+
+.calcField {
+  display: grid;
+  gap: 6px;
+}
+
+/* Breakdown */
+.breakdown {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.total {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+}
