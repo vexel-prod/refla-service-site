@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 import styles from './QuoteLeadForm.module.css'
 
@@ -39,6 +41,8 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
   const [error, setError] = React.useState<string | null>(null)
   const [hp, setHp] = React.useState('') // honeypot
 
+  const [copyToast, setCopyToast] = React.useState<string | null>(null)
+
   const contactValid = React.useMemo(() => {
     const v = contact.trim()
     if (!v) return false
@@ -79,6 +83,41 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
     ]
     return lines.filter(Boolean).join('\n')
   }, [quote])
+
+  const handleCopyEstimate = React.useCallback(() => {
+    if (!estimate) return
+
+    // Пытаемся через современный API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(estimate)
+        .then(() => {
+          setCopyToast('Смета скопирована в буфер обмена.')
+          setTimeout(() => setCopyToast(null), 2000)
+        })
+        .catch(() => {
+          setCopyToast('Не удалось скопировать смету.')
+          setTimeout(() => setCopyToast(null), 2000)
+        })
+      return
+    }
+
+    // Фоллбек (старые браузеры)
+    try {
+      const textarea = document.getElementById('estimate') as HTMLTextAreaElement | null
+      if (textarea) {
+        textarea.focus()
+        textarea.select()
+        document.execCommand('copy')
+        window.getSelection()?.removeAllRanges()
+        setCopyToast('Смета скопирована в буфер обмена.')
+        setTimeout(() => setCopyToast(null), 2000)
+      }
+    } catch {
+      setCopyToast('Не удалось скопировать смету.')
+      setTimeout(() => setCopyToast(null), 2000)
+    }
+  }, [estimate])
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -142,7 +181,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
    */
 
   return (
-    <div>
+    <section>
       <form onSubmit={onSubmit} noValidate suppressHydrationWarning>
         {/* honeypot */}
         <div
@@ -164,6 +203,9 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
               onChange={(e) => setHp(e.target.value)}
             />
           </label>
+        </div>
+        <div className='sub-wrapper'>
+          <h2 className='page-sub'>Оформить заявку с расчётом</h2>
         </div>
 
         <div className={styles.formWrapper}>
@@ -218,21 +260,44 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
             />
           </div>
 
+          {/* Блок сметы с кнопкой "Скопировать" */}
           <div>
-            <label className='label' htmlFor='estimate'>
-              Смета (автоматически)
-            </label>
-            <textarea
-              suppressHydrationWarning
-              id='estimate'
-              className='textarea'
-              rows={10}
-              readOnly
-              value={estimate}
-              aria-readonly='true'
-            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                marginBottom: 6,
+              }}
+            >
+              <label className='label' htmlFor='estimate' style={{ marginBottom: 0 }}>
+                Смета (автоматически)
+              </label>
+            </div>
+            <div className={styles.relative}>
+              <textarea
+                suppressHydrationWarning
+                id='estimate'
+                className='textarea'
+                rows={10}
+                readOnly
+                value={estimate}
+                aria-readonly='true'
+              />
+              <button
+                type='button'
+                className={`${styles.btnCopy} button button--outline`}
+                onClick={handleCopyEstimate}
+                disabled={loading || !quote.canSubmit}
+                style={{ marginLeft: 'auto', fontSize: 12, padding: '4px 8px' }}
+              >
+                {loading ? 'Копирую...' : 'Скопировать'}
+              </button>
+              {copyToast && <p className={`${styles.absolute} success`}>{copyToast}</p>}
+            </div>
+
+            <div className='helper'>Смета формируется автоматически из выбранных параметров.</div>
           </div>
-          <div className='helper'>ℹ смета формируется автоматически из выбранных параметров.</div>
 
           <div>
             <label className='label' htmlFor='notes'>
@@ -250,17 +315,21 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
           </div>
 
           <div className={styles.leadWrapper}>
-            <button className='button' type='submit' disabled={loading || !quote.canSubmit}>
+            <button
+              className='button button--outline'
+              type='submit'
+              disabled={loading || !quote.canSubmit}
+            >
               {loading ? 'Отправка...' : 'Отправить заявку'}
             </button>
-            <a
-              className='button telegram-button'
+            {/* <a
+              className='button button--outline'
               href='https://t.me/refla_bot?start=lead'
               target='_blank'
               rel='noreferrer'
             >
               Оформить заявку в Telegram
-            </a>
+            </a> */}
           </div>
 
           {!quote.canSubmit && (
@@ -270,6 +339,6 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
           {error && <div className='error'>{error}</div>}
         </div>
       </form>
-    </div>
+    </section>
   )
 }

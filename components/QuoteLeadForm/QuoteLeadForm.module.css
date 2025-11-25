@@ -9,3 +9,26 @@
   text-align: center;
   gap: 20px;
 }
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.btnCopy {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+@media (max-width: 860px) {
+  .button {
+    font-size: 12px;
+  }
+}

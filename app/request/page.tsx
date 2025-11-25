@@ -3,12 +3,13 @@ import styles from './page.module.css'
 
 export default function RequestPage() {
   return (
-    <section className={styles.root}>
-      <div className='card about__section about__section--soft'>
+    <main>
+      <section className='topSection'>
         <h1 className='page-title'>Заявка без калькуляции</h1>
-      </div>
-
-      <LeadForm />
-    </section>
+      </section>
+      <section>
+        <LeadForm />
+      </section>
+    </main>
   )
 }

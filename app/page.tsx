@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styles from './page.module.css'
 import CallToActionSection from 'components/CallToActionSection/CallToActionSection'
+import TypingText from 'components/TypingText/TypingText'
 
 // Главная страница с плотным контентом без примеров работ
 export default function Home() {
@@ -136,28 +137,27 @@ export default function Home() {
     <main>
       {/* HERO */}
       <section className='topSection'>
-        <div className={styles.heroHead}>
-          <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
-          <div className={styles.heroBadges}>
-            <span className={`${styles.badge} ${styles.badgeFast}`}>Замер бесплатно в СПБ</span>
-            <span className={`${styles.badge} ${styles.badgeSafe}`}>Быстрый монтаж</span>
-            <span className={`${styles.badge} ${styles.badgeSafe}`}>Гарантия 12 месяцев</span>
-            <span className={`${styles.badge} ${styles.badgeSafe}`}>Индивидуальная смета</span>
-            <span className={`${styles.badge} ${styles.badgeSafe}`}>СПБ и область</span>
-          </div>
+        <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
+        <div className={styles.heroBadges}>
+          <span className={`${styles.badge} ${styles.badgeFast}`}>Замер бесплатно в СПБ</span>
+          <span className={`${styles.badge} ${styles.badgeSafe}`}>Быстрый монтаж</span>
+          <span className={`${styles.badge} ${styles.badgeSafe}`}>Гарантия 12 месяцев</span>
+          <span className={`${styles.badge} ${styles.badgeSafe}`}>Индивидуальная смета</span>
+          <span className={`${styles.badge} ${styles.badgeSafe}`}>СПБ и область</span>
         </div>
-
-        <p className='page-text'>
-          Преобразите прихожую: визуально расширим пространство, подберём безопасное стекло,
-          аккуратно смонтируем.
-        </p>
+        <TypingText
+          className='page-text'
+          text={
+            'Преобразите прихожую: визуально расширим пространство, подберём безопасное стекло, аккуратно смонтируем.'
+          }
+        />
 
         <div className={styles.cta}>
-          <Link className='button' href='/request/'>
-            Оставить заявку
-          </Link>
           <Link className='button button--outline' href='/pricing/'>
             Рассчитать стоимость
+          </Link>
+          <Link className='button button--outline' href='/request/'>
+            Оставить заявку
           </Link>
         </div>
       </section>

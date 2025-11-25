@@ -4,6 +4,7 @@
   gap: 16px;
 }
 
+/* На всякий, если где-то используешь .card внутри прайса */
 .card {
   display: flex;
   flex-direction: column;
@@ -16,25 +17,29 @@
   min-height: 140px;
 }
 
+/* Регион */
 .region {
   display: flex;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 20px;
 }
 
 .pill {
-  padding: 8px 14px;
+  padding: 4px 8px;
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: var(--border);
+  background: var(--border-color);
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background var(--transition), color var(--transition), transform var(--transition),
+    box-shadow var(--transition), border-color var(--transition);
 }
 
 .pillActive {
   background: var(--accent);
-  color: white;
+  color: var(--bg);
   border-color: var(--accent);
+  box-shadow: 0 8px 18px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Cards grid */
@@ -44,49 +49,138 @@
   gap: 20px;
 }
 
+/* Базовая карточка услуги — спокойный “2.5D” */
 .service {
-  border-radius: var(--radius);
-  text-align: left;
-  cursor: pointer;
-  border: var(--border);
-  background: var(--gradient);
-  box-shadow: var(--box-shadow);
+  position: relative;
+  display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 220px;
+
   padding: 20px;
-  transition: all 0.2s;
-  display: flex;
-  max-height: fit-content;
-  position: relative;
+  border-radius: var(--radius);
+  border: var(--border);
+
+  background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.1), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(249, 115, 22, 0.15), transparent 60%), var(--card);
+
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.55), 0 0 0 1px rgba(15, 23, 42, 0.35);
+
+  cursor: pointer;
+
+  transform: translateY(0);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 160ms ease,
+    background 200ms ease;
 }
 
+/* Лёгкий “блик” сверху — даёт ощущение материала */
+.service::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 1px 1px 55% 1px;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.05) 35%,
+    transparent 100%
+  );
+
+  opacity: 0.7;
+}
+
+/* Тень-основание под карточкой */
+.service::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -10px;
+  height: 16px;
+  border-radius: 999px;
+
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0) 70%);
+
+  filter: blur(4px);
+  opacity: 0.7;
+  transition: opacity 180ms ease, filter 180ms ease, transform 200ms ease;
+}
+
+/* Hover — чуть больше объём, но без драк с глазами */
+@media (hover: hover) and (pointer: fine) {
+  .service:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.7), 0 0 0 1px rgba(148, 163, 184, 0.6);
+  }
+
+  .service:hover::after {
+    opacity: 0.9;
+    filter: blur(6px);
+    transform: translateY(2px);
+  }
+}
+
+/* Выбранная карточка — чуть теплее и тяжелее */
+.serviceActive {
+  border-color: var(--accent-3);
+  box-shadow: 0 22px 46px rgba(15, 23, 42, 0.85), 0 0 0 1px rgba(249, 115, 22, 0.6);
+
+  background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(249, 115, 22, 0.22), transparent 60%), var(--card);
+}
+
+/* Актив + hover — финальный штрих */
+@media (hover: hover) and (pointer: fine) {
+  .serviceActive:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 52px rgba(15, 23, 42, 0.95), 0 0 0 1px rgba(249, 115, 22, 0.75);
+  }
+}
+
+/* Чекбокс-галочка в углу */
 .checkMark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 18px;
+  right: 18px;
 
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
   border: var(--border);
 
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 700;
 
-  transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease,
-    transform 0.25s cubic-bezier(0.35, 0.8, 0.45, 1.2); /* немного упругости */
+  background: var(--bg);
+  backdrop-filter: blur(10px);
+  color: transparent;
+
+  box-shadow: var(--box-shadow);
+
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.marker {
+  color: var(--accent-3);
 }
 
 /* Активная карточка → галка оживает */
 .serviceActive .checkMark {
-  transform: scale(1.35);
-  border-color: var(--accent-3);
+  color: #22c55e;
+  border-color: #22c55e;
+  background: rgba(22, 163, 74, 0.16);
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.5), 0 0 0 1px rgba(34, 197, 94, 0.7);
+  transform: translateY(-1px);
 }
 
+/* Контент карточки */
 .serviceTitle {
   font-size: 16px;
   font-weight: 800;
@@ -109,14 +203,43 @@
   margin-top: 6px;
 }
 
+/* Цена */
 .servicePrice {
+  margin-top: auto;
   font-size: 16px;
   font-weight: 800;
-  color: #ff840076;
+  color: var(--accent-3);
 }
 
 .pricePart {
   color: var(--accent);
+}
+
+/* Маленькая “табличка” цены внутри карточки */
+.price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.unit {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+/* Badge (используется в PriceView) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 15px;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+
+  background: #00cc4f69;
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.7);
 }
 
 /* Calculator */
@@ -151,10 +274,69 @@
   font-weight: 700;
 }
 
+/* Адаптив */
 @media (max-width: 860px) {
   .cards {
-    display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 20px;
+    gap: 16px;
   }
+
+  .service {
+    transform: translateY(0);
+  }
+
+  .pill {
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 0;
+  }
+
+  .pillActive {
+    padding: 2px 26px;
+    font-size: 12px;
+  }
+
+  .pillWrapper {
+    display: flex;
+    border-radius: var(--radius);
+  }
+}
+
+.pillWrapper {
+  position: relative;
+  display: inline-flex;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+}
+
+/* Бегунок */
+.pillSlider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--gradient);
+  border: var(--border);
+  border-radius: var(--radius);
+  z-index: 0;
+
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+/* Кнопки */
+.pill {
+  position: relative;
+  z-index: 2;
+  padding: 2px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 14px;
+  transition: color var(--transition);
+}
+
+/* Активный текст */
+.activeText {
+  color: var(--accent);
 }

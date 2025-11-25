@@ -13,7 +13,7 @@ export default function CallToActionSection() {
         </p>
       </div>
 
-      <Link className={styles.buttonCTA} href='/request/'>
+      <Link className='button button--outline' href='/request/'>
         Оставить заявку
       </Link>
     </section>

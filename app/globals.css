@@ -1,37 +1,42 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
-/* ===============================================
-   TOKENS (ROOT)
-   =============================================== */
+/* ========================================================
+   THEME TOKENS — DARK
+   ======================================================== */
 
-:root {
+:root[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Цвета */
-  --text: #555555;
-  --muted: #6b7280;
-  --accent: #1f7a8c;
-  --accent-2: #145362;
-  --accent-3: #ff840076;
-  --title: #00d3bb;
+  /* Базовые цвета */
+  --page-bg: #020617; /* фон страницы */
+  --block: #020617; /* фон секций */
+  --card: #0b1120; /* фон карточек */
 
-  --card: #272727; /* светлая карточка */
-  --block: #222222; /* тёмный фон секций */
+  --text: #e5e7eb; /* основной текст */
+  --muted: #9ca3af; /* приглушённый текст */
 
-  --border-color: #0000002b;
+  --accent: #38bdf8; /* холодный акцент (кнопки/ссылки) */
+  --accent-2: #0ea5e9; /* hover-акцент */
+  --accent-3: #f97316; /* тёплый акцент (подзаголовки/штрихи) */
+
+  --title: #e5e7eb; /* заголовки */
+
+  --border-color: rgba(148, 163, 184, 0.35);
   --border: 1px solid var(--border-color);
 
-  --shadow: rgba(15, 23, 42, 0.12);
-  --box-shadow: 0 8px 24px var(--shadow);
+  --shadow: rgba(15, 23, 42, 0.7);
+  --box-shadow: 0 18px 45px var(--shadow);
 
   --gradient: linear-gradient(
     135deg,
-    rgba(31, 115, 140, 0.08) 15%,
-    rgba(31, 120, 140, 0.05) 30%,
-    rgba(20, 82, 98, 0.05) 70%,
-    rgba(20, 91, 98, 0.1) 100%
+    rgba(56, 189, 248, 0.07) 0%,
+    rgba(37, 99, 235, 0.06) 40%,
+    rgba(15, 23, 42, 0.95) 100%
   );
+
+  /* --gradient: radial-gradient(circle at 0% 0%, #38bdf826, transparent 50%),
+    radial-gradient(circle at 100% 100%, #f973162e, transparent 55%), var(--card); */
 
   /* Геометрия */
   --radius: 10px;
@@ -45,13 +50,52 @@
   --font-brand: var(--font-manrope);
   --font-body: var(--font-nunito);
 
-  /* Поверхность по умолчанию */
+  /* Поверхности */
   --surface: var(--card);
+  --bg: var(--card);
 }
 
-/* ===============================================
-   GLOBAL RESET / BASE RULES
-   =============================================== */
+/* ========================================================
+   THEME TOKENS — LIGHT
+   ======================================================== */
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --page-bg: #f7f8fa;
+  --block: #ffffff;
+  --card: #ffffff;
+
+  --text: #2c2c2c;
+  --muted: #6b7280;
+
+  --accent: #0092b5; /* бирюзовый */
+  --accent-2: #006c85;
+  --accent-3: #d66a00;
+  --title: #004f60;
+
+  --border-color: rgba(132, 132, 132, 0.1);
+  --border: 1px solid var(--border-color);
+
+  --shadow: rgba(0, 0, 0, 0.08);
+  --box-shadow: 0 12px 28px var(--shadow);
+
+  --gradient: linear-gradient(145deg, rgba(0, 147, 171, 0.04) 0%, rgba(255, 255, 255, 0.7) 100%);
+
+  --radius: 10px;
+  --container: 1180px;
+  --transition: 180ms ease;
+
+  --font-brand: var(--font-manrope);
+  --font-body: var(--font-nunito);
+
+  --surface: var(--card);
+  --bg: var(--card);
+}
+
+/* ========================================================
+   GLOBAL RESET / BASE
+   ======================================================== */
 
 *,
 *::before,
@@ -61,7 +105,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  overscroll-behavior-y: none; /* гасим белый рывок */
+  overscroll-behavior-y: none; /* убираем белый рывок на iOS */
 }
 
 html,
@@ -72,25 +116,20 @@ body {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  min-height: 100vh;
+  background: var(--page-bg);
   color: var(--text);
-  background: var(--block);
   font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
-  font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
-  min-height: 100vh;
 }
 
-/* ===============================================
-   LAYOUT / STRUCTURE
-   =============================================== */
+/* ========================================================
+   LAYOUT
+   ======================================================== */
 
 #__next {
   min-height: 100vh;
@@ -102,22 +141,24 @@ header,
 footer,
 main {
   max-width: var(--container);
-  margin: 0 auto;
   width: 100%;
+  margin: 0 auto;
 }
 
 main {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 section {
   background: var(--block);
+  padding: 20px;
   border: var(--border);
   border-radius: var(--radius);
   box-shadow: var(--box-shadow);
-  padding: 20px;
 }
 
 .topSection {
@@ -127,14 +168,17 @@ section {
   background: var(--gradient);
 }
 
-/* Глобальная grid-сетка */
+/* ========================================================
+   GRID
+   ======================================================== */
+
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
 }
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -146,9 +190,9 @@ section {
   }
 }
 
-/* ===============================================
+/* ========================================================
    MEDIA ELEMENTS
-   =============================================== */
+   ======================================================== */
 
 img,
 svg,
@@ -159,13 +203,13 @@ canvas {
   height: auto;
 }
 
-/* ===============================================
-   LINKS / INTERACTION
-   =============================================== */
+/* ========================================================
+   LINKS
+   ======================================================== */
 
 a {
-  color: var(--accent);
   text-decoration: none;
+  color: var(--accent);
   transition: color var(--transition);
 }
 
@@ -175,19 +219,19 @@ a:hover {
 
 a:focus-visible,
 .button:focus-visible,
-.input:focus-visible,
-.textarea:focus-visible {
+.input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(31, 122, 140, 0.18);
+  background: var(--accent-2);
+  color: #ffffff;
 }
 
-/* ===============================================
-   SUMMARY / DETAILS (FAQ)
-   =============================================== */
+/* ========================================================
+   FAQ (summary/details)
+   ======================================================== */
 
 summary {
   display: block;
@@ -198,21 +242,18 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-summary::marker {
+summary::before {
+  content: '➡ ';
   color: var(--accent);
 }
 
-summary::before {
-  content: '➡ ';
-}
-
-details[open] > summary::before {
+details[open] summary::before {
   content: '⬇ ';
 }
 
-/* ===============================================
+/* ========================================================
    TYPOGRAPHY
-   =============================================== */
+   ======================================================== */
 
 h1,
 h2,
@@ -221,7 +262,8 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: var(--font-brand);
+  font-family: var(--font-brand), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1.2;
@@ -229,7 +271,7 @@ h6 {
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
   color: var(--title);
 }
@@ -248,17 +290,12 @@ h6 {
 
 @media (max-width: 860px) {
   .page-title {
-    font-size: 20px;
-    color: var(--title);
-  }
-  .page-sub {
-    font-size: 18px;
+    font-size: 22px;
   }
 }
 
 /* Автор отзыва */
 .about__review-author {
-  display: block;
   margin-top: 8px;
   color: var(--accent);
 }
@@ -279,9 +316,9 @@ h6 {
   color: var(--muted);
 }
 
-/* ===============================================
-   COMPONENT-LIKE ELEMENTS
-   =============================================== */
+/* ========================================================
+   COMPONENT-LIKE
+   ======================================================== */
 
 .card {
   background: var(--card);
@@ -290,13 +327,12 @@ h6 {
   box-shadow: var(--box-shadow);
 }
 
-/* Подзаголовочные блоки */
 .sub-wrapper {
   text-align: center;
   padding: 10px;
   margin-bottom: 20px;
-  border: var(--border);
   border-radius: var(--radius);
+  border: var(--border);
   background: var(--gradient);
   box-shadow: var(--box-shadow);
 }
@@ -320,12 +356,11 @@ h6 {
   border: 0;
 }
 
-/* ===============================================
-   FORMS / BUTTONS
-   =============================================== */
+/* ========================================================
+   FORMS & BUTTONS
+   ======================================================== */
 
 .label {
-  display: block;
   margin-bottom: 6px;
   color: var(--muted);
 }
@@ -333,29 +368,22 @@ h6 {
 .input,
 .textarea {
   width: 100%;
-  border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  font-family: var(--font-body);
-  transition: border-color var(--transition), box-shadow var(--transition),
-    background var(--transition);
-}
-
-.input {
-  padding: 0 14px;
-  background: #fafbfc;
-}
-
-.textarea {
+  border: 1px solid var(--border-color);
   padding: 10px 14px;
-  background: #fafbfc;
+  color: var(--text);
+  background: var(--card);
+  transition: var(--transition);
+  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(31, 122, 140, 0.12);
-  background: white;
+  box-shadow: 0 0 0 4px rgba(0, 255, 242, 0.18);
+  background: var(--block);
 }
 
 .input::placeholder,
@@ -366,31 +394,30 @@ h6 {
 /* readOnly textarea */
 .textarea[readonly],
 .textarea[aria-readonly='true'] {
-  background: #f7f8fa;
-  cursor: default;
-  color: var(--muted);
+  cursor: text;
 }
 
 /* Кнопка */
 .button {
+  cursor: pointer;
   display: inline-block;
-  padding: 5px 10px;
+  padding: 8px 14px;
   border-radius: var(--radius);
   background: var(--accent);
+  color: var(--block);
+  font-weight: 600;
   border: var(--border);
   box-shadow: var(--box-shadow);
-  color: white;
-  font-weight: 600;
-  font-family: var(--font-body);
-  font-size: 14px;
-  cursor: pointer;
   transition: var(--transition);
+  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  font-size: 14px;
 }
 
 .button:hover {
   background: var(--accent-2);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px var(--shadow);
+  color: var(--block);
 }
 
 .button:active {
@@ -407,11 +434,13 @@ h6 {
 
 /* Обводочная кнопка */
 .button.button--outline {
-  background: white;
-  color: var(--accent);
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--accent);
+  width: fit-content;
 }
 
-/* Чипы */
+/* Универсальный чип / бейдж */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -426,5 +455,21 @@ h6 {
 
 .chip--accent {
   background: var(--accent);
-  color: white;
+  color: #ffffff;
+}
+
+/* ========================================================
+   MOBILE: горизонтальный свайп секций
+   ======================================================== */
+
+@media (max-width: 860px) {
+  .button {
+    font-size: 12px;
+    padding: 8px 10px;
+    width: fit-content;
+  }
+  
+  main {
+    padding: 0 20px;
+  }
 }

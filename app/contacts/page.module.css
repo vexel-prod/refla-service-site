@@ -1,29 +1,18 @@
-/* Корневой контейнер страницы */
-.root {
-  display: grid;
-  gap: 20px;
-  max-width: var(--container);
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-}
-
 /* Верхний блок (заголовок, описание) */
 .hero {
   display: grid;
   gap: 10px;
 }
 
-/* Основной блок контактов */
-.section {
-  display: grid;
-  gap: 18px;
-  padding: 20px;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* Заголовок/график */
 .head {
-  display: grid;
+  display: flex;
   gap: 10px;
 }
 

@@ -103,7 +103,7 @@ export default function LeadForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className={`card ${styles.root}`} noValidate>
+    <form onSubmit={onSubmit} className={`card ${styles.root}`} noValidate suppressHydrationWarning>
       {/* honeypot */}
       <div
         style={{
@@ -118,6 +118,7 @@ export default function LeadForm() {
         <label>
           Не заполняйте это поле
           <input
+            suppressHydrationWarning
             tabIndex={-1}
             autoComplete='off'
             value={hp}
@@ -132,6 +133,7 @@ export default function LeadForm() {
             Ваше имя *
           </label>
           <input
+            suppressHydrationWarning
             className='input'
             id='name'
             required
@@ -153,6 +155,7 @@ export default function LeadForm() {
             Контакт (телефон или e-mail) *
           </label>
           <input
+            suppressHydrationWarning
             className='input'
             id='contact'
             required
@@ -177,6 +180,7 @@ export default function LeadForm() {
             Адрес установки *
           </label>
           <input
+            suppressHydrationWarning
             className='input'
             id='address'
             required
@@ -199,6 +203,7 @@ export default function LeadForm() {
             Комментарий (необязательно)
           </label>
           <textarea
+            suppressHydrationWarning
             className='textarea'
             id='comment'
             rows={4}

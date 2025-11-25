@@ -98,8 +98,9 @@ const SERVICES: Service[] = [
     kind: 'work',
     name: 'Замер и консультация',
     pricing: { spb: { kind: 'free' }, area: { kind: 'perKm', rate: 27 } },
-    description: 'Снимаем размеры и даём рекомендации.',
-    included: ['Замер', 'Подбор варианта', 'Черновая смета'],
+    description:
+      'Приезжаем, делаем замер дверного полотна, обсуждаем задачи и подбираем оптимальное решение.',
+    included: ['Замер полотна и проёма', 'Подбор материала и кромки', 'Черновая смета и сроки'],
   },
   {
     id: 'edge',
@@ -109,7 +110,10 @@ const SERVICES: Service[] = [
       spb: { kind: 'from', amount: 870, unit: 'м', affectsArea: true },
       area: { kind: 'from', amount: 870, unit: 'м', affectsArea: true },
     },
-    description: 'Полировка или фацет.',
+    description:
+      'Делаем безопасную и аккуратную кромку: полировка — лаконично, фацет — выразительный объём.',
+    included: ['Шлифовка торца', 'Полировка или фацет', 'Контроль геометрии кромки'],
+    note: 'Фацет считается с коэффициентом, итог зависит от ширины и рисунка.',
   },
   {
     id: 'mount',
@@ -119,6 +123,10 @@ const SERVICES: Service[] = [
       spb: { kind: 'from', amount: 3750, affectsArea: true },
       area: { kind: 'from', amount: 3750, affectsArea: true },
     },
+    description:
+      'Устанавливаем зеркало на дверное полотно: ровно по уровню, без смещений и перекосов.',
+    included: ['Подготовка полотна', 'Разметка и примерка', 'Крепление на клей/крепёж'],
+    note: 'Финальная цена зависит от материала полотна и сложности доступа.',
   },
   {
     id: 'demount',
@@ -128,6 +136,13 @@ const SERVICES: Service[] = [
       spb: { kind: 'from', amount: 1650, affectsArea: true },
       area: { kind: 'from', amount: 1650, affectsArea: true },
     },
+    description: 'Аккуратно снимаем старое зеркало или панели, готовим дверь под новый монтаж.',
+    included: [
+      'Защита прилегающих поверхностей',
+      'Снятие старого зеркала/крепежа',
+      'Базовая очистка полотна',
+    ],
+    note: 'Сложный демонтаж (много клея, скрытый крепёж) может считаться индивидуально.',
   },
 
   // материалы
@@ -136,60 +151,119 @@ const SERVICES: Service[] = [
     kind: 'glass',
     name: 'Зеркало закалённое',
     pricing: { spb: RUB_M2(6590), area: RUB_M2(6590) },
+    description:
+      'Безопасное ударостойкое стекло: подходит для активных прихожих и семей с детьми или животными.',
+    included: [
+      'Закалённое стекло 4–6 мм',
+      'Повышенная прочность',
+      'Безопасный характер разрушения',
+    ],
+    note: 'Рекомендуем для металлических дверей и интенсивной эксплуатации.',
   },
   {
     id: 'glass_clear',
     kind: 'glass',
     name: 'Прозрачное',
     pricing: { spb: RUB_M2(5490), area: RUB_M2(5490) },
+    description:
+      'Классическое зеркало без оттенка: универсальный вариант, который подходит к большинству интерьеров.',
+    included: [
+      'Нейтральный цвет отражения',
+      'Хорошая передача оттенков',
+      'Оптимальное решение по бюджету',
+    ],
   },
   {
     id: 'glass_tinted',
     kind: 'glass',
     name: 'Тонированное',
     pricing: { spb: RUB_M2(6290), area: RUB_M2(6290) },
+    description:
+      'Бронза или графит: добавляет глубину и мягкий оттенок, делает полотно более декоративным.',
+    included: [
+      'Бронзовый или графитовый тон',
+      'Мягкое “подтягивание” цветов',
+      'Эффект более камерной прихожей',
+    ],
+    note: 'Чуть приглушает свет — это стоит учитывать при слабом освещении.',
   },
   {
     id: 'glass_satin',
     kind: 'glass',
     name: 'Satinato',
     pricing: { spb: RUB_M2(6790), area: RUB_M2(6790) },
+    description:
+      'Матированное стекло с мягким рассеиванием: меньше бликов и отпечатков, более спокойный вид.',
+    included: [
+      'Матированная поверхность',
+      'Меньше видны следы рук',
+      'Мягкое отражение без резких бликов',
+    ],
   },
   {
     id: 'glass_pattern',
     kind: 'glass',
     name: 'С узором',
     pricing: { spb: RUB_M2(7290), area: RUB_M2(7290) },
+    description:
+      'Зеркало с пескоструйным рисунком или узором: работает как аккуратный акцент на входе.',
+    included: ['Нанесение узора по макету', 'Согласование эскиза', 'Подбор плотности рисунка'],
+    note: 'Сложные макеты и большие площади рисунка рассчитываются отдельно.',
   },
   {
     id: 'glass_facet_incl',
     kind: 'glass',
     name: 'С фацетом (включён)',
     pricing: { spb: RUB_M2(7990), area: RUB_M2(7990) },
+    description:
+      'Зеркало с декоративной фаской по периметру: объёмный “световой” кант без доплаты за кромку.',
+    included: [
+      'Зеркало с готовым фацетом',
+      'Аккуратный блестящий торец',
+      'Эффект “рамки” без лишних деталей',
+    ],
+    note: 'При выборе этого варианта отдельная “Обработка кромки” не требуется.',
   },
   {
     id: 'glass_acrylic',
     kind: 'glass',
     name: 'Акрил',
     pricing: { spb: RUB_M2(4890), area: RUB_M2(4890) },
+    description:
+      'Лёгкое пластиковое зеркало: минимальная нагрузка на полотно, выше стойкость к ударам.',
+    included: ['Небьющееся полотно', 'Малая масса', 'Подходит для “сложных” дверей'],
+    note: 'Отражение чуть мягче, чем у стеклянных зеркал — это нормально для акрила.',
   },
   {
     id: 'glass_titanium',
     kind: 'glass',
     name: 'Титановое',
     pricing: { spb: RUB_M2(8890), area: RUB_M2(8890) },
+    description:
+      'Зеркало с холодным металлическим отливом: эффект “стального” отражения и современного интерьера.',
+    included: [
+      'Холодный металлический оттенок',
+      'Выразительный современный вид',
+      'Хорошо сочетается с чёрной фурнитурой',
+    ],
   },
   {
     id: 'glass_aluminum',
     kind: 'glass',
     name: 'Алюминиевое',
     pricing: { spb: RUB_M2(5790), area: RUB_M2(5790) },
+    description:
+      'Классическое алюминиевое зеркало — проверенная технология и привычный по цвету отражения вариант.',
+    included: ['Стабильное покрытие', 'Привычный нейтральный оттенок', 'Баланс цены и качества'],
   },
   {
     id: 'glass_silvered',
     kind: 'glass',
     name: 'Посеребрённое',
     pricing: { spb: RUB_M2(6990), area: RUB_M2(6990) },
+    description:
+      'Более глубокое отражение с лёгким благородным оттенком: красиво работает в светлых и тёплых интерьерах.',
+    included: ['Посеребрённое покрытие', 'Глубокое отражение', 'Чуть более “мягкий” тон'],
   },
 ]
 
@@ -318,7 +392,6 @@ export function PricingClient() {
     setState((p) => ({ ...p, region }))
   }, [region])
 
-  /* ========== ГЛАВНЫЙ ФИКС – НОВЫЙ toggleService (правильный!) ========== */
   function toggleService(id: ServiceId) {
     setState((prev) => {
       const next = new Set(prev.selected)
@@ -365,7 +438,7 @@ export function PricingClient() {
         return { ...prev, selected: new Set(next) }
       }
 
-      // ▶ добавляем новую услугу
+      // добавляем новую услугу
       next.add(id)
 
       let edgeType = prev.edgeType
@@ -406,9 +479,27 @@ export function PricingClient() {
     canSubmit,
   }
 
-  /* ============================================
-     JSX
-     ============================================ */
+  const spbRef = React.useRef<HTMLButtonElement>(null)
+  const areaRef = React.useRef<HTMLButtonElement>(null)
+
+  const [activeWidth, setActiveWidth] = React.useState<number>(0)
+  const [activeOffset, setActiveOffset] = React.useState<number>(0)
+
+  React.useEffect(() => {
+    const el = region === 'spb' ? spbRef.current : areaRef.current
+    if (!el) return
+
+    const { offsetWidth, offsetLeft } = el
+    setActiveWidth(offsetWidth)
+    setActiveOffset(offsetLeft)
+  }, [region])
+
+  /**
+   * ! ===============================================
+   * ?                     RETURN
+   * ! ===============================================
+   */
+
   return (
     <main>
       <section className='topSection'>
@@ -416,22 +507,37 @@ export function PricingClient() {
           <h1 className='page-title'>Прайс — выберите услуги для расчёта</h1>
           <h2 className='page-sub'>Стоимость учитывается автоматически</h2>
 
-          <p className='page-text'>Выберите ваш регион:</p>
           <div className={styles.region}>
-            <button
-              type='button'
-              className={`${styles.pill} ${region === 'spb' ? styles.pillActive : ''}`}
-              onClick={() => setRegion('spb')}
-            >
-              СПБ
-            </button>
-            <button
-              type='button'
-              className={`${styles.pill} ${region === 'area' ? styles.pillActive : ''}`}
-              onClick={() => setRegion('area')}
-            >
-              Область
-            </button>
+            <p className='page-text'>Выберите ваш регион:</p>
+            <div className={styles.pillWrapper}>
+              {/* Бегунок */}
+              <div
+                className={styles.pillSlider}
+                style={{
+                  width: activeWidth,
+                  transform: `translateX(${activeOffset}px)`,
+                }}
+              />
+
+              {/* Кнопки */}
+              <button
+                ref={spbRef}
+                type='button'
+                className={`${styles.pill} ${region === 'spb' ? styles.activeText : ''}`}
+                onClick={() => setRegion('spb')}
+              >
+                СПБ
+              </button>
+
+              <button
+                ref={areaRef}
+                type='button'
+                className={`${styles.pill} ${region === 'area' ? styles.activeText : ''}`}
+                onClick={() => setRegion('area')}
+              >
+                Область
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -447,12 +553,26 @@ export function PricingClient() {
               <button
                 key={s.id}
                 type='button'
-                className={`${styles.card} ${styles.service} ${active ? styles.serviceActive : ''}`}
+                className={`${styles.service} ${active ? styles.serviceActive : ''}`}
                 onClick={() => toggleService(s.id)}
                 aria-pressed={active}
               >
                 <div className={styles.checkMark} aria-hidden>
-                  {active ? '✔' : ''}
+                  {active ? (
+                    <svg
+                      className={styles.marker}
+                      viewBox='0 0 24 24'
+                      width='20'
+                      height='20'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='4'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    >
+                      <path d='M5 12l5 5L20 7' />
+                    </svg>
+                  ) : null}
                 </div>
 
                 <div className={styles.serviceTitle}>{s.name}</div>
@@ -627,12 +747,7 @@ export function PricingClient() {
       </section>
 
       {/* Форма */}
-      <section>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Оформить заявку</h2>
-        </div>
-        <QuoteLeadForm quote={quotePayload} />
-      </section>
+      <QuoteLeadForm quote={quotePayload} />
     </main>
   )
 }

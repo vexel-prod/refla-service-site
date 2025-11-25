@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import styles from './Header.module.css'
+import ThemeToggle from 'components/ThemeToggle/ThemeToggle'
 
 // нормализуем путь
 const normalize = (s: string) => s.replace(/\/+$/, '') || '/'
@@ -58,41 +59,46 @@ export default function Header() {
         )}
 
         {/* ДЕСКТОП */}
-        <nav className={styles.nav} aria-label='Главная навигация'>
-          <Link
-            href='/about/'
-            className={`button ${isActive('/about/') ? '' : 'button--outline'}`}
-            aria-current={isActive('/about/') ? 'page' : undefined}
-          >
-            О нас
-          </Link>
-          <Link
-            href='/pricing/'
-            className={`button ${isActive('/pricing/') ? '' : 'button--outline'}`}
-            aria-current={isActive('/pricing/') ? 'page' : undefined}
-          >
-            Прайс
-          </Link>
-          <Link
-            href='/contacts/'
-            className={`button ${isActive('/contacts/') ? '' : 'button--outline'}`}
-            aria-current={isActive('/contacts/') ? 'page' : undefined}
-          >
-            Контакты
-          </Link>
-        </nav>
+        <div className={styles.wrapper}>
+          <nav className={styles.nav} aria-label='Главная навигация'>
+            <Link
+              href='/about/'
+              className={`button ${isActive('/about/') ? '' : 'button--outline'}`}
+              aria-current={isActive('/about/') ? 'page' : undefined}
+            >
+              О нас
+            </Link>
+            <Link
+              href='/pricing/'
+              className={`button ${isActive('/pricing/') ? '' : 'button--outline'}`}
+              aria-current={isActive('/pricing/') ? 'page' : undefined}
+            >
+              Прайс
+            </Link>
+            <Link
+              href='/contacts/'
+              className={`button ${isActive('/contacts/') ? '' : 'button--outline'}`}
+              aria-current={isActive('/contacts/') ? 'page' : undefined}
+            >
+              Контакты
+            </Link>
+          </nav>
 
-        {/* БУРГЕР */}
-        <button
-          className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
-          aria-expanded={open}
-          aria-label='Меню'
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className={`${styles.burgerLine} ${styles.burgerLineTop}`} />
-          <span className={`${styles.burgerLine} ${styles.burgerLineMid}`} />
-          <span className={`${styles.burgerLine} ${styles.burgerLineBot}`} />
-        </button>
+          {/* БУРГЕР */}
+          <div className={styles.wrapper}>
+            <ThemeToggle />
+            <button
+              className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
+              aria-expanded={open}
+              aria-label='Меню'
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className={`${styles.burgerLine} ${styles.burgerLineTop}`} />
+              <span className={`${styles.burgerLine} ${styles.burgerLineMid}`} />
+              <span className={`${styles.burgerLine} ${styles.burgerLineBot}`} />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* МОБИЛЬНОЕ МЕНЮ */}

@@ -17,28 +17,25 @@ export const metadata: Metadata = {
 // Страница "Контакты": телефоны, мессенджеры и ссылка на карту
 export default function Contacts() {
   return (
-    <div className={styles.root}>
+    <main>
       {/* Шапка страницы */}
-      <section className={`card about__section about__section--soft ${styles.hero}`}>
+      <section className='topSection'>
         <h1 className='page-title'>Контакты</h1>
-        <h2 className='page-sub'>
+        <p className='page-text'>
           Связаться с нами можно по указанным ниже контактным данным, отвечаем в течение получаса!
-        </h2>
+        </p>
       </section>
 
       {/* Основной блок контактов */}
-      <section className={`card about__section ${styles.section}`}>
-        {/* Заголовок / график */}
-        <header className={styles.head}>
-          <div className={styles.chips}>
-            <span className='chip'>Заявки: 10:00–21:00</span>
-            <span className='chip'>Монтаж: 12:00–19:00</span>
-            <span className='chip'>Пн–Пт</span>
-          </div>
-        </header>
+      <section className={styles.wrapper}>
+        <div className={styles.chips}>
+          <span className='chip'>Заявки: 10:00–21:00</span>
+          <span className='chip'>Монтаж: 12:00–19:00</span>
+          <span className='chip'>Пн–Пт</span>
+        </div>
 
         {/* Сетка карточек каналов связи */}
-        <div className={styles.grid}>
+        <div className={styles.wrapper}>
           {/* Телефон */}
           <a className={`card ${styles.item}`} href='tel:+79956245534'>
             <div className={styles.icon} aria-hidden>
@@ -52,7 +49,6 @@ export default function Contacts() {
             <div className={styles.body}>
               <div className='page-text'>+7 (995) 624-55-34</div>
             </div>
-            <span className='chip'>Позвонить</span>
           </a>
 
           {/* Telegram */}
@@ -80,7 +76,6 @@ export default function Contacts() {
             <div className={styles.body}>
               <div className='page-text'>@refla_mirror</div>
             </div>
-            <span className='chip'>Написать</span>
           </a>
 
           {/* Почта */}
@@ -97,15 +92,12 @@ export default function Contacts() {
             <div className={styles.body}>
               <div className='page-text'>refla-mirror@mail.ru</div>
             </div>
-            <span className='chip'>Написать письмо</span>
           </a>
         </div>
 
         {/* Регион обслуживания + кнопка карты */}
-        <div className={`card ${styles.footer}`}>
-          <div className={styles.region}>
-            Работаем по всему Санкт-Петербургу и Ленинградской области
-          </div>
+        <div className={styles.wrapper}>
+          <p className='page-text'>Работаем по всему Санкт-Петербургу и Ленинградской области</p>
           <a
             className='button button--outline'
             href='https://yandex.ru/maps/?text=Санкт-Петербург'
@@ -116,6 +108,6 @@ export default function Contacts() {
           </a>
         </div>
       </section>
-    </div>
+    </main>
   )
 }
