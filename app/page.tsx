@@ -1,7 +1,13 @@
+// app/page.tsx
+'use client'
+
+import * as React from 'react'
 import Link from 'next/link'
 import styles from './page.module.css'
 import CallToActionSection from 'components/CallToActionSection/CallToActionSection'
 import TypingText from 'components/TypingText/TypingText'
+import TiltCard from 'components/TiltCard/TiltCard'
+import ButtonCTA from 'components/ButtonCTA/ButtonCTA'
 
 // Главная страница с плотным контентом без примеров работ
 export default function Home() {
@@ -127,16 +133,24 @@ export default function Home() {
     },
   ]
 
-  /**
-   * ! ===============================================
-   * ?                     RETURN
-   * ! ===============================================
-   */
+  // какие FAQ сейчас открыты (по индексу)
+  const [openFaqs, setOpenFaqs] = React.useState<Set<number>>(new Set())
+
+  const handleToggleFaq = (index: number) => (e: React.SyntheticEvent<HTMLDetailsElement>) => {
+    const isOpen = (e.currentTarget as HTMLDetailsElement).open
+
+    setOpenFaqs((prev) => {
+      const next = new Set(prev)
+      if (isOpen) next.add(index)
+      else next.delete(index)
+      return next
+    })
+  }
 
   return (
     <main>
       {/* HERO */}
-      <section className='topSection'>
+      <section className={`topSection ${styles.hero}`}>
         <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
         <div className={styles.heroBadges}>
           <span className={`${styles.badge} ${styles.badgeFast}`}>Замер бесплатно в СПБ</span>
@@ -148,7 +162,7 @@ export default function Home() {
         <TypingText
           className='page-text'
           text={
-            'Преобразите прихожую: визуально расширим пространство, подберём безопасное стекло, аккуратно смонтируем.'
+            'Преобразим Вашу прихожую: визуально расширим пространство, подберём наилучшее зеркало, аккуратно установим 😉'
           }
         />
 
@@ -156,9 +170,7 @@ export default function Home() {
           <Link className='button button--outline' href='/pricing/'>
             Рассчитать стоимость
           </Link>
-          <Link className='button button--outline' href='/request/'>
-            Оставить заявку
-          </Link>
+          <ButtonCTA />
         </div>
       </section>
 
@@ -169,29 +181,45 @@ export default function Home() {
         </div>
         <div className={styles.cardsWrapper}>
           {features.map(([title, text], i) => (
-            <div key={i} className={styles.card}>
+            <TiltCard key={i} as='article' className={`${styles.card}`}>
               <div className={styles.cardTitle}>{title}</div>
               <div className={styles.cardSubtitle}>{text}</div>
-              <span className={styles.ribbonStripe} aria-hidden />
-            </div>
+            </TiltCard>
           ))}
         </div>
       </section>
 
-      {/* FAQ — на details/summary, без JS */}
+      {/* FAQ — “живые” спойлеры на TiltCard */}
       <section>
         <div className='sub-wrapper'>
           <h2 className='page-sub'>Частые вопросы:</h2>
+          <p className={styles.faqHint}>
+            Нажмите на вопрос — карточка чуть “приподнимется”, а внутри раскроется подробный ответ.
+          </p>
         </div>
-        <div className='grid'>
-          {faqs.map((f, i) => (
-            <details key={i} className={`card ${styles.whyItem}`}>
-              <summary className={`${styles.whyItemTitle} title-font`} role='button'>
-                {f.q}
-              </summary>
-              <div className={styles.whyItemText}>{f.a}</div>
-            </details>
-          ))}
+
+        <div className={styles.faqGrid}>
+          {faqs.map((f, i) => {
+            const isOpen = openFaqs.has(i)
+
+            return (
+              <TiltCard key={i} className={styles.faqCard} freezeOnLeave={isOpen}>
+                <details className={styles.faqDetails} onToggle={handleToggleFaq(i)}>
+                  <summary className={styles.faqSummary}>
+                    <span className={styles.faqIndex}>{String(i + 1)}</span>
+                    <span className={styles.faqQuestion}>{f.q}</span>
+                    <span className={styles.faqIcon} aria-hidden>
+                      <span className={styles.faqIconLineV} />
+                      <span className={styles.faqIconLineH} />
+                    </span>
+                  </summary>
+                  <div className={styles.faqBody}>
+                    <p className={styles.faqText}>{f.a}</p>
+                  </div>
+                </details>
+              </TiltCard>
+            )
+          })}
         </div>
       </section>
 
@@ -202,15 +230,16 @@ export default function Home() {
         </div>
         <div className='grid'>
           {reviews.slice(0, 7).map((r, i) => (
-            <blockquote key={i} className={`card ${styles.whyItem}`}>
+            <TiltCard key={i} as='blockquote' className={`card ${styles.whyItem}`}>
               <p className='page-text'>«{r.text}»</p>
               <cite className='about__review-author' style={{ display: 'block' }}>
                 {r.name}
               </cite>
-            </blockquote>
+            </TiltCard>
           ))}
         </div>
       </section>
+
       <CallToActionSection />
     </main>
   )

@@ -14,7 +14,7 @@
 
 .scrolled {
   background: var(--gradient);
-  backdrop-filter: blur(6px) saturate(160%);
+  backdrop-filter: blur(3px) saturate(100%);
   border-radius: 0 0 10px 10px;
 }
 
@@ -29,6 +29,7 @@
 
 .wrapper {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
@@ -189,5 +190,11 @@
   .tagline {
     font-size: 7px;
     letter-spacing: 0.085em;
+  }
+}
+
+@media (max-width: 860px) {
+  .wrapper {
+    gap: 10px;
   }
 }

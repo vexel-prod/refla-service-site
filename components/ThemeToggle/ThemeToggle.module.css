@@ -1,11 +1,11 @@
 .toggle {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius);
-  border: var(--border);
+  border: 1px solid var(--accent);
   background: var(--card);
   cursor: pointer;
   transition: background var(--transition), transform var(--transition),
@@ -14,11 +14,11 @@
   font-size: 18px;
 }
 
-.toggle:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 20px var(--shadow);
-}
 
-.toggle:active {
-  transform: scale(0.95);
+@media (max-width: 860px) {
+  .toggle {
+    border: var(--border);
+    width: 42px;
+    height: 42px;
+  }
 }

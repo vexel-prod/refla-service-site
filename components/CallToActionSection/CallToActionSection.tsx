@@ -1,21 +1,20 @@
-import Link from 'next/link'
+import TiltCard from 'components/TiltCard/TiltCard'
+import ButtonCTA from 'components/ButtonCTA/ButtonCTA'
 import styles from './CallToActionSection.module.css'
 
 export default function CallToActionSection() {
   return (
-    <section className={styles.callToAction} aria-labelledby='cta-title'>
-      <div className={styles.textBlock}>
-        <h2 id='cta-title' className={styles.pageSub}>
-          Готовы обсудить установку?
-        </h2>
-        <p className={styles.pageText}>
-          Оставьте заявку — подберём оптимальное решение под вашу дверь и интерьер.
-        </p>
-      </div>
+    <section className={styles.wrap}>
+      <TiltCard as='div' className={styles.ctaCard}>
+        <div className={styles.textBlock}>
+          <h2 className={styles.title}>Готовы к красивой двери?</h2>
+          <p className={styles.subtitle}>
+            Сориентируем по цене, подберём зеркало и ответим на вопросы. Быстро и без навязчивости.
+          </p>
+        </div>
 
-      <Link className='button button--outline' href='/request/'>
-        Оставить заявку
-      </Link>
+        <ButtonCTA />
+      </TiltCard>
     </section>
   )
 }

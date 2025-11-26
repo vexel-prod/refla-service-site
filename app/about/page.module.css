@@ -1,3 +1,12 @@
+/* app/about/page.module.css */
+@keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
 /* ===== Цифры и факты ===== */
 
 .statsGrid {
@@ -22,14 +31,16 @@
 
 /* ленточка */
 .ribbonStripe {
-  width: 30px;
-  position: absolute;
-  top: -120px;
-  bottom: 0px;
-  right: 0px;
-  transform: rotate(315deg);
   background: var(--accent);
-  box-shadow: 0 6px 16px var(--shadow);
+  width: 100%;
+  animation: 6s linear infinite page-module__E0kJGG__hue;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: rotate(45deg);
+  opacity: 0.15;
+  box-shadow: inset -18px -3px 3px 0px #000000;
+  animation: hue 6s linear infinite;
 }
 
 /* разные цвета для карточек 2–4 */
@@ -73,7 +84,7 @@
   justify-content: center;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  background: #eef7fa;
+  background: var(--bg);
   color: var(--accent);
   font-weight: 700;
 }
@@ -86,37 +97,59 @@
   color: var(--muted);
 }
 
-/* ===== Материалы и безопасность (чек-лист) ===== */
+/* ===== Материалы и безопасность (новые карточки) ===== */
 
-.list {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
+.materialsGrid {
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
-.listItem {
+.materialCard {
   position: relative;
-  padding-left: 26px;
-  color: var(--muted);
+  padding: 20px;
+  display: grid;
+  overflow: hidden;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--box-shadow);
 }
 
-.listItem::before {
-  content: '✔';
+.materialRibbon {
+  background: var(--accent);
+  opacity: 0.15;
+  width: 1000px;
+  height: 1000px;
+  animation: 6s linear infinite page-module__xgPmsG__hue;
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  background: #ecfdf5;
-  color: #15803d;
-  font-size: 12px;
+  bottom: 0;
+  transform: rotate(45deg);
+  box-shadow: inset -18px -3px 3px #000;
+  animation: hue 6s linear infinite;
+}
+
+.materialTitle {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 16px;
+  font-style: italic;
+}
+
+.materialText {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* на мобильных — тонкая вертикальная кромка */
+@media (max-width: 640px) {
+  .materialRibbon {
+    width: 10px;
+    top: 0;
+    transform: rotate(0deg);
+    right: auto;
+    left: 0;
+  }
 }
 
 /* ===== Команда / ценности ===== */
@@ -136,6 +169,7 @@
   border: var(--border);
   border-radius: var(--radius);
   padding: 20px;
+  gap: 10px;
 }
 
 .valueCardEdge {
@@ -147,13 +181,21 @@
   transform: rotate(315deg);
   background: var(--accent);
   box-shadow: 0 6px 16px var(--shadow);
+  animation: hue 6s linear infinite;
 }
 
 .cardTitle {
-  font-size: 16px;
   color: var(--accent);
-  font-style: italic;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 800;
+  background: #94a3b817;
+  padding: 4px 8px;
+  max-width: max-content;
+  border-radius: var(--radius);
+  box-shadow: inset 1px 1px 1px 0px #ffffff78;
+  text-shadow: 0 0.5px #020617, 0 2px 4px #00000073;
+  animation: 6s linear infinite hue;
+  opacity: .5;
 }
 
 .aboutText {

@@ -1,0 +1,86 @@
+/* components/TiltCard/TiltCard.module.css */
+
+.tiltWrapper {
+  perspective: 1200px;
+  perspective-origin: 50% 30%;
+  max-height: max-content;
+  position: relative;
+}
+
+/* сюда прилетает .card / about__* */
+.tiltInner {
+  max-height: max-content;
+  gap: 10px;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  background: var(--gradient);
+  will-change: transform, box-shadow, border-color, background, filter;
+  transform: translate3d(0, 0, var(--tilt-z, 0px)) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.22s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.22s, border-color 0.2s,
+    background 0.2s, filter 0.2s;
+  position: relative;
+  
+}
+
+/* подсветка / блик */
+.tiltInner::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 0%),
+    rgba(255, 255, 255, 0.22),
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+  opacity: var(--glare-opacity, 0);
+  transition: opacity 200ms ease-out;
+}
+
+/* лёгкая неоновая кайма */
+.tiltInner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.18), 0 0 24px rgba(56, 189, 248, 0.15);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+/* усиливаем объём и свечение при ховере */
+.tiltInnerHovered {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border-color));
+  filter: saturate(1.05);
+}
+
+.tiltInnerHovered::after {
+  opacity: 1;
+}
+
+/* На тач-устройствах — без 3D */
+@media (pointer: coarse) {
+  .tiltWrapper {
+    perspective: none;
+  }
+
+  .tiltInner {
+    transform: none !important;
+    transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+  }
+
+  .tiltInner::before,
+  .tiltInner::after {
+    opacity: 0 !important;
+  }
+
+  .tiltInnerHovered {
+    box-shadow: inherit;
+  }
+}

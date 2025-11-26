@@ -12,6 +12,7 @@
   --page-bg: #020617; /* фон страницы */
   --block: #020617; /* фон секций */
   --card: #0b1120; /* фон карточек */
+  --success: #00ff9152;
 
   --text: #e5e7eb; /* основной текст */
   --muted: #9ca3af; /* приглушённый текст */
@@ -73,6 +74,7 @@
   --accent-2: #006c85;
   --accent-3: #d66a00;
   --title: #004f60;
+  --success: #00ff9152;
 
   --border-color: rgba(132, 132, 132, 0.1);
   --border: 1px solid var(--border-color);
@@ -234,7 +236,7 @@ a:focus-visible,
    ======================================================== */
 
 summary {
-  display: block;
+  display: none;
   cursor: pointer;
 }
 
@@ -242,13 +244,16 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-summary::before {
-  content: '➡ ';
+summary::after {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  content: '';
   color: var(--accent);
 }
 
-details[open] summary::before {
-  content: '⬇ ';
+details[open] summary::after {
+  content: '';
 }
 
 /* ========================================================
@@ -468,8 +473,10 @@ h6 {
     padding: 8px 10px;
     width: fit-content;
   }
-  
+
   main {
     padding: 0 20px;
   }
 }
+
+

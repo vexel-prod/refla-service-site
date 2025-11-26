@@ -1,93 +1,113 @@
-/* Верхний блок (заголовок, описание) */
+/* Верхний блок */
 .hero {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
-.wrapper {
+.badgeRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Контейнер */
+.section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
 }
 
-/* Заголовок/график */
-.head {
-  display: flex;
-  gap: 10px;
-}
-
+/* График */
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* Сетка карточек каналов связи */
+/* GRID */
 .grid {
   display: grid;
-  gap: 12px;
+  gap: 20px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* Карточка (TiltCard внутри) */
 .item {
   display: grid;
-  grid-template-columns: 40px 1fr auto;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
   align-items: center;
-  gap: 12px;
-  padding: 14px;
+
+  padding: 18px 20px;
+  border-radius: var(--radius);
   border: var(--border);
-  transition: transform var(--transition), box-shadow var(--transition),
-    border-color var(--transition), background var(--transition);
+  background: var(--card);
+
   text-decoration: none;
+  color: var(--text);
+
+  /* Выключили свой hover — теперь за эффект отвечает TiltCard */
 }
 
-.item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px var(--shadow);
-  border-color: var(--accent);
-  background: linear-gradient(0deg, rgba(31, 122, 140, 0.06), rgba(31, 122, 140, 0.06)), var(--card);
-}
-
-/* Иконка канала */
+/* Иконка */
 .icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  background: #f0f5f7;
-  border: 1px solid var(--border-color);
+  background: var(--gradient);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.65);
 }
 
-/* Текст внутри карточки */
+/* Текст */
 .body {
   display: grid;
-  gap: 2px;
+  gap: 4px;
+  transform: translateZ(24px);
 }
 
-/* Нижний блок: регион + кнопка карты */
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Footer */
 .footer {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px;
-  margin-top: 10px;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .region {
-  color: var(--muted);
   font-size: 14px;
+  color: var(--muted);
+  max-width: 500px;
 }
 
-/* Адаптив: сетка контактов в одну колонку */
-@media (max-width: 760px) {
+/* Адаптив */
+@media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
-  }
-
-  .footer {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }

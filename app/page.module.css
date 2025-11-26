@@ -1,3 +1,13 @@
+/* app/page.module.css */
+@keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
 /* HERO */
 .hero {
   display: flex;
@@ -32,10 +42,17 @@
 }
 
 .cardTitle {
-  font-style: italic;
+  color: var(--accent);
   font-size: 18px;
   font-weight: 800;
-  color: var(--accent);
+  background: #94a3b817;
+  padding: 4px 8px;
+  max-width: max-content;
+  border-radius: var(--radius);
+  box-shadow: inset 1px 1px 1px 0px #ffffff78;
+  text-shadow: 0 0.5px #020617, 0 2px 4px #00000073;
+  animation: 6s linear infinite hue;
+  opacity: 0.5;
 }
 
 .cardSubtitle {
@@ -116,7 +133,6 @@
 
 .whyItemTitle {
   font-size: 16px;
-  margin: 0 0 8px;
 }
 
 .whyItemText {
@@ -125,14 +141,16 @@
 
 /* Лента (ribbon) на карточках преимуществ */
 .ribbonStripe {
-  width: 30px;
-  position: absolute;
-  top: -145px;
-  bottom: 0px;
-  right: 0px;
-  transform: rotate(315deg);
   background: var(--accent);
-  box-shadow: 0 6px 16px var(--shadow);
+  width: 100%;
+  animation: 6s linear infinite page-module__E0kJGG__hue;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: rotate(135deg);
+  opacity: 0.5;
+  box-shadow: inset -18px -3px 3px 0px #000000;
+  animation: hue 6s linear infinite;
 }
 
 .ribbon {
@@ -146,20 +164,189 @@
 }
 
 /* Цвета лент по порядку карточек */
-.grid > .ribbon:nth-child(2) .ribbonStripe {
+.cardsWrapper > .ribbon:nth-child(2) .ribbonStripe {
   background: var(--accent-2);
 }
-.grid > .ribbon:nth-child(3) .ribbonStripe {
+.cardsWrapper > .ribbon:nth-child(3) .ribbonStripe {
   background: #0ea5e9;
 }
-.grid > .ribbon:nth-child(4) .ribbonStripe {
+.cardsWrapper > .ribbon:nth-child(4) .ribbonStripe {
   background: #10b981;
 }
-.grid > .ribbon:nth-child(5) .ribbonStripe {
+.cardsWrapper > .ribbon:nth-child(5) .ribbonStripe {
   background: #8b5cf6;
 }
-.grid > .ribbon:nth-child(6) .ribbonStripe {
+.cardsWrapper > .ribbon:nth-child(6) .ribbonStripe {
   background: #f59e0b;
+}
+
+/* =========================
+   FAQ — интерактивные спойлеры
+   ========================= */
+
+.faqHint {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0.9;
+}
+
+/* сетка FAQ */
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* TiltCard-обёртка */
+.faqCard {
+  padding: 0; /* всё внутри details */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* сама “капсула” спойлера */
+.faqDetails {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 200ms ease;
+}
+
+/* состояние open усиливает свечение */
+.faqDetails[open] {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border-color));
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.75), 0 0 36px rgba(56, 189, 248, 0.22);
+}
+
+/* заголовок-спойлер */
+.faqSummary {
+  margin: 0;
+  padding: 14px 16px 14px 20px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+/* убираем стандартный маркер */
+.faqSummary::-webkit-details-marker {
+  display: none;
+}
+
+.faqIndex {
+  border: 1px solid var(--border-color);
+  background: var(--bg);
+  width: 28px;
+  height: 28px;
+  color: var(--accent);
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.faqQuestion {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* плюс/минус с анимацией */
+.faqIcon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.55), transparent 55%),
+    rgba(15, 23, 42, 0.9);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.9);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease,
+    background 200ms ease;
+}
+
+.faqIconLineV,
+.faqIconLineH {
+  position: absolute;
+  background: #e5f3ff;
+  border-radius: 999px;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.faqIconLineV {
+  width: 2px;
+  height: 9px;
+}
+
+.faqIconLineH {
+  width: 9px;
+  height: 2px;
+}
+
+/* hover по summary */
+.faqDetails:not([open]) .faqSummary:hover .faqIcon {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.95);
+}
+
+/* при open вертикальная линия схлопывается → плюс превращается в минус */
+.faqDetails[open] .faqIconLineV {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* тело ответа */
+.faqBody {
+  padding: 0 20px 16px 20px;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: max-height 220ms ease, opacity 200ms ease, transform 200ms ease;
+}
+
+/* раскрытое состояние */
+.faqDetails[open] .faqBody {
+  max-height: 260px; /* достаточно для текста, при необходимости увеличь */
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.faqText {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* адаптив для FAQ */
+@media (max-width: 860px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .faqSummary {
+    padding-inline: 14px;
+  }
+
+  .faqBody {
+    padding-inline: 14px;
+  }
 }
 
 /* Адаптив — то, что касается именно home */
@@ -167,22 +354,28 @@
   .whyTitle {
     font-size: 24px;
   }
+
   .cardsWrapper {
     grid-template-columns: repeat(1, 1fr);
   }
+
   .whyItem {
     max-height: fit-content;
     min-height: auto;
   }
+
   .card {
     gap: 0px;
     min-height: max-content;
   }
+
   .ribbonStripe {
-    transform: rotate(0deg);
+    width: 100%;
+    height: 10px;
+    right: 0;
     left: 0;
-    top: 0;
-    width: 10px;
+    bottom: 0;
+    transform: rotate(0deg);
+    box-shadow: none;
   }
 }
-

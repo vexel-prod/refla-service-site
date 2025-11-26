@@ -3,6 +3,7 @@
 import * as React from 'react'
 import QuoteLeadForm from 'components/QuoteLeadForm/QuoteLeadForm'
 import styles from './PricingClient.module.css'
+import TiltCard from 'components/TiltCard/TiltCard'
 
 /* ============================================
    Типы
@@ -396,7 +397,6 @@ export function PricingClient() {
     setState((prev) => {
       const next = new Set(prev.selected)
 
-      // клик по материалу — эксклюзивный
       if (isGlass(id)) {
         for (const sid of next) {
           if (isGlass(sid)) next.delete(sid)
@@ -404,16 +404,11 @@ export function PricingClient() {
 
         if (prev.selected.has(id)) {
           next.delete(id)
-          return {
-            ...prev,
-            selected: new Set(next),
-            edgeType: prev.edgeType,
-          }
+          return { ...prev, selected: new Set(next), edgeType: prev.edgeType }
         }
 
         next.add(id)
 
-        // выбран материал с фацетом — отключаем edge
         if (id === 'glass_facet_incl') {
           next.delete('edge')
           return { ...prev, selected: new Set(next), edgeType: 'none' }
@@ -422,23 +417,16 @@ export function PricingClient() {
         return { ...prev, selected: new Set(next) }
       }
 
-      // обычная услуга (работы)
       if (next.has(id)) {
         next.delete(id)
 
-        // если edge снят — обнуляем edgeType
         if (id === 'edge') {
-          return {
-            ...prev,
-            selected: new Set(next),
-            edgeType: 'none',
-          }
+          return { ...prev, selected: new Set(next), edgeType: 'none' }
         }
 
         return { ...prev, selected: new Set(next) }
       }
 
-      // добавляем новую услугу
       next.add(id)
 
       let edgeType = prev.edgeType
@@ -446,11 +434,7 @@ export function PricingClient() {
         edgeType = 'polish'
       }
 
-      return {
-        ...prev,
-        selected: new Set(next),
-        edgeType,
-      }
+      return { ...prev, selected: new Set(next), edgeType }
     })
   }
 
@@ -458,7 +442,6 @@ export function PricingClient() {
   const services = React.useMemo(() => SERVICES, [])
 
   const selectedNames = services.filter((s) => state.selected.has(s.id)).map((s) => s.name)
-
   const canSubmit = selectedNames.length >= 1
 
   const safe = (n: number, d = 0) => (Number.isFinite(n) ? n : d)
@@ -488,56 +471,36 @@ export function PricingClient() {
   React.useEffect(() => {
     const el = region === 'spb' ? spbRef.current : areaRef.current
     if (!el) return
-
     const { offsetWidth, offsetLeft } = el
     setActiveWidth(offsetWidth)
     setActiveOffset(offsetLeft)
   }, [region])
-
-  /**
-   * ! ===============================================
-   * ?                     RETURN
-   * ! ===============================================
-   */
 
   return (
     <main>
       <section className='topSection'>
         <div className={styles.hero}>
           <h1 className='page-title'>Прайс — выберите услуги для расчёта</h1>
-          <h2 className='page-sub'>Стоимость учитывается автоматически</h2>
+          <p className='page-text'>Выберите ваш регион:</p>
 
-          <div className={styles.region}>
-            <p className='page-text'>Выберите ваш регион:</p>
-            <div className={styles.pillWrapper}>
-              {/* Бегунок */}
-              <div
-                className={styles.pillSlider}
-                style={{
-                  width: activeWidth,
-                  transform: `translateX(${activeOffset}px)`,
-                }}
-              />
+          <div className={styles.pillWrapper}>
+            <button
+              ref={spbRef}
+              onClick={() => setRegion('spb')}
+              type='button'
+              className={`${styles.pill} ${region === 'spb' ? styles.pillActive : ''}`}
+            >
+              СПБ
+            </button>
 
-              {/* Кнопки */}
-              <button
-                ref={spbRef}
-                type='button'
-                className={`${styles.pill} ${region === 'spb' ? styles.activeText : ''}`}
-                onClick={() => setRegion('spb')}
-              >
-                СПБ
-              </button>
-
-              <button
-                ref={areaRef}
-                type='button'
-                className={`${styles.pill} ${region === 'area' ? styles.activeText : ''}`}
-                onClick={() => setRegion('area')}
-              >
-                Область
-              </button>
-            </div>
+            <button
+              ref={areaRef}
+              onClick={() => setRegion('area')}
+              type='button'
+              className={`${styles.pill} ${region === 'area' ? styles.pillActive : ''}`}
+            >
+              ОБЛ
+            </button>
           </div>
         </div>
       </section>
@@ -550,40 +513,39 @@ export function PricingClient() {
             const active = state.selected.has(s.id)
 
             return (
-              <button
-                key={s.id}
-                type='button'
-                className={`${styles.service} ${active ? styles.serviceActive : ''}`}
-                onClick={() => toggleService(s.id)}
-                aria-pressed={active}
-              >
-                <div className={styles.checkMark} aria-hidden>
-                  {active ? (
-                    <svg
-                      className={styles.marker}
-                      viewBox='0 0 24 24'
-                      width='20'
-                      height='20'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='4'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <path d='M5 12l5 5L20 7' />
-                    </svg>
-                  ) : null}
-                </div>
-
-                <div className={styles.serviceTitle}>{s.name}</div>
-                {s.description && <div className={styles.serviceDesc}>{s.description}</div>}
-
-                <div className={styles.servicePrice}>
-                  <PriceView price={price} region={region} />
-                </div>
-
-                {s.note && <div className={styles.note}>* {s.note}</div>}
-              </button>
+              <TiltCard key={s.id} as='article' className={styles.card} freezeOnLeave={active}>
+                <button
+                  type='button'
+                  className={`${styles.cardInner} ${active ? styles.cardInnerActive : ''}`}
+                  onClick={() => toggleService(s.id)}
+                  aria-pressed={active}
+                >
+                  <div className={styles.cardHeader}>
+                    <div className={styles.serviceTitle}>{s.name}</div>
+                    <div className={styles.checkMark} aria-hidden>
+                      {active ? (
+                        <svg
+                          className={styles.marker}
+                          viewBox='0 0 24 24'
+                          width='20'
+                          height='20'
+                          fill='none'
+                          stroke='currentColor'
+                          strokeWidth='4'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                        >
+                          <path d='M5 12l5 5L20 7' />
+                        </svg>
+                      ) : null}
+                    </div>
+                  </div>
+                  {s.description && <p className={styles.serviceDesc}>{s.description}</p>}
+                  <div className={styles.servicePrice}>
+                    <PriceView price={price} region={region} />
+                  </div>
+                </button>
+              </TiltCard>
             )
           })}
         </div>
@@ -645,7 +607,6 @@ export function PricingClient() {
               />
             </div>
 
-            {/* Кромка */}
             <div className={styles.calcField}>
               <label className='label'>Тип кромки</label>
               <select
@@ -701,7 +662,6 @@ export function PricingClient() {
             )}
           </div>
 
-          {/* Разбивка */}
           <div className={styles.breakdown}>
             {res.parts.glass > 0 && (
               <div className={styles.line}>
@@ -746,7 +706,6 @@ export function PricingClient() {
         </div>
       </section>
 
-      {/* Форма */}
       <QuoteLeadForm quote={quotePayload} />
     </main>
   )

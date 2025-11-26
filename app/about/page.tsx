@@ -1,7 +1,9 @@
+// app/about/page.tsx
 import type { Metadata } from 'next'
 import styles from './page.module.css'
 import CallToActionSection from 'components/CallToActionSection/CallToActionSection'
 import TypingText from 'components/TypingText/TypingText'
+import TiltCard from 'components/TiltCard/TiltCard'
 
 // Страница «О нас» — с бейджами, цветными плашками и живыми элементами
 export const metadata: Metadata = {
@@ -72,12 +74,6 @@ export default function About() {
     },
   ]
 
-  /**
-   * ! ===============================================
-   * ?                     RETURN
-   * ! ===============================================
-   */
-
   return (
     <main>
       {/* О нас, описание, миссия */}
@@ -89,9 +85,7 @@ export default function About() {
         <TypingText
           className='page-text'
           text={
-            'Наша миссия — сделать прихожую Вашего дома стильной и функциональной, ценим качество, ' +
-            'честность и индивидуальный подход. Мы работаем с разными типами полотен и покрытий, ' +
-            'подбираем безопасные крепёжные решения и учитываем особенности вашего пространства ☺️'
+            'Наша миссия — сделать прихожую Вашего дома стильной и функциональной, качественно, честно и с индивидуальным подходом. Мы работаем с разными типами полотен и покрытий, подбираем безопасные крепёжные решения и учитываем особенности вашего пространства ☺️'
           }
         />
       </section>
@@ -103,11 +97,11 @@ export default function About() {
         </div>
         <div className={`grid ${styles.statsGrid}`}>
           {stats.map((s, i) => (
-            <div key={i} className={`card ${styles.stat}`}>
+            <TiltCard key={i} as='article' className={`card ${styles.stat}`}>
               <div className={styles.statValue + ' title-font'}>{s.value}</div>
               <div className={styles.statLabel}>{s.label}</div>
               <span className={styles.ribbonStripe} aria-hidden />
-            </div>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -119,31 +113,57 @@ export default function About() {
         </div>
         <ol className={styles.steps}>
           {steps.map(([title, text], i) => (
-            <li key={i} className={`card ${styles.step}`}>
+            <TiltCard key={i} as='li' className={`card ${styles.step}`}>
               <div className={styles.stepHead}>
                 <span className={styles.stepNum}>{i + 1}</span>
                 <p className={styles.stepTitle + ' title-font'}>{title}</p>
               </div>
               <div className={styles.stepText}>{text}</div>
-            </li>
+            </TiltCard>
           ))}
         </ol>
       </section>
 
-      {/* Материалы и безопасность — с «галочками» */}
+      {/* Материалы и безопасность — карточки с акцентной лентой */}
       <section>
         <div className='sub-wrapper'>
           <h2 className='page-sub'>Материалы и безопасность:</h2>
         </div>
-        <ul className={styles.list}>
-          <li className={styles.listItem}>
-            Закалённое и тонированное стекло, полировка или фацетная кромка.
-          </li>
-          <li className={styles.listItem}>
-            Надёжные крепления с учётом геометрии двери и расположения фурнитуры.
-          </li>
-          <li className={styles.listItem}>Рекомендации по уходу и безопасной эксплуатации.</li>
-        </ul>
+
+        <div className={`grid ${styles.materialsGrid}`}>
+          {[
+            {
+              title: 'Правильный класс зеркала',
+              text: 'Используем закалённое и качественно посеребрённое стекло подходящей толщины — без «строительных остатков» и сомнительных поставщиков.',
+            },
+            {
+              title: 'Кромка под ваш сценарий',
+              text: 'Полировка — спокойный минимализм; фацет — выразительный акцент. Всегда аккуратно и безопасно.',
+            },
+            {
+              title: 'Крепёж под конкретную дверь',
+              text: 'Учитываем материал полотна, металл, рёбра жёсткости, петли и фурнитуру. Зеркало сидит надёжно и ровно.',
+            },
+            {
+              title: 'Проверенные клеевые составы',
+              text: 'Клеи и профили, совместимые со стеклом, металлом и МДФ. Только надёжные составы под вашу дверь.',
+            },
+            {
+              title: 'Безопасность при эксплуатации',
+              text: 'Учитываем детей, животных и плотность использования. Усиливаем крепление при необходимости.',
+            },
+            {
+              title: 'Рекомендации по уходу',
+              text: 'Оставляем рекомендации по уходу за зеркалом и кромкой, чтобы покрытие дольше сохраняло вид «как новое».',
+            },
+          ].map((item, i) => (
+            <TiltCard key={i} as='article' className={`card ${styles.materialCard}`}>
+              <span className={styles.materialRibbon} aria-hidden />
+              <p className={`${styles.materialTitle} title-font`}>{item.title}</p>
+              <p className={styles.materialText}>{item.text}</p>
+            </TiltCard>
+          ))}
+        </div>
       </section>
 
       {/* Команда / ценности — мини-карточки с акцентной кромкой */}
@@ -159,8 +179,8 @@ export default function About() {
 
           <div className={`grid ${styles.teamGrid}`}>
             {['Аккуратность', 'Опыт', 'Коммуникация', 'Безопасность'].map((val, i) => (
-              <div key={i} className={`card ${styles.valueCard}`}>
-                <div className={styles.valueCardEdge} aria-hidden />
+              <TiltCard key={i} as='article' className={`card ${styles.valueCard}`}>
+                {/* <div className={styles.valueCardEdge} aria-hidden /> */}
                 <div className={styles.cardTitle}>{val}</div>
                 <div className={styles.aboutText}>
                   {val === 'Аккуратность' &&
@@ -172,7 +192,7 @@ export default function About() {
                   {val === 'Безопасность' &&
                     'Подбираем надёжные крепления с учётом геометрии двери и расположения фурнитуры.'}
                 </div>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -185,10 +205,10 @@ export default function About() {
         </div>
         <div className='grid'>
           {reviews.map((r, i) => (
-            <blockquote key={i} className={`card ${styles.review}`}>
+            <TiltCard key={i} as='blockquote' className={`card ${styles.review}`}>
               <p className='page-text'>«{r.text}»</p>
               <cite className='about__review-author title-font'>{r.name}</cite>
-            </blockquote>
+            </TiltCard>
           ))}
         </div>
       </section>
