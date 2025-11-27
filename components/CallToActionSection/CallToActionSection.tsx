@@ -7,7 +7,7 @@ export default function CallToActionSection() {
     <section>
       <TiltCard className={styles.ctaWrapper}>
         <div>
-          <h2 className='page-sub'>Готовы к красивой двери !?</h2>
+          <h2 className='page-sub'>Готовы к установке !?</h2>
           <p className={styles.ctaText}>– подберём зеркало и ответим на вопросы.</p>
         </div>
         <ButtonCTA />

@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import styles from './Header.module.css'
 import ThemeToggle from 'components/ThemeToggle/ThemeToggle'
-import ButtonCTA from 'components/ButtonCTA/ButtonCTA'
 
 // нормализуем путь
 const normalize = (s: string) => s.replace(/\/+$/, '') || '/'
