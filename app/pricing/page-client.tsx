@@ -513,38 +513,39 @@ export function PricingClient() {
             const active = state.selected.has(s.id)
 
             return (
-              <TiltCard key={s.id} as='article' className={styles.card} freezeOnLeave={active}>
-                <button
-                  type='button'
-                  className={`${styles.cardInner} ${active ? styles.cardInnerActive : ''}`}
-                  onClick={() => toggleService(s.id)}
-                  aria-pressed={active}
-                >
-                  <div className={styles.cardHeader}>
-                    <div className={styles.serviceTitle}>{s.name}</div>
-                    <div className={styles.checkMark} aria-hidden>
-                      {active ? (
-                        <svg
-                          className={styles.marker}
-                          viewBox='0 0 24 24'
-                          width='20'
-                          height='20'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth='4'
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                        >
-                          <path d='M5 12l5 5L20 7' />
-                        </svg>
-                      ) : null}
-                    </div>
+              <TiltCard
+                key={s.id}
+                as='button'
+                freezeOnLeave={active}
+                type='button'
+                className={`${styles.cardInner} ${active ? styles.cardInnerActive : ''}`}
+                onClick={() => toggleService(s.id)}
+                aria-pressed={active}
+              >
+                <div className={styles.cardHeader}>
+                  <div className={styles.serviceTitle}>{s.name}</div>
+                  <div className={styles.checkMark} aria-hidden>
+                    {active ? (
+                      <svg
+                        className={styles.marker}
+                        viewBox='0 0 24 24'
+                        width='20'
+                        height='20'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='4'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      >
+                        <path d='M5 12l5 5L20 7' />
+                      </svg>
+                    ) : null}
                   </div>
-                  {s.description && <p className={styles.serviceDesc}>{s.description}</p>}
-                  <div className={styles.servicePrice}>
-                    <PriceView price={price} region={region} />
-                  </div>
-                </button>
+                </div>
+                {s.description && <p className={styles.serviceDesc}>{s.description}</p>}
+                <div className={styles.servicePrice}>
+                  <PriceView price={price} region={region} />
+                </div>
               </TiltCard>
             )
           })}

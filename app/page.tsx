@@ -150,28 +150,28 @@ export default function Home() {
   return (
     <main>
       {/* HERO */}
-      <section className={`topSection ${styles.hero}`}>
+      <section className='topSection'>
         <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
-        <div className={styles.heroBadges}>
+        {/* <div className={styles.heroBadges}>
           <span className={`${styles.badge} ${styles.badgeFast}`}>Замер бесплатно в СПБ</span>
           <span className={`${styles.badge} ${styles.badgeSafe}`}>Быстрый монтаж</span>
           <span className={`${styles.badge} ${styles.badgeSafe}`}>Гарантия 12 месяцев</span>
           <span className={`${styles.badge} ${styles.badgeSafe}`}>Индивидуальная смета</span>
           <span className={`${styles.badge} ${styles.badgeSafe}`}>СПБ и область</span>
-        </div>
+        </div> */}
         <TypingText
           className='page-text'
           text={
-            'Преобразим Вашу прихожую: визуально расширим пространство, подберём наилучшее зеркало, аккуратно установим 😉'
+            'Преобразим Вашу прихожую: визуально расширим пространство, подберём наилучшее зеркало, аккуратно установим'
           }
         />
 
-        <div className={styles.cta}>
+        {/* <div className={styles.cta}>
           <Link className='button button--outline' href='/pricing/'>
             Рассчитать стоимость
           </Link>
           <ButtonCTA />
-        </div>
+        </div> */}
       </section>
 
       {/* Почему с нами удобно */}
@@ -203,20 +203,22 @@ export default function Home() {
             const isOpen = openFaqs.has(i)
 
             return (
-              <TiltCard key={i} className={styles.faqCard} freezeOnLeave={isOpen}>
-                <details className={styles.faqDetails} onToggle={handleToggleFaq(i)}>
-                  <summary className={styles.faqSummary}>
-                    <span className={styles.faqIndex}>{String(i + 1)}</span>
-                    <span className={styles.faqQuestion}>{f.q}</span>
-                    <span className={styles.faqIcon} aria-hidden>
-                      <span className={styles.faqIconLineV} />
-                      <span className={styles.faqIconLineH} />
-                    </span>
-                  </summary>
-                  <div className={styles.faqBody}>
-                    <p className={styles.faqText}>{f.a}</p>
-                  </div>
-                </details>
+              <TiltCard
+                as='details'
+                key={i}
+                className={`${styles.faqCard} ${styles.faqDetails}`}
+                onToggle={handleToggleFaq(i)}
+                freezeOnLeave={isOpen}
+              >
+                <summary className={styles.faqSummary}>
+                  <span className={styles.faqIndex}>{String(i + 1)}</span>
+                  <span className={styles.faqQuestion}>{f.q}</span>
+                  <span className={styles.faqIcon} aria-hidden>
+                    <span className={styles.faqIconLineV} />
+                    <span className={styles.faqIconLineH} />
+                  </span>
+                </summary>
+                <p className={styles.faqText}>{f.a}</p>
               </TiltCard>
             )
           })}

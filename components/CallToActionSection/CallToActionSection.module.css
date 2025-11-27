@@ -1,96 +1,23 @@
 /* Обёртка карточки (через TiltCard) */
-.ctaCard {
-  position: relative;
-  padding: 26px 26px 26px 26px;
-  display: flex;
+.ctaWrapper {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 20px;
   align-items: center;
-  gap: 24px;
-
-  border-radius: var(--radius);
-  background: var(--card);
-  border: var(--border);
-  box-shadow: var(--box-shadow);
-
-  overflow: hidden;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* Неоновая диагональная лента */
-.ribbon {
-  background: var(--accent);
-  opacity: 0.5;
-  width: 1000px;
-  height: 1000px;
-  animation: 6s linear infinite page-module__xgPmsG__hue;
-  position: absolute;
-  bottom: 0;
-  transform: rotate(45deg);
-  box-shadow: inset -18px -3px 3px #000;
-  animation: hueRotate 10s linear infinite;
-}
-
-@keyframes hueRotate {
-  from {
-    filter: hue-rotate(0deg);
-  }
-  to {
-    filter: hue-rotate(360deg);
-  }
-}
-
-/* Текстовый блок */
-.textBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  position: relative;
-  z-index: 2;
-}
-
-.title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  font-style: italic;
-  color: var(--accent-3);
-}
-
-.subtitle {
-  margin: 0;
+.ctaText {
   color: var(--muted);
-  font-size: 15px;
 }
 
-/* Кнопка */
-.ctaCard :global(.buttonCTA) {
-  margin-left: auto;
-  position: relative;
-  z-index: 2;
-}
-
-/* Мобилка */
 @media (max-width: 860px) {
-  .ctaCard {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-    padding: 22px;
-  }
-
-  .ctaCard :global(.buttonCTA) {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .ribbon {
-    opacity: 0.5;
-
-    box-shadow: inset -18px -3px 3px #000;
-
-    width: 100%;
-    height: 900px;
-    right: -380px;
-    top: -596px;
-    transform: rotate(135deg);
-    left: -205px;
+  .ctaWrapper {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    row-gap: 20px;
   }
 }

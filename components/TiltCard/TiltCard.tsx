@@ -3,27 +3,25 @@
 import * as React from 'react'
 import styles from './TiltCard.module.css'
 
-type AsTag = 'div' | 'section' | 'article' | 'blockquote' | 'li' | 'a' | 'p'
+// Любой React-тег: 'div', 'section', 'a', 'form', и т.д.
+type TiltCardAs = React.ElementType
 
-type TiltCardProps<T extends AsTag> = {
+type TiltCardProps<T extends TiltCardAs = 'div'> = {
   as?: T
   className?: string
   children?: React.ReactNode
-  /** если true — не сбрасываем наклон при mouseleave и держим подсветку */
+  /** если true — карточка остаётся "подсвеченной" после ухода мыши */
   freezeOnLeave?: boolean
 } & React.ComponentPropsWithoutRef<T>
 
-/**
- * Универсальная 3D-карточка с подсветкой
- */
-export default function TiltCard<T extends AsTag = 'div'>({
+export default function TiltCard<T extends TiltCardAs = 'div'>({
   as,
   className = '',
   children,
   freezeOnLeave = false,
   ...rest
 }: TiltCardProps<T>) {
-  const TagEl = (as || 'div') as AsTag
+  const TagEl = (as || 'div') as TiltCardAs
   const ref = React.useRef<HTMLElement | null>(null)
   const [hovered, setHovered] = React.useState(false)
 
@@ -71,13 +69,12 @@ export default function TiltCard<T extends AsTag = 'div'>({
 
   const handleLeave = () => {
     setHovered(false)
-    // если freezeOnLeave=true (активная карточка) — НЕ сбрасываем наклон
-    if (!freezeOnLeave)  {
+    if (!freezeOnLeave) {
       resetCard()
     }
   }
 
-  // Когда карточка перестала быть активной — мягко сбросим наклон
+  // Если freezeOnLeave перестал быть true — аккуратно сбрасываем наклон
   React.useEffect(() => {
     if (!freezeOnLeave) {
       resetCard()

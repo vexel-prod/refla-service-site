@@ -21,7 +21,7 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button className={styles.toggle} onClick={toggle} aria-label='Переключить тему'>
+    <button className='button button--outline' onClick={toggle} aria-label='Переключить тему'>
       {theme === 'light' ? '🌙' : '☀️'}
     </button>
   )

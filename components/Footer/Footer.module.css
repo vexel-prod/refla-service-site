@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 /* Текст копирайта */
@@ -35,7 +35,7 @@
 /* Адаптив */
 @media (max-width: 860px) {
   .footer {
-    padding: 10px;
+    padding: 20px;
     text-align: center;
   }
 

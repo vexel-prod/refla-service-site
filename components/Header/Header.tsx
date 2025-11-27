@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import styles from './Header.module.css'
 import ThemeToggle from 'components/ThemeToggle/ThemeToggle'
+import ButtonCTA from 'components/ButtonCTA/ButtonCTA'
 
 // нормализуем путь
 const normalize = (s: string) => s.replace(/\/+$/, '') || '/'
@@ -81,6 +82,13 @@ export default function Header() {
               aria-current={isActive('/contacts/') ? 'page' : undefined}
             >
               Контакты
+            </Link>
+            <Link
+              href='/request/'
+              className={`button ${isActive('/request/') ? '' : 'button--outline'}`}
+              aria-current={isActive('/request/') ? 'page' : undefined}
+            >
+              Оставить заявку
             </Link>
           </nav>
 

@@ -61,11 +61,11 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 12px;
+  gap: 20px;
 }
 
 .step {
-  padding: 14px;
+  padding: 20px;
   display: grid;
   gap: 6px;
 }
@@ -73,7 +73,7 @@
 .stepHead {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .stepNum {
@@ -169,7 +169,7 @@
   border: var(--border);
   border-radius: var(--radius);
   padding: 20px;
-  gap: 10px;
+  gap: 20px;
 }
 
 .valueCardEdge {
@@ -193,7 +193,7 @@
   max-width: max-content;
   border-radius: var(--radius);
   box-shadow: inset 1px 1px 1px 0px #ffffff78;
-  text-shadow: 0 0.5px #020617, 0 2px 4px #00000073;
+  text-shadow: var(--shadow-text);
   animation: 6s linear infinite hue;
   opacity: .5;
 }

@@ -1,24 +1,44 @@
-.root {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-  max-width: var(--container);
-  width: 100%;
-  margin: 0 auto;
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
 }
 
-.title {
-  font-size: 28px;
-  margin-top: 0;
+.lead {
+  font-size: 15px;
+  max-width: 720px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.block {
+  padding: 20px;
+  display: grid;
+  gap: 15px;
 }
 
 .subtitle {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--accent-2);
+  text-shadow: 0 1px 2px #0006;
 }
 
-.paragraphWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.text {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.list {
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 15px;
 }

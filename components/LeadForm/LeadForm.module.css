@@ -1,22 +1,169 @@
-/* components/LeadForm.module.css */
-
-.root {
-  padding: 18px;
+/* Внутренняя сетка: слева текст, справа форма */
+.layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.7fr);
+  gap: 20px;
+  align-items: flex-start;
+  z-index: 1;
 }
 
+/* Левая колонка */
+.left {
+  display: grid;
+  gap: 20px;
+}
+
+/* Маленький заголовок */
+.kicker {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Основной заголовок */
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--accent);
+  text-shadow: 0 0.5px 0 #020617, 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+/* Подзаголовок */
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Бейджи под заголовком */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: var(--bg);
+  color: var(--text);
+  backdrop-filter: blur(10px);
+}
+
+/* Список преимуществ */
+.points {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Правая колонка */
+.right {
+  display: grid;
+  gap: 14px;
+}
+
+/* Сетка полей */
 .grid {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
 }
 
+/* Комментарий — на всю ширину */
+.commentField {
+  grid-column: 1 / -1;
+}
+
+/* Экшены (кнопки) */
 .actions {
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin-top: 4px;
 }
 
+/* Телеграм-кнопка — чуть прозрачная */
 .telegramButton {
-  display: inline-block;
-  max-width: fit-content;
-  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius);
+}
+
+/* Низ формы — политика */
+.policy {
+  margin-top: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-3);
+  margin-top: 5px;
+}
+
+.policyLink {
+  color: var(--accent-3);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.policyLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Адаптив */
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .root {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions .button,
+  .actions .button.button--outline {
+    width: 100%;
+    text-align: center;
+  }
 }

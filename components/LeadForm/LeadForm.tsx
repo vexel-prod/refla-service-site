@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './LeadForm.module.css'
+import TiltCard from 'components/TiltCard/TiltCard'
 
 const API_ENDPOINT = 'https://refla.ru/api/lead.php'
 
@@ -103,7 +104,14 @@ export default function LeadForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className={`card ${styles.root}`} noValidate suppressHydrationWarning>
+    <TiltCard
+      as='form'
+      onSubmit={onSubmit}
+      className={styles.root}
+      noValidate
+      suppressHydrationWarning
+      aria-label='Форма заявки на установку зеркала'
+    >
       {/* honeypot */}
       <div
         style={{
@@ -127,120 +135,153 @@ export default function LeadForm() {
         </label>
       </div>
 
-      <div className={styles.grid}>
-        <div>
-          <label className='label' htmlFor='name'>
-            Ваше имя *
-          </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='name'
-            required
-            placeholder='Иван'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            aria-invalid={name.trim() !== '' && !nameValid}
-            maxLength={60}
-          />
-          {name.trim() !== '' && !nameValid && (
-            <div className='error' style={{ marginTop: 6 }}>
-              Имя от 2 до 60 символов, без лишних знаков.
+      <div className={styles.layout}>
+        {/* Левая колонка — контекст заявки */}
+        <div className={styles.left}>
+          <p className={styles.kicker}>Заявка на установку</p>
+          <h2 className={styles.title}>Расскажите немного о двери</h2>
+          <p className={styles.subtitle}>
+            Мы уточним детали, подберём оптимальное зеркало и согласуем монтаж в удобное время.
+          </p>
+
+          <div className={styles.badges}>
+            <span className={styles.badge}>Ответ обычно до 30 минут</span>
+            <span className={styles.badge}>Замер в СПБ — бесплатно</span>
+            <span className={styles.badge}>СПБ и Ленобласть</span>
+          </div>
+
+          <ul className={styles.points}>
+            <li>Без спама — только по вашей заявке.</li>
+            <li>Предварительную смету можно скорректировать после замера.</li>
+            <li>Все данные защищены и не передаются третьим лицам.</li>
+          </ul>
+        </div>
+
+        {/* Правая колонка — сама форма */}
+        <div className={styles.right}>
+          <div className={styles.grid}>
+            <div>
+              <label className='label' htmlFor='name'>
+                Ваше имя *
+              </label>
+              <input
+                suppressHydrationWarning
+                className='input'
+                id='name'
+                required
+                placeholder='Иван'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                aria-invalid={name.trim() !== '' && !nameValid}
+                maxLength={60}
+              />
+              {name.trim() !== '' && !nameValid && (
+                <div className='error' style={{ marginTop: 6 }}>
+                  Имя от 2 до 60 символов, без лишних знаков.
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div>
-          <label className='label' htmlFor='contact'>
-            Контакт (телефон или e-mail) *
-          </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='contact'
-            required
-            placeholder='+7 900 000-00-00'
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            aria-invalid={contact.trim() !== '' && !contactValid}
-            inputMode='email'
-            autoComplete='email'
-            maxLength={100}
-          />
-          {!contactValid && contact.trim() !== '' && (
-            <div className='error' style={{ marginTop: 6 }}>
-              Укажите корректный телефон или e-mail.
+            <div>
+              <label className='label' htmlFor='contact'>
+                Контакт (телефон или e-mail) *
+              </label>
+              <input
+                suppressHydrationWarning
+                className='input'
+                id='contact'
+                required
+                placeholder='+7 900 000-00-00'
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                aria-invalid={contact.trim() !== '' && !contactValid}
+                inputMode='email'
+                autoComplete='email'
+                maxLength={100}
+              />
+              {!contactValid && contact.trim() !== '' && (
+                <div className='error' style={{ marginTop: 6 }}>
+                  Укажите корректный телефон или e-mail.
+                </div>
+              )}
+              <div className='helper'>Мы используем контакт только для связи по заявке.</div>
             </div>
-          )}
-          <div className='helper'>Мы используем контакт только для связи по заявке.</div>
-        </div>
 
-        <div>
-          <label className='label' htmlFor='address'>
-            Адрес установки *
-          </label>
-          <input
-            suppressHydrationWarning
-            className='input'
-            id='address'
-            required
-            placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            aria-invalid={address.trim() !== '' && !addressValid}
-            maxLength={200}
-            autoComplete='street-address'
-          />
-          {address.trim() !== '' && !addressValid && (
-            <div className='error' style={{ marginTop: 6 }}>
-              Адрес от 5 до 200 символов.
+            <div>
+              <label className='label' htmlFor='address'>
+                Адрес установки *
+              </label>
+              <input
+                suppressHydrationWarning
+                className='input'
+                id='address'
+                required
+                placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                aria-invalid={address.trim() !== '' && !addressValid}
+                maxLength={200}
+                autoComplete='street-address'
+              />
+              {address.trim() !== '' && !addressValid && (
+                <div className='error' style={{ marginTop: 6 }}>
+                  Адрес от 5 до 200 символов.
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div>
-          <label className='label' htmlFor='comment'>
-            Комментарий (необязательно)
-          </label>
-          <textarea
-            suppressHydrationWarning
-            className='textarea'
-            id='comment'
-            rows={4}
-            placeholder='Опишите пожелания...'
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            aria-invalid={!commentValid}
-            maxLength={2000}
-          />
-          {!commentValid && (
-            <div className='error' style={{ marginTop: 6 }}>
-              Слишком длинный комментарий (до 2000 символов).
+            <div className={styles.commentField}>
+              <label className='label' htmlFor='comment'>
+                Комментарий (необязательно)
+              </label>
+              <textarea
+                suppressHydrationWarning
+                className='textarea'
+                id='comment'
+                rows={4}
+                placeholder='Опишите пожелания, тип двери, желаемое зеркало...'
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                aria-invalid={!commentValid}
+                maxLength={2000}
+              />
+              {!commentValid && (
+                <div className='error' style={{ marginTop: 6 }}>
+                  Слишком длинный комментарий (до 2000 символов).
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
 
-        <div className={styles.actions}>
-          <button className='button' type='submit' disabled={!formValid}>
-            {loading ? 'Отправка...' : 'Отправить заявку'}
-          </button>
-          <a
-            className={`button ${styles.telegramButton}`}
-            href='https://t.me/refla_bot?start=lead'
-            target='_blank'
-            rel='noreferrer'
-          >
-            Оформить заявку в Telegram
-          </a>
-        </div>
+          <div className={styles.actions}>
+            <button className='button' type='submit' disabled={!formValid}>
+              {loading ? 'Отправка...' : 'Отправить заявку'}
+            </button>
+            <a
+              className={`button button--outline ${styles.telegramButton}`}
+              href='https://t.me/refla_bot?start=lead'
+              target='_blank'
+              rel='noreferrer'
+            >
+              Оформить в Telegram
+            </a>
+          </div>
 
-        {success && <div className='success'>{success}</div>}
-        {error && <div className='error'>{error}</div>}
+          {success && <div className='success'>{success}</div>}
+          {error && <div className='error'>{error}</div>}
+
+          <div className={styles.policy}>
+            <span className={styles.dot} aria-hidden />
+            <span>
+              Нажимая «Отправить заявку», вы соглашаетесь с{' '}
+              <a href='/privacy/' className={styles.policyLink}>
+                политикой обработки персональных данных
+              </a>
+              .
+            </span>
+          </div>
+        </div>
       </div>
-
-      <div className='helper'>
-        * Нажимая «Отправить заявку», вы соглашаетесь с политикой обработки персональных данных.
-      </div>
-    </form>
+    </TiltCard>
   )
 }

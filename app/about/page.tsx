@@ -85,7 +85,7 @@ export default function About() {
         <TypingText
           className='page-text'
           text={
-            'Наша миссия — сделать прихожую Вашего дома стильной и функциональной, качественно, честно и с индивидуальным подходом. Мы работаем с разными типами полотен и покрытий, подбираем безопасные крепёжные решения и учитываем особенности вашего пространства ☺️'
+            'Наша миссия — сделать прихожую Вашего дома стильной и функциональной, качественно, честно и с индивидуальным подходом. Мы работаем с разными типами полотен и покрытий, подбираем безопасные крепёжные решения и учитываем особенности вашего пространства'
           }
         />
       </section>
@@ -113,12 +113,12 @@ export default function About() {
         </div>
         <ol className={styles.steps}>
           {steps.map(([title, text], i) => (
-            <TiltCard key={i} as='li' className={`card ${styles.step}`}>
+            <TiltCard key={i} as='li' className={styles.step}>
               <div className={styles.stepHead}>
                 <span className={styles.stepNum}>{i + 1}</span>
                 <p className={styles.stepTitle + ' title-font'}>{title}</p>
               </div>
-              <div className={styles.stepText}>{text}</div>
+              <p className={styles.stepText}>{text}</p>
             </TiltCard>
           ))}
         </ol>

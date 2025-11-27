@@ -1,70 +1,80 @@
-/* components/TiltCard/TiltCard.module.css */
-
 .tiltWrapper {
   perspective: 1200px;
   perspective-origin: 50% 30%;
-  max-height: max-content;
   position: relative;
+  height: max-content;
 }
 
-/* сюда прилетает .card / about__* */
+/* сюда прилетает div/section/article/a/form и т.д. */
 .tiltInner {
-  max-height: max-content;
-  gap: 10px;
+  position: relative;
+
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  border-radius: var(--radius);
-  background: var(--gradient);
   will-change: transform, box-shadow, border-color, background, filter;
+
   transform: translate3d(0, 0, var(--tilt-z, 0px)) rotateX(var(--tilt-x, 0deg))
     rotateY(var(--tilt-y, 0deg));
+
   transition: transform 0.22s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.22s, border-color 0.2s,
     background 0.2s, filter 0.2s;
-  position: relative;
-  
+
+  /* базовый стеклянный фон */
+  background: var(--card);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(15, 23, 42, 0.9);
 }
 
-/* подсветка / блик */
+/* блик / подсветка */
 .tiltInner::before {
   content: '';
+  height: 100%;
   position: absolute;
-  inset: -1px;
+  inset: 2px 2px 55% 2px;
   border-radius: inherit;
   pointer-events: none;
+
   background: radial-gradient(
     circle at var(--glare-x, 50%) var(--glare-y, 0%),
-    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.32),
     transparent 55%
   );
+
   mix-blend-mode: screen;
   opacity: var(--glare-opacity, 0);
   transition: opacity 200ms ease-out;
 }
 
-/* лёгкая неоновая кайма */
+/* неоновый контур */
 .tiltInner::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  border: 1px solid rgba(56, 189, 248, 0.1);
-  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.18), 0 0 24px rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.22), 0 0 28px rgba(56, 189, 248, 0.25);
   opacity: 0;
   transition: opacity 200ms ease-out;
 }
 
-/* усиливаем объём и свечение при ховере */
+/* усиление объёма при hover / freezeOnLeave */
 .tiltInnerHovered {
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border-color));
-  filter: saturate(1.05);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.7);
+  filter: saturate(1.06);
 }
 
 .tiltInnerHovered::after {
   opacity: 1;
 }
 
-/* На тач-устройствах — без 3D */
+/* На таче — без 3D, остаётся просто стеклянная плитка */
 @media (pointer: coarse) {
   .tiltWrapper {
     perspective: none;
@@ -72,7 +82,8 @@
 
   .tiltInner {
     transform: none !important;
-    transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+    transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease,
+      filter 180ms ease;
   }
 
   .tiltInner::before,

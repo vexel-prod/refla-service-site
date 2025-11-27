@@ -28,6 +28,7 @@
 
   --shadow: rgba(15, 23, 42, 0.7);
   --box-shadow: 0 18px 45px var(--shadow);
+  --shadow-text: 1px 1px 0 #000, 2px 2px 2px rgba(0, 0, 0, 0.55);
 
   --gradient: linear-gradient(
     135deg,
@@ -81,6 +82,7 @@
 
   --shadow: rgba(0, 0, 0, 0.08);
   --box-shadow: 0 12px 28px var(--shadow);
+  --shadow-text: 1px 1px 0 #000, 2px 2px 2px rgba(0, 0, 0, 0.55);
 
   --gradient: linear-gradient(145deg, rgba(0, 147, 171, 0.04) 0%, rgba(255, 255, 255, 0.7) 100%);
 
@@ -156,18 +158,19 @@ main {
 }
 
 section {
-  background: var(--block);
-  padding: 20px;
-  border: var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .topSection {
   display: flex;
   flex-direction: column;
+  padding: 20px;
   gap: 20px;
+  border: var(--border);
+  border-radius: var(--radius);
   background: var(--gradient);
+  box-shadow: var(--box-shadow);
 }
 
 /* ========================================================
@@ -279,6 +282,7 @@ h6 {
   font-size: 26px;
   font-weight: 800;
   color: var(--title);
+  text-shadow: var(--shadow-text);
 }
 
 .page-sub {
@@ -286,11 +290,12 @@ h6 {
   font-weight: 800;
   font-style: italic;
   color: var(--accent-3);
+  text-shadow: var(--shadow-text);
 }
 
 .page-text {
   font-size: 16px;
-  color: var(--muted);
+  color: var(--text);
 }
 
 @media (max-width: 860px) {
@@ -334,7 +339,7 @@ h6 {
 
 .sub-wrapper {
   text-align: center;
-  padding: 10px;
+  padding: 20px;
   margin-bottom: 20px;
   border-radius: var(--radius);
   border: var(--border);
@@ -375,7 +380,7 @@ h6 {
   width: 100%;
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  padding: 10px 14px;
+  padding: 20px 14px;
   color: var(--text);
   background: var(--card);
   transition: var(--transition);
@@ -402,47 +407,105 @@ h6 {
   cursor: text;
 }
 
-/* Кнопка */
+/* ================================
+         PREMIUM GLASS BUTTON
+   ================================ */
 .button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 9px 18px;
+  border-radius: calc(var(--radius) * 1.2);
+
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--block);
-  font-weight: 600;
-  border: var(--border);
-  box-shadow: var(--box-shadow);
-  transition: var(--transition);
-  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
-  font-size: 14px;
+
+  backdrop-filter: blur(12px) saturate(170%);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 18px rgba(0, 0, 0, 0.45);
+
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* бликовая стеклянная полоска сверху */
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.06) 35%,
+    transparent
+  );
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+}
+
+/* HOVER — лёгкое свечение + подъем */
 .button:hover {
-  background: var(--accent-2);
-  transform: translateY(-1px);
-  color: var(--block);
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 8px 26px rgba(0, 0, 0, 0.55),
+    0 0 22px var(--accent-2);
+  background: rgba(255, 255, 255, 0.1);
 }
 
+/* ACTIVE — вдавливание в стекло */
 .button:active {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 -1px 1px rgba(255, 255, 255, 0.15);
 }
 
+/* Disabled */
 .button:disabled,
 .button[aria-disabled='true'] {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.45;
   transform: none;
   box-shadow: none;
 }
 
-/* Обводочная кнопка */
-.button.button--outline {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--accent);
-  width: fit-content;
+/* ================================
+         OUTLINE VARIANT
+   ================================ */
+.button--outline {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--accent-3);
+  color: var(--accent-3);
+}
+
+.button--outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 18px var(--accent-3);
+}
+
+.button--outline:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Текущая страница / активный роут */
+.button[aria-current='page'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* если это ещё и outline-варик */
+.button.button--outline[aria-current='page'] {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent-3);
 }
 
 /* Универсальный чип / бейдж */
@@ -478,5 +541,3 @@ h6 {
     padding: 0 20px;
   }
 }
-
-

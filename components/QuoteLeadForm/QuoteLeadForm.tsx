@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import styles from './QuoteLeadForm.module.css'
+import TiltCard from 'components/TiltCard/TiltCard'
 
 type Region = 'spb' | 'area'
 type Parts = {
@@ -87,7 +88,6 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
   const handleCopyEstimate = React.useCallback(() => {
     if (!estimate) return
 
-    // Пытаемся через современный API
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard
         .writeText(estimate)
@@ -102,7 +102,6 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
       return
     }
 
-    // Фоллбек (старые браузеры)
     try {
       const textarea = document.getElementById('estimate') as HTMLTextAreaElement | null
       if (textarea) {
@@ -174,15 +173,24 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
     }
   }
 
-  /**
-   * ! ===============================================
-   * ?                     RETURN
-   * ! ===============================================
-   */
+  const fmtMoney = (n: number) =>
+    new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'RUB',
+      maximumFractionDigits: 0,
+    }).format(n)
+
+  const regionLabel = quote.region === 'spb' ? 'Санкт-Петербург' : 'Ленинградская область'
 
   return (
-    <section>
-      <form onSubmit={onSubmit} noValidate suppressHydrationWarning>
+    <section aria-label='Заявка с расчётом'>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        suppressHydrationWarning
+        className={styles.root}
+        aria-label='Форма заявки с черновым расчётом'
+      >
         {/* honeypot */}
         <div
           style={{
@@ -192,6 +200,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
             height: 1,
             overflow: 'hidden',
           }}
+          aria-hidden='true'
         >
           <label>
             Не заполняйте это поле
@@ -204,139 +213,189 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
             />
           </label>
         </div>
+
         <div className='sub-wrapper'>
           <h2 className='page-sub'>Оформить заявку с расчётом</h2>
+          <p className={styles.hint}>
+            Данные из калькулятора уже подставлены в черновую смету — вы можете отправить её нам и
+            уточнить детали.
+          </p>
         </div>
 
-        <div className={styles.formWrapper}>
-          <div>
-            <label className='label' htmlFor='name'>
-              Ваше имя *
-            </label>
-            <input
-              suppressHydrationWarning
-              className='input'
-              id='name'
-              required
-              placeholder='Иван'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className='label' htmlFor='contact'>
-              Контакт (телефон или e-mail) *
-            </label>
-            <input
-              suppressHydrationWarning
-              className='input'
-              id='contact'
-              required
-              placeholder='+7 900 000-00-00'
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-            />
-            {!contactValid && contact.trim() !== '' && (
-              <div className='error' style={{ marginTop: 6 }}>
-                Укажите телефон или e-mail.
-              </div>
-            )}
-            <div className='helper'>Мы используем контакт только для связи по заявке.</div>
-          </div>
-
-          <div>
-            <label className='label' htmlFor='address'>
-              Адрес установки *
-            </label>
-            <input
-              suppressHydrationWarning
-              className='input'
-              id='address'
-              required
-              placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-
-          {/* Блок сметы с кнопкой "Скопировать" */}
-          <div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                marginBottom: 6,
-              }}
-            >
-              <label className='label' htmlFor='estimate' style={{ marginBottom: 0 }}>
-                Смета (автоматически)
-              </label>
+        <div className={styles.layout}>
+          {/* Слева — краткое резюме расчёта */}
+          <div className={styles.left}>
+            <div className={styles.summaryCard}>
+              <div className={styles.summaryLabel}>Черновой расчёт</div>
+              <div className={styles.summaryTotal}>{fmtMoney(quote.total)}</div>
+              <div className={styles.summaryRegion}>{regionLabel}</div>
+              <dl className={styles.summaryList}>
+                <div>
+                  <dt>Услуги</dt>
+                  <dd>
+                    {quote.selectedServices.length
+                      ? quote.selectedServices.join(', ')
+                      : 'Пока ничего не выбрано'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Размер двери</dt>
+                  <dd>
+                    {quote.width}×{quote.height} мм · ~{quote.m2.toFixed(2)} м²
+                  </dd>
+                </div>
+                <div>
+                  <dt>Кромка</dt>
+                  <dd>
+                    {quote.edgeType === 'polish'
+                      ? 'Полировка'
+                      : quote.edgeType === 'facet'
+                      ? 'Фацет'
+                      : 'Без обработки'}
+                  </dd>
+                </div>
+                {quote.region === 'area' && (
+                  <div>
+                    <dt>Расстояние от КАД</dt>
+                    <dd>~{quote.kmFromKAD} км (туда-обратно)</dd>
+                  </div>
+                )}
+              </dl>
             </div>
-            <div className={styles.relative}>
+            <ul className={styles.points}>
+              <li>Сумма не окончательная — она уточняется после замера.</li>
+              <li>Вы можете скопировать смету и сохранить себе или переслать.</li>
+              <li>Ответ обычно в течение 30 минут в рабочее время.</li>
+            </ul>
+          </div>
+
+          {/* Справа — форма и текст сметы */}
+          <div className={styles.right}>
+            <div className={styles.grid}>
+              <div>
+                <label className='label' htmlFor='name'>
+                  Ваше имя *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  className='input'
+                  id='name'
+                  required
+                  placeholder='Иван'
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className='label' htmlFor='contact'>
+                  Контакт (телефон или e-mail) *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  className='input'
+                  id='contact'
+                  required
+                  placeholder='+7 900 000-00-00'
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  aria-invalid={contact.trim() !== '' && !contactValid}
+                />
+                {!contactValid && contact.trim() !== '' && (
+                  <div className='error' style={{ marginTop: 6 }}>
+                    Укажите телефон или e-mail.
+                  </div>
+                )}
+                <div className='helper'>Мы используем контакт только для связи по заявке.</div>
+              </div>
+
+              <div className={styles.addressField}>
+                <label className='label' htmlFor='address'>
+                  Адрес установки *
+                </label>
+                <input
+                  suppressHydrationWarning
+                  className='input'
+                  id='address'
+                  required
+                  placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Смета + копирование */}
+            <div className={styles.estimateBlock}>
+              <div className={styles.estimateHeader}>
+                <label className='label' htmlFor='estimate'>
+                  Смета из калькулятора
+                </label>
+                <button
+                  type='button'
+                  className={`${styles.btnCopy} button button--outline`}
+                  onClick={handleCopyEstimate}
+                  disabled={loading || !quote.canSubmit}
+                >
+                  {loading ? 'Копирую...' : 'Скопировать'}
+                </button>
+              </div>
+              <div className={styles.estimateBody}>
+                <textarea
+                  suppressHydrationWarning
+                  id='estimate'
+                  className='textarea'
+                  rows={8}
+                  readOnly
+                  value={estimate}
+                  aria-readonly='true'
+                />
+                {copyToast && <p className={`${styles.copyToast} success`}>{copyToast}</p>}
+              </div>
+              <div className='helper'>
+                Текст сметы можно отредактировать после отправки — при согласовании.
+              </div>
+            </div>
+
+            <div>
+              <label className='label' htmlFor='notes'>
+                Ваши пожелания
+              </label>
               <textarea
                 suppressHydrationWarning
-                id='estimate'
+                id='notes'
                 className='textarea'
-                rows={10}
-                readOnly
-                value={estimate}
-                aria-readonly='true'
+                rows={4}
+                placeholder='Пожелания по дизайну, срокам, особенностям подъезда...'
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
               />
-              <button
-                type='button'
-                className={`${styles.btnCopy} button button--outline`}
-                onClick={handleCopyEstimate}
-                disabled={loading || !quote.canSubmit}
-                style={{ marginLeft: 'auto', fontSize: 12, padding: '4px 8px' }}
-              >
-                {loading ? 'Копирую...' : 'Скопировать'}
-              </button>
-              {copyToast && <p className={`${styles.absolute} success`}>{copyToast}</p>}
             </div>
 
-            <div className='helper'>Смета формируется автоматически из выбранных параметров.</div>
-          </div>
+            <div className={styles.actions}>
+              <button
+                className='button button--outline'
+                type='submit'
+                disabled={loading || !quote.canSubmit}
+              >
+                {loading ? 'Отправка...' : 'Отправить заявку с расчётом'}
+              </button>
+            </div>
 
-          <div>
-            <label className='label' htmlFor='notes'>
-              Ваши пожелания
-            </label>
-            <textarea
-              suppressHydrationWarning
-              id='notes'
-              className='textarea'
-              rows={6}
-              placeholder='Пожелания к оттенку, срокам и т.д.'
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </div>
+            {!quote.canSubmit && (
+              <div className='error'>Выберите хотя бы одну услугу (например, «Замер»).</div>
+            )}
+            {success && <div className='success'>{success}</div>}
+            {error && <div className='error'>{error}</div>}
 
-          <div className={styles.leadWrapper}>
-            <button
-              className='button button--outline'
-              type='submit'
-              disabled={loading || !quote.canSubmit}
-            >
-              {loading ? 'Отправка...' : 'Отправить заявку'}
-            </button>
-            {/* <a
-              className='button button--outline'
-              href='https://t.me/refla_bot?start=lead'
-              target='_blank'
-              rel='noreferrer'
-            >
-              Оформить заявку в Telegram
-            </a> */}
+            <div className={styles.policy}>
+              Нажимая «Отправить заявку с расчётом», вы соглашаетесь с{' '}
+              <a href='/privacy/' className={styles.policyLink}>
+                политикой обработки персональных данных
+              </a>
+              .
+            </div>
           </div>
-
-          {!quote.canSubmit && (
-            <div className='error'>Выберите хотя бы одну услугу (например, «Замер»).</div>
-          )}
-          {success && <div className='success'>{success}</div>}
-          {error && <div className='error'>{error}</div>}
         </div>
       </form>
     </section>
