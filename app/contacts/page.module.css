@@ -13,8 +13,8 @@
 .badge {
   padding: 4px 10px;
   border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--success);
+  color: var(--text);
   font-size: 12px;
   font-weight: 600;
 }

@@ -73,7 +73,7 @@ export default function Gallery() {
   return (
     <div className='grid'>
       {GALLERY_ITEMS.map((it, idx) => (
-        <figure key={idx} className={`card ${styles.item}`}>
+        <figure key={idx} className={styles.item}>
           <img className={styles.image} src={it.image} alt={it.title} />
           <figcaption className={styles.caption}>
             <div className={`${styles.description} title-font`}>{it.description}</div>

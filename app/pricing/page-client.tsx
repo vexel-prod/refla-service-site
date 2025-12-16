@@ -516,11 +516,11 @@ export function PricingClient() {
               <TiltCard
                 key={s.id}
                 as='button'
-                freezeOnLeave={active}
                 type='button'
+                aria-pressed={active}
+                freezeOnLeave={active}
                 className={`${styles.cardInner} ${active ? styles.cardInnerActive : ''}`}
                 onClick={() => toggleService(s.id)}
-                aria-pressed={active}
               >
                 <div className={styles.cardHeader}>
                   <div className={styles.serviceTitle}>{s.name}</div>
@@ -551,163 +551,12 @@ export function PricingClient() {
           })}
         </div>
       </section>
-
-      {/* Калькулятор */}
-      <section>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Параметры полотна</h2>
-        </div>
-
-        <div>
-          <div className={styles.calc}>
-            <div className={styles.calcField}>
-              <label className='label'>Ширина (мм)</label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                type='number'
-                min={300}
-                max={1200}
-                step={10}
-                value={Number.isFinite(state.width) ? state.width : ''}
-                onChange={(e) =>
-                  setState((p) => ({
-                    ...p,
-                    width: e.target.value === '' ? NaN : Number(e.target.value),
-                  }))
-                }
-                onBlur={(e) => {
-                  if (e.target.value === '') {
-                    setState((p) => ({ ...p, width: 500 }))
-                  }
-                }}
-              />
-            </div>
-
-            <div className={styles.calcField}>
-              <label className='label'>Высота (мм)</label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                type='number'
-                min={800}
-                max={2300}
-                step={10}
-                value={Number.isFinite(state.height) ? state.height : ''}
-                onChange={(e) =>
-                  setState((p) => ({
-                    ...p,
-                    height: e.target.value === '' ? NaN : Number(e.target.value),
-                  }))
-                }
-                onBlur={(e) => {
-                  if (e.target.value === '') {
-                    setState((p) => ({ ...p, height: 1600 }))
-                  }
-                }}
-              />
-            </div>
-
-            <div className={styles.calcField}>
-              <label className='label'>Тип кромки</label>
-              <select
-                suppressHydrationWarning
-                className='input'
-                value={state.edgeType}
-                onChange={(e) => setState((p) => ({ ...p, edgeType: e.target.value as EdgeType }))}
-                disabled={getSelectedGlass(state.selected) === 'glass_facet_incl'}
-              >
-                <option value='none'>Без обработки</option>
-                <option value='polish'>Полировка</option>
-                <option value='facet'>Фацет</option>
-              </select>
-            </div>
-
-            <div className={styles.calcField}>
-              <label className='label'>Периметр (м)</label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                type='number'
-                min={0}
-                step={0.1}
-                value={Number.isFinite(state.edgeMeters) ? state.edgeMeters : ''}
-                onChange={(e) =>
-                  setState((p) => ({
-                    ...p,
-                    edgeMeters: e.target.value === '' ? NaN : Number(e.target.value),
-                  }))
-                }
-              />
-              <div className='helper'>0 — рассчитывается автоматически</div>
-            </div>
-
-            {region === 'area' && (
-              <div className={styles.calcField}>
-                <label className='label'>Расстояние от КАД (км)</label>
-                <input
-                  suppressHydrationWarning
-                  className='input'
-                  type='number'
-                  min={0}
-                  step={1}
-                  value={Number.isFinite(state.kmFromKAD) ? state.kmFromKAD : ''}
-                  onChange={(e) =>
-                    setState((p) => ({
-                      ...p,
-                      kmFromKAD: e.target.value === '' ? NaN : Number(e.target.value),
-                    }))
-                  }
-                />
-              </div>
-            )}
-          </div>
-
-          <div className={styles.breakdown}>
-            {res.parts.glass > 0 && (
-              <div className={styles.line}>
-                <span>Зеркало</span>
-                <b>{fmt(res.parts.glass)}</b>
-              </div>
-            )}
-
-            {res.enabled.edge && (
-              <div className={styles.line}>
-                <span>Кромка</span>
-                <b>{fmt(res.parts.edge)}</b>
-              </div>
-            )}
-
-            {res.enabled.mount && (
-              <div className={styles.line}>
-                <span>Монтаж</span>
-                <b>{fmt(res.parts.mount)}</b>
-              </div>
-            )}
-
-            {res.enabled.demount && (
-              <div className={styles.line}>
-                <span>Демонтаж</span>
-                <b>{fmt(res.parts.demount)}</b>
-              </div>
-            )}
-
-            {res.enabled.travel && (
-              <div className={styles.line}>
-                <span>Выезд</span>
-                <b>{fmt(res.parts.travel)}</b>
-              </div>
-            )}
-
-            <div className={`${styles.line} ${styles.total}`}>
-              <span>Итого</span>
-              <b>{fmt(res.total)}</b>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <QuoteLeadForm quote={quotePayload} />
+      <QuoteLeadForm
+        quote={quotePayload}
+        calcState={state}
+        setCalcState={setState}
+        calcResult={res}
+      />
     </main>
   )
 }

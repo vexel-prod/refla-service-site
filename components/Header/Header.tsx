@@ -47,14 +47,12 @@ export default function Header() {
       <div className={styles.inner}>
         {/* ЛОГО */}
         {onHome ? (
-          <span className={styles.logo} aria-current='page'>
-            <span className={styles.brand}>REFLA</span>
-            <span className={styles.tagline}>ОТРАЖЕНИЕ В ВАШ ДОМ</span>
+          <span className={styles.brand} aria-current='page'>
+            refla
           </span>
         ) : (
-          <Link href='/' className={styles.logo}>
-            <span className={styles.brand}>REFLA</span>
-            <span className={styles.tagline}>ОТРАЖЕНИЕ В ВАШ ДОМ</span>
+          <Link href={'/'} className={styles.brand}>
+            refla
           </Link>
         )}
 

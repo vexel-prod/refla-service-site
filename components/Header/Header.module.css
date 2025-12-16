@@ -1,20 +1,21 @@
 /* ============ HEADER ============ */
 
 .header {
+  z-index: 100;
+  border-top: none;
+  border-radius: 0px 0px 10px 10px;
+  width: 100%;
+  padding: 20px 20px;
+
+  transition: background 0.35s, box-shadow 0.35s, -webkit-backdrop-filter 0.35s,
+    backdrop-filter 0.35s;
   position: sticky;
   top: 0;
-  z-index: 100;
-  width: 100%;
-  background: var(--block);
-  border-bottom: var(--border);
-  padding: 20px;
-  border-radius: var(--radius);
-  transition: background 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  box-shadow: 0px 0px 0px 1px var(--border-color);
 }
 
 .scrolled {
-  background: var(--gradient);
-  backdrop-filter: blur(3px) saturate(100%);
+  backdrop-filter: blur(6px) saturate(160%);
   border-radius: 0 0 10px 10px;
 }
 
@@ -33,34 +34,15 @@
   gap: 20px;
 }
 
-/* ============ LOGO ============ */
-
-.logo {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  cursor: pointer;
-}
-
-.logo[aria-current='page'] {
-  color: var(--accent);
-}
-
 .brand {
-  font-family: var(--font-brand);
-  font-size: 40px;
-  font-weight: 800;
+  font-family: var(--font-baloo);
+  color: var(--accent-3);
+  font-size: 36px;
   line-height: 1;
-  letter-spacing: 0.07em;
 }
 
-.tagline {
-  font-size: 9px;
-  color: var(--accent-3);
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  width: fit-content;
+.brand[aria-current='page'] {
+  color: var(--accent-2);
 }
 
 /* ============ DESKTOP NAV ============ */
@@ -82,9 +64,6 @@
   cursor: pointer;
   position: relative;
   transition: background 0.25s ease;
-}
-
-.burger:hover {
 }
 
 /* Линии */
@@ -132,7 +111,7 @@
   left: 0;
   right: 0;
   top: 100%;
-  background: var(--card);
+  background: var(--element-bg);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -161,7 +140,7 @@
 
 .mobileMenuLinkActive {
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-3);
 }
 
 /* ============ MOBILE BREAKPOINT ============ */

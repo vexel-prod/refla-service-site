@@ -5,7 +5,21 @@ import 'app/globals.css'
 import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
 import './globals.css'
-import { Manrope, Nunito_Sans } from 'next/font/google'
+import { Manrope, Nunito_Sans, Baloo_Bhai_2, Play } from 'next/font/google'
+
+const play = Play({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '700'],
+  variable: '--font-play',
+  display: 'swap',
+})
+
+const baloo = Baloo_Bhai_2({
+  subsets: ['latin'],
+  variable: '--font-baloo',
+  display: 'swap',
+  preload: false,
+})
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -36,7 +50,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ru' data-theme='dark'>
-      <body className={`${manrope.variable} ${nunito.variable}`}>
+      <body className={`${manrope.variable} ${nunito.variable} ${baloo.variable} ${play.variable}`}>
         <Header />
         {children}
         <Footer />

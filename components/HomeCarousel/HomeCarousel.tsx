@@ -82,7 +82,7 @@ export default function HomeCarousel() {
   }, [index])
 
   return (
-    <section className={`card ${styles.root}`} aria-label='Примеры работ'>
+    <section className={styles.root} aria-label='Примеры работ'>
       <div className={styles.viewport}>
         <div className={styles.track} ref={trackRef}>
           {SLIDES.map((s, i) => (

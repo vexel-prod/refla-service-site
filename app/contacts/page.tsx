@@ -21,21 +21,19 @@ export default function Contacts() {
     <main>
       {/* Шапка страницы */}
       <section className='topSection'>
-        <div className={styles.hero}>
-          <h1 className='page-title'>Контакты</h1>
-          <p className='page-text'>
-            Связаться с нами можно по указанным каналам. Отвечаем обычно в течение 30 минут.
-          </p>
+        <h1 className='page-title'>Контакты</h1>
+        <p className='page-text'>
+          Связаться с нами можно по указанным каналам. Отвечаем обычно в течение 30 минут.
+        </p>
 
-          <div className={styles.badgeRow}>
-            <span className={styles.badge}>Телефон · Telegram · Почта</span>
-            <span className={styles.badge}>Консультация и предварительная оценка</span>
-          </div>
+        <div className={styles.badgeRow}>
+          <span className={styles.badge}>Телефон · Telegram · Почта</span>
+          <span className={styles.badge}>Консультация и предварительная оценка</span>
         </div>
       </section>
 
       {/* Основной блок контактов */}
-      <section className={styles.section}>
+      <section>
         {/* График работы */}
         <div className={styles.chips}>
           <span className='chip'>Заявки: 10:00–21:00</span>

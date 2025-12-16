@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <p className={styles.text}>
-          <b className={styles.brandText}>REFLA</b> – установка зеркал на входные двери, все права
+          <b className='brand'>refla</b> – установка зеркал на входные двери, все права
           защищены © {year} г. Created by «vexel»
         </p>
         <nav className={styles.nav} aria-label='Быстрые ссылки'>

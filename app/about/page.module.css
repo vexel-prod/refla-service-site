@@ -83,9 +83,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg);
-  color: var(--accent);
+  border: var(--border);
+  color: var(--accent-2);
   font-weight: 700;
 }
 
@@ -107,16 +106,14 @@
 .materialCard {
   position: relative;
   padding: 20px;
-  display: grid;
   overflow: hidden;
   border: var(--border);
   border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--box-shadow);
+  background: var(--element-bg);
 }
 
 .materialRibbon {
-  background: var(--accent);
+  background: var(--accent-2);
   opacity: 0.15;
   width: 1000px;
   height: 1000px;
@@ -130,9 +127,8 @@
 
 .materialTitle {
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-3);
   font-size: 16px;
-  font-style: italic;
 }
 
 .materialText {
@@ -143,62 +139,23 @@
 
 /* на мобильных — тонкая вертикальная кромка */
 @media (max-width: 640px) {
-  .materialRibbon {
-    width: 10px;
-    top: 0;
-    transform: rotate(0deg);
-    right: auto;
-    left: 0;
-  }
+  
 }
 
 /* ===== Команда / ценности ===== */
 
-.team {
-  display: grid;
-  gap: 16px;
-}
-
 .teamGrid {
-  gap: 16px;
-}
-
-.valueCard {
-  position: relative;
-  overflow: hidden;
-  border: var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.valueCardEdge {
-  width: 30px;
-  position: absolute;
-  top: -145px;
-  bottom: 0px;
-  right: 0px;
-  transform: rotate(315deg);
-  background: var(--accent);
-  box-shadow: 0 6px 16px var(--shadow);
-  animation: hue 6s linear infinite;
+.teamTitle {
+  color: var(--accent-2);
+  font-size: 16px;
 }
 
-.cardTitle {
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 800;
-  background: #94a3b817;
-  padding: 4px 8px;
-  max-width: max-content;
-  border-radius: var(--radius);
-  box-shadow: inset 1px 1px 1px 0px #ffffff78;
-  text-shadow: var(--shadow-text);
-  animation: 6s linear infinite hue;
-  opacity: .5;
-}
-
-.aboutText {
+.teamText {
   color: var(--muted);
   font-size: 14px;
 }
@@ -221,5 +178,12 @@
     left: 0;
     transform: rotate(0deg);
     background: var(--accent);
+  }
+  .materialRibbon {
+    width: 10px;
+    top: 0;
+    transform: rotate(0deg);
+    right: auto;
+    left: 0;
   }
 }

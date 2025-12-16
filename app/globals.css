@@ -1,64 +1,49 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
-/* ========================================================
-   THEME TOKENS — DARK
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                  Темная тема
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-
-  /* Базовые цвета */
-  --page-bg: #020617;
-  --block: #020617;
-  --card: #020617;
-
+  --total-bg: #222;
+  --element-bg: #272727;
+  --element-bs: 0 26px 70px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.7);
   --surface: #0b1120;
-  --bg: #020617;
-
+  --bg: transparent;
   --text: #e5e7eb;
   --muted: #9ca3af;
-
-  --accent: #38bdf8;
+  --accent: #bebebe;
   --accent-2: #0ea5e9;
-  --accent-3: #f97316;
-
-  --title: #e5e7eb;
+  --accent-3: #ffa363;
+  --title: #abaaff;
   --success: #00ff9152;
-
-  --border-color: rgba(148, 163, 184, 0.35);
+  --border-color: #555;
   --border: 1px solid var(--border-color);
-
-  --shadow: rgba(15, 23, 42, 0.7);
+  --shadow: #0f172ab3;
   --box-shadow: 0 18px 45px var(--shadow);
-  --shadow-text: 1px 1px 0 #000, 2px 2px 2px rgba(0, 0, 0, 0.55);
-
-  --gradient: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.22), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(249, 115, 22, 0.18), transparent 65%),
-    linear-gradient(145deg, #020617, #020617 55%, #020617);
-
-  /* Геометрия */
+  --shadow-text: 1px 1px 0 #000, 2px 2px 2px #0000008c;
+  --gradient: none;
   --radius: 10px;
   --container: 1180px;
   --gutter: 20px;
-
-  /* Анимации */
-  --transition: 180ms ease;
-
-  /* Шрифты */
-  --font-brand: var(--font-manrope);
-  --font-body: var(--font-nunito);
+  --transition: 0.18s ease;
 }
 
-/* ========================================================
-   THEME TOKENS — LIGHT
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                  Светлая тема
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 :root[data-theme='light'] {
   color-scheme: light;
 
   /* Стеклянный «дневной» фон */
-  --page-bg: radial-gradient(circle at top left, #e0f2fe 0, #f9fafb 40%, #e5e7eb 100%);
+  --total-bg: #e2e2e2;
   --block: rgba(255, 255, 255, 0.9);
   --card: rgba(255, 255, 255, 0.96);
 
@@ -93,14 +78,13 @@
   --radius: 10px;
   --container: 1180px;
   --transition: 180ms ease;
-
-  --font-brand: var(--font-manrope);
-  --font-body: var(--font-nunito);
 }
 
-/* ========================================================
-   GLOBAL RESET / BASE
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?              Глобальные настройки
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 *,
 *::before,
@@ -109,7 +93,6 @@
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
 }
 
@@ -122,25 +105,20 @@ body {
 
 body {
   min-height: 100vh;
-  background: var(--page-bg);
+  background: var(--total-bg);
   color: var(--text);
-  font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family: var(--font-nunito), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
-/* ========================================================
-   LAYOUT
-   ======================================================== */
-
-#__next {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                    Разметка
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 header,
 footer,
@@ -165,17 +143,17 @@ section {
 .topSection {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   gap: 20px;
-  border: var(--border);
   border-radius: var(--radius);
-  background: var(--gradient);
-  box-shadow: var(--box-shadow);
+  border: var(--border);
+  padding: 20px;
 }
 
-/* ========================================================
-   GRID
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                     Сетки
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 .grid {
   display: grid;
@@ -195,9 +173,11 @@ section {
   }
 }
 
-/* ========================================================
-   MEDIA ELEMENTS
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                 Медиа элементы
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 img,
 svg,
@@ -208,18 +188,16 @@ canvas {
   height: auto;
 }
 
-/* ========================================================
-   LINKS
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                     Ссылки
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 a {
   text-decoration: none;
   color: var(--accent);
   transition: color var(--transition);
-}
-
-a:hover {
-  color: var(--accent-2);
 }
 
 a:focus-visible,
@@ -234,9 +212,11 @@ a:focus-visible,
   color: #ffffff;
 }
 
-/* ========================================================
-   FAQ (summary/details) — базовый reset
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                    Спойлер
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 summary {
   cursor: pointer;
@@ -247,11 +227,11 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* всё оформление стрелок/иконок — в модульных стилях */
-
-/* ========================================================
-   TYPOGRAPHY
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                Шрифты, типография
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 h1,
 h2,
@@ -260,27 +240,32 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: var(--font-brand), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family: var(--font-play), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1.2;
   color: var(--text);
 }
 
+.brand {
+  font-family: var(--font-baloo), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--accent-3);
+  line-height: 1;
+}
+
 .page-title {
   font-size: 26px;
   font-weight: 800;
-  color: var(--title);
-  text-shadow: var(--shadow-text);
+  font-style: italic;
+  color: var(--accent-2);
 }
 
 .page-sub {
   font-size: 18px;
   font-weight: 800;
-  font-style: italic;
   color: var(--accent-3);
-  text-shadow: var(--shadow-text);
 }
 
 .page-text {
@@ -288,19 +273,6 @@ h6 {
   color: var(--text);
 }
 
-@media (max-width: 860px) {
-  .page-title {
-    font-size: 22px;
-  }
-}
-
-/* Автор отзыва */
-.about__review-author {
-  margin-top: 8px;
-  color: var(--accent);
-}
-
-/* Служебные состояния */
 .muted {
   color: var(--muted);
 }
@@ -316,16 +288,11 @@ h6 {
   color: var(--muted);
 }
 
-/* ========================================================
-   COMPONENT-LIKE
-   ======================================================== */
-
-.card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: var(--border);
-  box-shadow: var(--box-shadow);
-}
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                   Компоненты
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 .sub-wrapper {
   text-align: center;
@@ -333,8 +300,6 @@ h6 {
   margin-bottom: 20px;
   border-radius: var(--radius);
   border: var(--border);
-  background: var(--gradient);
-  box-shadow: var(--box-shadow);
 }
 
 /* Полноэкранный блок */
@@ -356,9 +321,11 @@ h6 {
   border: 0;
 }
 
-/* ========================================================
-   FORMS & BUTTONS
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?                 Формы и кнопки
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 .label {
   margin-bottom: 6px;
@@ -370,7 +337,6 @@ h6 {
   width: 100%;
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
-  padding: 12px 14px;
   color: var(--text);
   background: var(--card);
   transition: var(--transition);
@@ -391,75 +357,25 @@ h6 {
   color: #9aa0a6;
 }
 
-/* readOnly textarea */
 .textarea[readonly],
 .textarea[aria-readonly='true'] {
   cursor: text;
 }
 
-/* ================================
-         PREMIUM GLASS BUTTON
-   ================================ */
-
 .button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 9px 18px;
-  border-radius: calc(var(--radius) * 1.2);
-
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  border: var(--border);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-
-  backdrop-filter: blur(12px) saturate(170%);
-  -webkit-backdrop-filter: blur(12px) saturate(170%);
-
-  color: #f9fafb;
-
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 18px rgba(0, 0, 0, 0.45);
-
+  color: var(--accent-3);
   transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* В светлой теме делаем кнопку чуть светлее, но всё так же «стеклянной» */
-/* :root[data-theme='light'] .button {
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--accent-2);
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
-} */
-
-/* бликовая стеклянная полоска сверху */
-.button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.45),
-    rgba(255, 255, 255, 0.12) 38%,
-    transparent
-  );
-  opacity: 0.9;
-  mix-blend-mode: screen;
-  transition: opacity 0.3s ease;
-}
-
-.button:hover::before {
-  opacity: 1;
-}
-
-/* HOVER — лёгкое свечение + подъем */
 .button:hover {
   transform: translateY(-2px);
-  box-shadow: inset 0 0 0 1px #ffffff12, 0 4px 20px #0000008c, 0 0 6px var(--accent-2);
+  border-color: var(--accent-3);
 }
 
 /* ACTIVE — вдавливание в стекло */
@@ -477,69 +393,33 @@ h6 {
   box-shadow: none;
 }
 
-/* ================================
-         OUTLINE VARIANT
-   ================================ */
-
-.button--outline {
-  background: transparent;
-  border: 1px solid var(--accent-3);
-  color: var(--accent-3);
-}
-
-.button--outline:hover {
-  background: rgba(249, 115, 22, 0.06);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(249, 115, 22, 0.7);
-}
-
-.button--outline:active {
+.button:active {
   transform: translateY(1px);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 -1px 1px rgba(255, 255, 255, 0.15);
 }
 
 /* Текущая страница / активный роут */
 .button[aria-current='page'] {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: var(--accent-2);
+  border-color: var(--accent-2);
 }
 
-/* если это ещё и outline-варик */
-.button.button--outline[aria-current='page'] {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--accent-3);
-}
-
-/* Универсальный чип / бейдж */
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 10px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border-color);
-  background: var(--surface);
-  box-shadow: 0 3px 10px var(--shadow);
-  font-size: 13px;
-  line-height: 1;
-}
-
-.chip--accent {
-  background: var(--accent);
-  color: #ffffff;
-}
-
-/* ========================================================
-   MOBILE
-   ======================================================== */
+/**
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+* ?               Мобильная адаптация
+* ! –––––––––––––––––––––––––––––––––––––––––––––––
+*/
 
 @media (max-width: 860px) {
+  main {
+    padding: 0 20px;
+  }
   .button {
     font-size: 12px;
     padding: 8px 12px;
     width: fit-content;
   }
-
-  main {
-    padding-inline: 16px;
+  .page-title {
+    font-size: 22px;
   }
 }

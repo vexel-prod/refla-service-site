@@ -35,7 +35,6 @@
 /* Адаптив */
 @media (max-width: 860px) {
   .footer {
-    padding: 20px;
     text-align: center;
   }
 

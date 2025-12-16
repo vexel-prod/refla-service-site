@@ -8,6 +8,7 @@
 /* сюда прилетает div/section/article/a/form и т.д. */
 .tiltInner {
   position: relative;
+  padding: 20px;
 
   transform-style: preserve-3d;
   backface-visibility: hidden;
@@ -20,15 +21,12 @@
     background 0.2s, filter 0.2s;
 
   /* базовый стеклянный фон */
-  background: var(--card);
-  padding: 20px;
+  background: var(--element-bg);
+  border: var(--border);
   border-radius: var(--radius);
-  border: 1px solid rgba(148, 163, 184, 0.45);
 
   backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
 
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(15, 23, 42, 0.9);
 }
 
 /* блик / подсветка */
@@ -52,21 +50,19 @@
 }
 
 /* неоновый контур */
-.tiltInner::after {
+/* .tiltInner::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  border: 1px solid rgba(56, 189, 248, 0.18);
   box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.22), 0 0 28px rgba(56, 189, 248, 0.25);
   opacity: 0;
   transition: opacity 200ms ease-out;
-}
+} */
 
 /* усиление объёма при hover / freezeOnLeave */
 .tiltInnerHovered {
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(148, 163, 184, 0.7);
   filter: saturate(1.06);
 }
 

@@ -6,7 +6,7 @@ const Gallery = dynamic(() => import('components/Gallery/Gallery'), { ssr: true 
 // Страница "Примеры наших работ"
 export default function Examples() {
   return (
-    <section className='card examples'>
+    <section>
       {/* Заголовок страницы */}
       <h1 className='examples__title'>Примеры наших работ</h1>
 

@@ -2,9 +2,10 @@
 
 import * as React from 'react'
 import styles from './QuoteLeadForm.module.css'
-import TiltCard from 'components/TiltCard/TiltCard'
+import PricingCalculator from 'components/PricingCalculator/PricingCalculator'
 
 type Region = 'spb' | 'area'
+
 type Parts = {
   glass: number
   edge: number
@@ -12,6 +13,7 @@ type Parts = {
   demount: number
   travel: number
 }
+
 type Quote = {
   region: Region
   width: number
@@ -29,9 +31,22 @@ type Quote = {
 }
 
 const API_ENDPOINT = 'https://refla.ru/api/lead.php'
-const SECRET = 'REFLA_FORM_2025' // тот же, что в api/lead.php
+const SECRET = 'REFLA_FORM_2025'
 
-export default function QuoteLeadForm({ quote }: { quote: Quote }) {
+// Доп. пропсы для встраивания калькулятора
+type QuoteLeadFormProps = {
+  quote: Quote
+  calcState: any
+  setCalcState: React.Dispatch<React.SetStateAction<any>>
+  calcResult: any
+}
+
+export default function QuoteLeadForm({
+  quote,
+  calcState,
+  setCalcState,
+  calcResult,
+}: QuoteLeadFormProps) {
   const [name, setName] = React.useState('')
   const [contact, setContact] = React.useState('')
   const [address, setAddress] = React.useState('')
@@ -216,15 +231,17 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
 
         <div className='sub-wrapper'>
           <h2 className='page-sub'>Оформить заявку с расчётом</h2>
-          <p className={styles.hint}>
-            Данные из калькулятора уже подставлены в черновую смету — вы можете отправить её нам и
-            уточнить детали.
-          </p>
         </div>
 
         <div className={styles.layout}>
-          {/* Слева — краткое резюме расчёта */}
           <div className={styles.left}>
+            <PricingCalculator
+              region={quote.region}
+              state={calcState}
+              setState={setCalcState}
+              result={calcResult}
+              fmt={fmtMoney}
+            />
             <div className={styles.summaryCard}>
               <div className={styles.summaryLabel}>Черновой расчёт</div>
               <div className={styles.summaryTotal}>{fmtMoney(quote.total)}</div>
@@ -262,14 +279,8 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
                 )}
               </dl>
             </div>
-            <ul className={styles.points}>
-              <li>Сумма не окончательная — она уточняется после замера.</li>
-              <li>Вы можете скопировать смету и сохранить себе или переслать.</li>
-              <li>Ответ обычно в течение 30 минут в рабочее время.</li>
-            </ul>
           </div>
 
-          {/* Справа — форма и текст сметы */}
           <div className={styles.right}>
             <div className={styles.grid}>
               <div>
@@ -306,7 +317,6 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
                     Укажите телефон или e-mail.
                   </div>
                 )}
-                <div className='helper'>Мы используем контакт только для связи по заявке.</div>
               </div>
 
               <div className={styles.addressField}>
@@ -325,7 +335,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
               </div>
             </div>
 
-            {/* Смета + копирование */}
+            {/* Смета + копирование
             <div className={styles.estimateBlock}>
               <div className={styles.estimateHeader}>
                 <label className='label' htmlFor='estimate'>
@@ -355,7 +365,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
               <div className='helper'>
                 Текст сметы можно отредактировать после отправки — при согласовании.
               </div>
-            </div>
+            </div> */}
 
             <div>
               <label className='label' htmlFor='notes'>
@@ -378,7 +388,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
                 type='submit'
                 disabled={loading || !quote.canSubmit}
               >
-                {loading ? 'Отправка...' : 'Отправить заявку с расчётом'}
+                {loading ? 'Отправка...' : 'Оформить заявку'}
               </button>
             </div>
 
@@ -389,7 +399,7 @@ export default function QuoteLeadForm({ quote }: { quote: Quote }) {
             {error && <div className='error'>{error}</div>}
 
             <div className={styles.policy}>
-              Нажимая «Отправить заявку с расчётом», вы соглашаетесь с{' '}
+              Нажимая «Оформить заявку», вы соглашаетесь с{' '}
               <a href='/privacy/' className={styles.policyLink}>
                 политикой обработки персональных данных
               </a>

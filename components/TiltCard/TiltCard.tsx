@@ -85,9 +85,9 @@ export default function TiltCard<T extends TiltCardAs = 'div'>({
     <div className={styles.tiltWrapper}>
       <TagEl
         ref={ref as any}
-        className={`${styles.tiltInner} ${
+        className={`${className} ${styles.tiltInner} ${
           hovered || freezeOnLeave ? styles.tiltInnerHovered : ''
-        } ${className}`}
+        }`}
         onMouseMove={handleMouseMove}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
