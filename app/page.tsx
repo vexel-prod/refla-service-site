@@ -1,292 +1,265 @@
-// app/page.tsx
 'use client'
 
-import * as React from 'react'
-import styles from './page.module.css'
-import CallToActionSection from 'components/CallToActionSection/CallToActionSection'
+import Link from 'next/link'
+import Gallery from 'components/Gallery/Gallery'
+import LeadForm from 'components/LeadForm/LeadForm'
 import TypingText from 'components/TypingText/TypingText'
 import TiltCard from 'components/TiltCard/TiltCard'
 
-// Карточки преимуществ
-const features: Array<[string, string]> = [
-  ['Эстетика', 'Точные подрезы, аккуратное крепление, ровные зазоры.'],
-  ['Безопасность', 'Закалённое стекло и надёжные крепёжные решения.'],
-  ['Чистый монтаж', 'Минимум пыли и шума, бережём вашу отделку.'],
-  ['Сроки', 'Большинство работ — за 1 день.'],
-  ['Гарантия', 'Даём гарантию на монтаж и материалы.'],
-  ['Честная смета', 'Прозрачные цены без скрытых платежей.'],
+const features: Array<{ title: string; text: string; icon: string }> = [
+  { title: 'Эстетика', text: 'Точные подрезы, аккуратная кромка, ровные зазоры.', icon: '✨' },
+  { title: 'Безопасность', text: 'Закалённое зеркало, надёжные крепления, аккуратный монтаж.', icon: '🛡️' },
+  { title: 'Чистая работа', text: 'Минимум пыли и шума. Бережём отделку и фурнитуру.', icon: '🧼' },
+  { title: 'Сроки', text: 'В большинстве случаев — установка за 1 день.', icon: '⏱️' },
+  { title: 'Гарантия', text: 'Даём гарантию на монтаж и материалы.', icon: '✅' },
+  { title: 'Смета заранее', text: 'Понятный расчёт стоимости до начала работ.', icon: '🧾' },
 ]
 
-// Отзывы (текстовые)
-const reviews: Array<{ name: string; text: string }> = [
-  {
-    name: 'Алексей, Санкт-Петербург',
-    text: 'Сделали аккуратно и за один день. Прихожая стала визуально больше — отлично!',
-  },
-  {
-    name: 'Екатерина, Санкт-Петербург',
-    text: 'Помогли выбрать кромку и оттенок, всё смотрится дорого и минималистично.',
-  },
-  {
-    name: 'Ирина, Санкт-Петербург',
-    text: 'Очень чистый монтаж, без суеты и пыли. Приятно удивили вниманием к деталям.',
-  },
-  {
-    name: 'Дмитрий, Колпино',
-    text: 'Работа выполнена качественно, но ожидал, что установка займёт меньше времени. В целом доволен результатом.',
-  },
-  {
-    name: 'Марина, Гатчина',
-    text: 'Зеркало установили аккуратно, ребята вежливые. Цена выше, чем думала, но качество оправдало ожидания.',
-  },
-  {
-    name: 'Сергей, Санкт-Петербург',
-    text: 'Хорошая работа, всё ровно и прочно. Правда, пришлось немного подождать мастера дольше назначенного времени.',
-  },
-  {
-    name: 'Анна, Санкт-Петербург',
-    text: 'Зеркало классное, прихожая теперь светлее. Немного смутило, что мусор за собой убрали не до конца.',
-  },
-  {
-    name: 'Игорь, Всеволожск',
-    text: 'Мастера приехали вовремя, сделали за два часа. Видно, что знают своё дело. Буду советовать знакомым.',
-  },
-  {
-    name: 'Светлана, Санкт-Петербург',
-    text: 'Очень понравилось, как смотрится зеркало, но процесс согласования занял больше времени, чем ожидала.',
-  },
-  {
-    name: 'Олег, Петергоф',
-    text: 'Думал, будет дороже. Цена оказалась адекватной, а результат отличный.',
-  },
-  {
-    name: 'Виктория, Санкт-Петербург',
-    text: 'Замерщик всё подробно объяснил. Монтажники приехали без опозданий. Всё чётко и спокойно.',
-  },
-  {
-    name: 'Тимур, Красное Село',
-    text: 'В целом всё понравилось. Зеркало сидит ровно, только небольшая царапина на коробке после установки.',
-  },
-  {
-    name: 'Людмила, Санкт-Петербург',
-    text: 'Очень аккуратная работа! Прихожая стала как из журнала. Хотелось бы, чтобы предложили больше вариантов кромки.',
-  },
-  {
-    name: 'Михаил, Санкт-Петербург',
-    text: 'Монтаж прошёл хорошо, но сам процесс занял почти три часа. Зато результат радует.',
-  },
-  {
-    name: 'Юлия, Пушкин',
-    text: 'Сервис понравился. Всё вежливо и спокойно. Немного дороговато, но качество того стоит.',
-  },
-  {
-    name: 'Константин, Санкт-Петербург',
-    text: 'Сделали в срок, зеркало отличное. Единственное — упаковку пришлось выносить самому.',
-  },
-  {
-    name: 'Валерия, Санкт-Петербург',
-    text: 'Очень приятные мастера. Всё сделали быстро и красиво. Спасибо!',
-  },
-  {
-    name: 'Николай, Всеволожск',
-    text: 'В целом доволен, но ожидал чуть больше предложений по дизайну.',
-  },
-  {
-    name: 'Оксана, Санкт-Петербург',
-    text: 'Хорошее качество установки. В прихожей стало просторнее и светлее.',
-  },
-  {
-    name: 'Андрей, Колпино',
-    text: 'Всё сделали качественно. Правда, цена чуть выше, чем у конкурентов, но и доверия больше.',
-  },
-  {
-    name: 'Дарья, Санкт-Петербург',
-    text: 'Зеркало идеально вписалось в интерьер. Мастера молодцы, но пришлось немного подождать согласования.',
-  },
-  {
-    name: 'Павел, Санкт-Петербург',
-    text: 'Отличная работа, но хотелось бы чуть быстрее по срокам. В остальном всё хорошо.',
-  },
+const steps: Array<{ title: string; text: string }> = [
+  { title: 'Заявка', text: 'Оставляете контакт — уточняем задачу и адрес.' },
+  { title: 'Замер', text: 'Приезжаем, измеряем, согласуем кромку и крепление.' },
+  { title: 'Изготовление', text: 'Подготовка под ваши размеры и требования.' },
+  { title: 'Монтаж', text: 'Аккуратно устанавливаем, проверяем, убираем рабочее место.' },
 ]
 
-function pickRandom<T>(arr: T[], count: number): T[] {
-  const copy = [...arr]
-  const result: T[] = []
+const reviews: Array<{ name: string; rating: number; text: string }> = [
+  { name: 'Алексей, Санкт‑Петербург', rating: 5, text: 'Сделали аккуратно и за один день. Прихожая стала визуально больше.' },
+  { name: 'Екатерина, СПб', rating: 5, text: 'Помогли выбрать кромку и оттенок. Смотрится дорого и минималистично.' },
+  { name: 'Ирина, СПб', rating: 5, text: 'Очень чистый монтаж, без суеты и пыли. Внимание к деталям.' },
+  { name: 'Дмитрий, Колпино', rating: 4, text: 'Качественно. Установка заняла чуть больше времени, чем ожидал, но результат отличный.' },
+  { name: 'Марина, Гатчина', rating: 4, text: 'Ребята вежливые, зеркало стоит идеально. Цена выше ожиданий, но качество оправдало.' },
+  { name: 'Игорь, Всеволожск', rating: 5, text: 'Приехали вовремя, сделали быстро. Буду рекомендовать знакомым.' },
+]
 
-  for (let i = 0; i < count && copy.length > 0; i++) {
-    const index = Math.floor(Math.random() * copy.length)
-    result.push(copy.splice(index, 1)[0])
-  }
-
-  return result
-}
-
-// FAQ
 const faqs: Array<{ q: string; a: string }> = [
   {
-    q: 'Сколько стоит зеркало?',
-    a: 'От 4 890 ₽/м² — точная стоимость зависит от размеров, кромки и монтажа. Вы можете рассчитать примерную стоимость в калькуляторе на странице «Прайс».',
+    q: 'Сколько занимает установка?',
+    a: 'Обычно 1–3 часа на монтаж после подготовки. Для нестандартных задач время может увеличиться — уточним на замере.',
   },
   {
-    q: 'Можно ли установить зеркало на металлическую дверь?',
-    a: 'Да. Подбираем крепёж и клей с учётом материала полотна, веса зеркала и условий эксплуатации.',
+    q: 'Насколько это безопасно?',
+    a: 'Используем закалённое зеркало и крепления под нагрузку двери. Монтаж выполняется с учётом фурнитуры и открывания.',
   },
   {
-    q: 'Сколько времени займет монтаж?',
-    a: 'Обычно – 2-3 часа. В сложных случаях (фацет, дополнительные работы) – занимает до 7-8 часов под ключ.',
+    q: 'Можно ли сделать зеркало «в пол»?',
+    a: 'Да. Подбираем размер под вашу дверь, учитываем ручки/замки и делаем аккуратные вырезы при необходимости.',
   },
   {
-    q: 'Даете ли вы гарантию?',
-    a: 'Да, 12 месяцев на монтаж и материалы. Также даём рекомендации по уходу.',
+    q: 'Какие есть варианты кромки?',
+    a: 'Чаще всего — полировка или фацет. Подскажем лучший вариант по дизайну и практичности.',
   },
 ]
 
-// Главная страница с плотным контентом без примеров работ
-export default function Home() {
-  // какие FAQ сейчас открыты (по индексу)
-  const [openFaqs, setOpenFaqs] = React.useState<Set<number>>(new Set())
-
-  // детерминированный старт для SSR, чтобы не было расхождения
-  const [randomReviews, setRandomReviews] = React.useState(
-    () => reviews.slice(0, 6), // первые 6 — одинаково на сервере и клиенте
-  )
-
-  React.useEffect(() => {
-    // после гидратации один раз подменяем на реально случайные 6 отзывов
-    setRandomReviews(pickRandom(reviews, 6))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleToggleFaq = (index: number) => (e: React.SyntheticEvent<HTMLDetailsElement>) => {
-    const isOpen = (e.currentTarget as HTMLDetailsElement).open
-
-    setOpenFaqs((prev) => {
-      const next = new Set(prev)
-      if (isOpen) next.add(index)
-      else next.delete(index)
-      return next
-    })
-  }
-
+export default function HomePage() {
   return (
-    <main>
-      {/* HERO */}
-      <section className='topSection'>
-        <h1 className='page-title'>Зеркала на входные двери под ключ</h1>
-        <TypingText
-          className='page-text'
-          text={
-            'Преобразим Вашу прихожую: визуально расширим пространство, подберём наилучшее зеркало, аккуратно установим'
-          }
-        />
-      </section>
-
-      {/* Почему с нами удобно */}
-      <section>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Почему с нами удобно:</h2>
-        </div>
-        <div className={styles.whyWrapper}>
-          {features.map(([title, text], i) => (
-            <TiltCard key={i} as='article'>
-              <p className={styles.whyTitle}>{title}</p>
-              <p className={styles.whySubtitle}>{text}</p>
-            </TiltCard>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ — “живые” спойлеры на TiltCard */}
-      <section>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Частые вопросы:</h2>
-        </div>
-
-        <div className={styles.faqGrid}>
-          {faqs.map((f, i) => {
-            const isOpen = openFaqs.has(i)
-
-            return (
-              <TiltCard
-                as='details'
-                key={i}
-                className={`${styles.faqCard} ${styles.faqDetails}`}
-                onToggle={handleToggleFaq(i)}
-                freezeOnLeave={isOpen}
-              >
-                <summary className={styles.faqSummary}>
-                  <span className={styles.faqIndex}>{String(i + 1)}</span>
-                  <span className={styles.faqQuestion}>{f.q}</span>
-                  <span className={styles.faqIcon} aria-hidden>
-                    <span className={styles.faqIconLineV} />
-                    <span className={styles.faqIconLineH} />
-                  </span>
-                </summary>
-                <p className={styles.faqText}>{f.a}</p>
-              </TiltCard>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* Отзывы — витрина с 3D-карточками */}
-      <section aria-labelledby='reviews-title'>
-        <div className='sub-wrapper'>
-          <h2 className='page-sub'>Отзывы клиентов:</h2>
-        </div>
-
-        <div className={styles.reviewsShell}>
-          {/* Левая колонка — агрегированный рейтинг */}
-          <div className={`card ${styles.reviewsMeta}`}>
-            <div className={styles.reviewsScoreRow}>
-              <div className={styles.reviewsScoreMain}>
-                <span className={styles.reviewsScoreValue}>4.8</span>
-                <span className={styles.reviewsStars} aria-hidden='true'>
-                  ★★★★★
-                </span>
+    <div>
+      {/* Hero */}
+      <section className='section'>
+        <div className='container'>
+          <div className='grid gap-10 lg:grid-cols-2 lg:items-center'>
+            <div>
+              <div className='inline-flex items-center gap-2 rounded-full border border-base-content/10 bg-base-100/60 px-4 py-2 text-sm backdrop-blur'>
+                <span className='badge badge-primary badge-sm'>SPB</span>
+                <span className='text-base-content/70'>Зеркало на входную дверь • монтаж под ключ</span>
               </div>
-              <div className={styles.reviewsScoreLabel}>на основе {reviews.length} отзывов</div>
+
+              <h1 className='mt-5 text-4xl md:text-5xl font-black tracking-tight leading-[1.02]'>
+                Зеркало на входную дверь —{' '}
+                <span className='text-primary'>
+                  <TypingText phrases={['аккуратно', 'быстро', 'безопасно', 'с гарантией']} />
+                </span>
+              </h1>
+
+              <p className='mt-5 text-base md:text-lg text-base-content/70 max-w-xl'>
+                Добавьте свет и глубину в прихожую. Мы подберём размер, кромку и крепление, сделаем точный монтаж и
+                оставим после себя чисто.
+              </p>
+
+              <div className='mt-7 flex flex-col sm:flex-row gap-3'>
+                <Link href='/request' className='btn btn-primary rounded-full'>
+                  Рассчитать стоимость
+                </Link>
+                <a href='#gallery' className='btn btn-ghost rounded-full'>
+                  Посмотреть примеры
+                </a>
+              </div>
+
+              <div className='mt-8 grid grid-cols-3 gap-3 max-w-lg'>
+                {[
+                  ['1 день', 'часто хватает'],
+                  ['0 ₽', 'за консультацию'],
+                  ['5★', 'средняя оценка'],
+                ].map(([a, b]) => (
+                  <div key={a} className='glass-card p-4'>
+                    <div className='text-xl font-black'>{a}</div>
+                    <div className='text-xs text-base-content/60 mt-1'>{b}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <ul className={styles.reviewsBullets}>
-              <li>Чаще всего отмечают аккуратный монтаж и чистоту после работ.</li>
-              <li>Для части клиентов важнее сроки и минимальные задержки.</li>
-              <li>Некоторые честно пишут про ожидания по цене и времени.</li>
-            </ul>
+            <TiltCard className='glass-card overflow-hidden'>
+              <div className='p-6 md:p-8'>
+                <div className='flex items-center justify-between'>
+                  <div className='font-black text-lg'>Быстрый расчёт</div>
+                  <div className='badge badge-outline'>онлайн</div>
+                </div>
+                <p className='mt-2 text-sm text-base-content/70'>
+                  Заполните форму — мы уточним детали и вернёмся с ценой и сроками.
+                </p>
+                <div className='mt-5'>
+                  <LeadForm variant='inline' title='Заявка' subtitle='Телефон или Telegram/WhatsApp — как удобно.' />
+                </div>
+              </div>
+            </TiltCard>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className='section pt-0'>
+        <div className='container'>
+          <div className='glass-card p-7 md:p-10'>
+            <div className='flex items-end justify-between gap-6 flex-wrap'>
+              <div>
+                <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Почему REFLA</h2>
+                <p className='mt-2 text-base-content/70 max-w-xl'>
+                  Сочетаем «красиво» и «надёжно»: детали решают, когда зеркало становится частью интерьера.
+                </p>
+              </div>
+              <Link href='/pricing' className='btn btn-ghost rounded-full'>
+                Открыть прайс
+              </Link>
+            </div>
+
+            <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+              {features.map((f) => (
+                <div key={f.title} className='rounded-3xl border border-base-content/10 bg-base-100/50 p-6'>
+                  <div className='flex items-center gap-3'>
+                    <div className='h-10 w-10 rounded-2xl bg-primary/15 flex items-center justify-center text-lg'>
+                      {f.icon}
+                    </div>
+                    <div className='font-bold'>{f.title}</div>
+                  </div>
+                  <p className='mt-3 text-sm text-base-content/70'>{f.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Steps */}
+      <section className='section'>
+        <div className='container'>
+          <div className='grid gap-8 lg:grid-cols-2 lg:items-center'>
+            <div>
+              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Как это происходит</h2>
+              <p className='mt-2 text-base-content/70 max-w-xl'>
+                Прозрачный процесс: вы понимаете стоимость, сроки и результат до начала работ.
+              </p>
+
+              <div className='mt-6 space-y-3'>
+                {steps.map((s, i) => (
+                  <div key={s.title} className='glass-card p-5 flex gap-4 items-start'>
+                    <div className='badge badge-primary badge-lg rounded-2xl px-4'>{i + 1}</div>
+                    <div>
+                      <div className='font-bold'>{s.title}</div>
+                      <div className='text-sm text-base-content/70 mt-1'>{s.text}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div id='gallery' className='glass-card p-6 md:p-8'>
+              <div className='flex items-end justify-between gap-4 flex-wrap'>
+                <div>
+                  <h3 className='text-xl md:text-2xl font-black tracking-tight'>Примеры работ</h3>
+                  <p className='mt-2 text-sm text-base-content/70'>Нажмите на фото, чтобы увеличить.</p>
+                </div>
+                <div className='badge badge-outline'>до / после</div>
+              </div>
+              <div className='mt-6'>
+                <Gallery />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className='section pt-0'>
+        <div className='container'>
+          <div className='flex items-end justify-between gap-6 flex-wrap'>
+            <div>
+              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Отзывы</h2>
+              <p className='mt-2 text-base-content/70'>Реальные впечатления клиентов (текстовые).</p>
+            </div>
+            <div className='badge badge-primary badge-outline'>обновляем регулярно</div>
           </div>
 
-          {/* Правая колонка — 3D-карточки отзывов */}
-          <div className={styles.reviewsGrid}>
-            {randomReviews.map((r, i) => (
-              <TiltCard
-                key={i}
-                as='figure'
-                className={`${styles.reviewCard} ${i === 0 ? styles.reviewCardLarge : ''}`}
+          <div className='mt-6 flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory'>
+            {reviews.map((r) => (
+              <div
+                key={r.name}
+                className='glass-card p-6 min-w-[320px] max-w-[420px] snap-start'
               >
-                <div className={styles.reviewHeader}>
-                  <span className={styles.reviewQuoteMark} aria-hidden='true'>
-                    “
-                  </span>
-                  <div className={styles.reviewMeta}>
-                    <span className={styles.reviewName}>{r.name}</span>
+                <div className='flex items-start justify-between gap-3'>
+                  <div className='font-bold'>{r.name}</div>
+                  <div className='rating rating-sm'>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <input
+                        key={i}
+                        type='radio'
+                        name={'rating-' + r.name}
+                        className='mask mask-star-2 bg-orange-400'
+                        checked={i + 1 === r.rating}
+                        readOnly
+                      />
+                    ))}
                   </div>
                 </div>
-
-                <blockquote className={styles.reviewText}>«{r.text}»</blockquote>
-
-                <figcaption className={styles.reviewFooter}>
-                  <span className={styles.reviewFooterStars} aria-hidden='true'>
-                    ★★★★☆
-                  </span>
-                  <span className={styles.reviewFooterNote}>Типовой проект · входная дверь</span>
-                </figcaption>
-              </TiltCard>
+                <p className='mt-3 text-sm text-base-content/70'>{r.text}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <CallToActionSection />
-    </main>
+      {/* FAQ */}
+      <section id='faq' className='section'>
+        <div className='container'>
+          <div className='grid gap-8 lg:grid-cols-2 lg:items-start'>
+            <div>
+              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>FAQ</h2>
+              <p className='mt-2 text-base-content/70 max-w-xl'>Коротко отвечаем на популярные вопросы.</p>
+
+              <div className='mt-6 space-y-3'>
+                {faqs.map((f, i) => (
+                  <div key={i} className='collapse collapse-plus glass-card'>
+                    <input type='radio' name='faq' defaultChecked={i === 0} />
+                    <div className='collapse-title text-base font-semibold'>{f.q}</div>
+                    <div className='collapse-content text-sm text-base-content/70'>
+                      <p>{f.a}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className='glass-card p-6 md:p-8'>
+              <h3 className='text-xl md:text-2xl font-black tracking-tight'>Готовы?</h3>
+              <p className='mt-2 text-sm text-base-content/70'>
+                Оставьте заявку — рассчитаем стоимость и предложим оптимальные варианты под вашу дверь.
+              </p>
+              <div className='mt-6'>
+                <LeadForm />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }

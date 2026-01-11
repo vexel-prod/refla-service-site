@@ -1,35 +1,30 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import styles from './LeadForm.module.css'
-import TiltCard from 'components/TiltCard/TiltCard'
 
-const API_ENDPOINT = 'https://refla.ru/api/lead.php'
-
-export default function LeadForm() {
-  // поля формы
+export default function LeadForm({
+  variant = 'card',
+  title = 'Получить расчёт',
+  subtitle = 'Ответим в течение 10–20 минут в рабочее время. Можно WhatsApp/Telegram или звонок.',
+}: {
+  variant?: 'card' | 'inline'
+  title?: string
+  subtitle?: string
+}) {
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
   const [address, setAddress] = useState('')
   const [comment, setComment] = useState('')
+  const [hp, setHp] = useState('')
 
-  // служебные
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [hp, setHp] = useState('') // honeypot
+  const [ok, setOk] = useState<string | null>(null)
+  const [err, setErr] = useState<string | null>(null)
 
-  // anti-bot: время рендера формы
   const ftRef = useRef<number>(0)
   useEffect(() => {
     if (!ftRef.current) ftRef.current = Date.now()
   }, [])
-
-  // базовые проверки
-  const nameValid = useMemo(() => {
-    const v = name.trim()
-    return v.length >= 2 && v.length <= 60 && /^[\p{L}\p{M}\s.'-]+$/u.test(v)
-  }, [name])
 
   const contactValid = useMemo(() => {
     const v = contact.trim()
@@ -39,249 +34,114 @@ export default function LeadForm() {
     return isEmail || isPhone
   }, [contact])
 
-  const addressValid = useMemo(() => {
-    const v = address.trim()
-    return v.length >= 5 && v.length <= 200
-  }, [address])
+  const canSend = name.trim().length >= 2 && contactValid && address.trim().length >= 5 && !loading
 
-  const commentValid = useMemo(() => comment.length <= 2000, [comment])
-
-  const formValid = nameValid && contactValid && addressValid && commentValid && !loading
-
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setSuccess(null)
-    setError(null)
-
-    if (!formValid) {
-      setError('Проверьте имя, контакт (телефон/e-mail), адрес и комментарий.')
-      return
-    }
-    if (hp.trim()) {
-      // honeypot: для ботов — имитируем успех и выходим
-      setSuccess('Заявка отправлена! Мы свяжемся с вами в ближайшее время.')
-      return
-    }
+    setOk(null)
+    setErr(null)
+    if (!canSend) return
 
     setLoading(true)
-    const controller = new AbortController()
-    const t = setTimeout(() => controller.abort(), 15000)
-
     try {
-      const resp = await fetch(API_ENDPOINT, {
+      const res = await fetch('/api/lead', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           name: name.trim(),
           contact: contact.trim(),
           address: address.trim(),
           comment: comment.trim(),
-          hp, // honeypot
-          ft: ftRef.current, // timestamp рендера для anti-bot на сервере
+          hp,
+          ft: Date.now() - (ftRef.current || Date.now()),
         }),
-        signal: controller.signal,
       })
-
-      const data: any = await resp.json().catch(() => null)
-
-      if (resp.ok && data?.ok) {
-        setSuccess('Заявка отправлена! Мы свяжемся с вами в ближайшее время.')
-        setName('')
-        setContact('')
-        setAddress('')
-        setComment('')
-        ftRef.current = Date.now()
-      } else {
-        setError(data?.error || `Ошибка отправки (${resp.status}). Попробуйте позже.`)
-      }
-    } catch (err: unknown) {
-      const e = err as { name?: string }
-      setError(e?.name === 'AbortError' ? 'Таймаут запроса.' : 'Сетевая ошибка.')
+      const data = (await res.json()) as { ok: boolean; error?: string }
+      if (!res.ok || !data?.ok) throw new Error(data?.error || 'send_failed')
+      setOk('Заявка отправлена. Мы свяжемся с вами в ближайшее время.')
+      setName('')
+      setContact('')
+      setAddress('')
+      setComment('')
+    } catch {
+      setErr('Не удалось отправить заявку. Попробуйте ещё раз или напишите в мессенджер.')
     } finally {
-      clearTimeout(t)
       setLoading(false)
     }
   }
 
+  const shell =
+    variant === 'inline'
+      ? 'bg-base-100/60 border border-base-content/10 rounded-3xl p-6 md:p-8 backdrop-blur'
+      : 'glass-card p-6 md:p-8'
+
   return (
-    <TiltCard
-      as='form'
-      onSubmit={onSubmit}
-      className={styles.root}
-      noValidate
-      suppressHydrationWarning
-      aria-label='Форма заявки на установку зеркала'
-    >
-      {/* honeypot */}
-      <div
-        style={{
-          position: 'absolute',
-          left: -9999,
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-        }}
-        aria-hidden='true'
-      >
-        <label>
-          Не заполняйте это поле
-          <input
-            suppressHydrationWarning
-            tabIndex={-1}
-            autoComplete='off'
-            value={hp}
-            onChange={(e) => setHp(e.target.value)}
-          />
-        </label>
+    <form onSubmit={onSubmit} className={shell}>
+      <div className='flex items-start justify-between gap-4'>
+        <div>
+          <div className='text-xl md:text-2xl font-black tracking-tight'>{title}</div>
+          <p className='mt-2 text-sm text-base-content/70'>{subtitle}</p>
+        </div>
+        <div className='badge badge-outline hidden sm:inline-flex' style={{width: '100%', maxWidth: 'max-content', color: 'green'}}>без спама</div>
       </div>
 
-      <div className={styles.layout}>
-        {/* Левая колонка — контекст заявки */}
-        <div className={styles.left}>
-          <p className={styles.kicker}>Заявка на установку</p>
-          <h2 className={styles.title}>Расскажите немного о двери</h2>
-          <p className={styles.subtitle}>
-            Мы уточним детали, подберём оптимальное зеркало и согласуем монтаж в удобное время.
-          </p>
+      <div className='mt-6 grid gap-3'>
+        <input
+          className='input input-bordered w-full rounded-2xl focus-ring'
+          placeholder='Имя'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete='name'
+        />
+        <input
+          className='input input-bordered w-full rounded-2xl focus-ring'
+          placeholder='Телефон или Email'
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+          autoComplete='tel'
+        />
+        <input
+          className='input input-bordered w-full rounded-2xl focus-ring'
+          placeholder='Адрес / район'
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          autoComplete='street-address'
+        />
+        <textarea
+          className='textarea textarea-bordered w-full rounded-2xl focus-ring min-h-[110px]'
+          placeholder='Комментарий (необязательно)'
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        {/* honeypot */}
+        <input
+          tabIndex={-1}
+          aria-hidden='true'
+          className='hidden'
+          value={hp}
+          onChange={(e) => setHp(e.target.value)}
+        />
+      </div>
 
-          <div className={styles.badges}>
-            <span className={styles.badge}>Ответ обычно до 30 минут</span>
-            <span className={styles.badge}>Замер в СПБ — бесплатно</span>
-            <span className={styles.badge}>СПБ и Ленобласть</span>
-          </div>
-
-          <ul className={styles.points}>
-            <li>Без спама — только по вашей заявке.</li>
-            <li>Предварительную смету можно скорректировать после замера.</li>
-            <li>Все данные защищены и не передаются третьим лицам.</li>
-          </ul>
-        </div>
-
-        {/* Правая колонка — сама форма */}
-        <div className={styles.right}>
-          <div className={styles.grid}>
-            <div>
-              <label className='label' htmlFor='name'>
-                Ваше имя *
-              </label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                id='name'
-                required
-                placeholder='Иван'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                aria-invalid={name.trim() !== '' && !nameValid}
-                maxLength={60}
-              />
-              {name.trim() !== '' && !nameValid && (
-                <div className='error' style={{ marginTop: 6 }}>
-                  Имя от 2 до 60 символов, без лишних знаков.
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label className='label' htmlFor='contact'>
-                Контакт (телефон или e-mail) *
-              </label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                id='contact'
-                required
-                placeholder='+7 900 000-00-00'
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                aria-invalid={contact.trim() !== '' && !contactValid}
-                inputMode='email'
-                autoComplete='email'
-                maxLength={100}
-              />
-              {!contactValid && contact.trim() !== '' && (
-                <div className='error' style={{ marginTop: 6 }}>
-                  Укажите корректный телефон или e-mail.
-                </div>
-              )}
-              <div className='helper'>Мы используем контакт только для связи по заявке.</div>
-            </div>
-
-            <div>
-              <label className='label' htmlFor='address'>
-                Адрес установки *
-              </label>
-              <input
-                suppressHydrationWarning
-                className='input'
-                id='address'
-                required
-                placeholder='г. Санкт-Петербург, ул. Пример, д. 1'
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                aria-invalid={address.trim() !== '' && !addressValid}
-                maxLength={200}
-                autoComplete='street-address'
-              />
-              {address.trim() !== '' && !addressValid && (
-                <div className='error' style={{ marginTop: 6 }}>
-                  Адрес от 5 до 200 символов.
-                </div>
-              )}
-            </div>
-
-            <div className={styles.commentField}>
-              <label className='label' htmlFor='comment'>
-                Комментарий (необязательно)
-              </label>
-              <textarea
-                suppressHydrationWarning
-                className='textarea'
-                id='comment'
-                rows={4}
-                placeholder='Опишите пожелания, тип двери, желаемое зеркало...'
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                aria-invalid={!commentValid}
-                maxLength={2000}
-              />
-              {!commentValid && (
-                <div className='error' style={{ marginTop: 6 }}>
-                  Слишком длинный комментарий (до 2000 символов).
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.actions}>
-            <button className='button' type='submit' disabled={!formValid}>
-              {loading ? 'Отправка...' : 'Отправить заявку'}
-            </button>
-            <a
-              className={`button button--outline ${styles.telegramButton}`}
-              href='https://t.me/refla_bot?start=lead'
-              target='_blank'
-              rel='noreferrer'
-            >
-              Оформить в Telegram
-            </a>
-          </div>
-
-          {success && <div className='success'>{success}</div>}
-          {error && <div className='error'>{error}</div>}
-
-          <div className={styles.policy}>
-            <span className={styles.dot} aria-hidden />
-            <span>
-              Нажимая «Отправить заявку», вы соглашаетесь с{' '}
-              <a href='/privacy/' className={styles.policyLink}>
-                политикой обработки персональных данных
-              </a>
-              .
-            </span>
-          </div>
+      <div className='mt-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between'>
+        <button className='btn btn-primary rounded-full' disabled={!canSend}>
+          {loading ? <span className='loading loading-spinner' /> : 'Отправить'}
+        </button>
+        <div className='text-xs text-base-content/60'>
+          Нажимая «Отправить», вы соглашаетесь с обработкой персональных данных.
         </div>
       </div>
-    </TiltCard>
+
+      {ok && (
+        <div role='status' className='mt-4 alert alert-success'>
+          <span>{ok}</span>
+        </div>
+      )}
+      {err && (
+        <div role='alert' className='mt-4 alert alert-error'>
+          <span>{err}</span>
+        </div>
+      )}
+    </form>
   )
 }

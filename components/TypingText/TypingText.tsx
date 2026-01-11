@@ -1,37 +1,53 @@
 'use client'
 
-import * as React from 'react'
-import styles from './TypingText.module.css'
+import { useEffect, useMemo, useState } from 'react'
 
-type TypingTextProps = {
-  text: string
+export default function TypingText({
+  phrases,
+  speed = 34,
+  pauseMs = 1200,
+  className = '',
+}: {
+  phrases: string[]
+  speed?: number
+  pauseMs?: number
   className?: string
-  speed?: number // мс на символ, по умолчанию ~30–40
-}
+}) {
+  const list = useMemo(() => (phrases?.length ? phrases : ['аккуратный монтаж', 'безопасные материалы']), [phrases])
+  const [idx, setIdx] = useState(0)
+  const [pos, setPos] = useState(0)
+  const [dir, setDir] = useState<'fwd' | 'bwd'>('fwd')
 
-export default function TypingText({ text, className = '', speed = 65 }: TypingTextProps) {
-  const [visible, setVisible] = React.useState('')
+  useEffect(() => {
+    const current = list[idx] || ''
+    const doneForward = dir === 'fwd' && pos >= current.length
+    const doneBackward = dir === 'bwd' && pos <= 0
 
-  React.useEffect(() => {
-    let i = 0
-    setVisible('')
+    const t = window.setTimeout(
+      () => {
+        if (doneForward) {
+          setDir('bwd')
+          return
+        }
+        if (doneBackward && dir === 'bwd') {
+          setDir('fwd')
+          setIdx((v) => (v + 1) % list.length)
+          return
+        }
+        setPos((p) => p + (dir === 'fwd' ? 1 : -1))
+      },
+      doneForward ? pauseMs : speed,
+    )
 
-    const id = window.setInterval(() => {
-      i += 1
-      setVisible(text.slice(0, i))
+    return () => window.clearTimeout(t)
+  }, [list, idx, pos, dir, speed, pauseMs])
 
-      if (i >= text.length) {
-        window.clearInterval(id)
-      }
-    }, speed)
-
-    return () => window.clearInterval(id)
-  }, [text, speed])
+  const text = (list[idx] || '').slice(0, pos)
 
   return (
-    <p className={`${className} ${styles.typing}`}>
-      {visible}
-      <span className={styles.cursor} >-</span>
-    </p>
+    <span className={['inline-flex items-baseline', className].join(' ')}>
+      <span>{text}</span>
+      <span className='ml-1 inline-block w-[0.6ch] animate-pulse opacity-80'>▍</span>
+    </span>
   )
 }

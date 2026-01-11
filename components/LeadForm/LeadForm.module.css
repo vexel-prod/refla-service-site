@@ -58,6 +58,11 @@
   backdrop-filter: blur(10px);
 }
 
+.badge_span {
+  width: 100%;
+  max-width: max-content;
+}
+
 /* Список преимуществ */
 .points {
   margin: 10px 0 0;

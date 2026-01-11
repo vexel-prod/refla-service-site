@@ -1,11 +1,10 @@
+import type { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/next'
-import type { Metadata } from 'next'
+import { Manrope, Nunito_Sans, Play } from 'next/font/google'
 import 'app/globals.css'
 import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
-import './globals.css'
-import { Manrope, Nunito_Sans, Baloo_Bhai_2, Play } from 'next/font/google'
 
 const play = Play({
   subsets: ['latin', 'cyrillic'],
@@ -14,18 +13,10 @@ const play = Play({
   display: 'swap',
 })
 
-const baloo = Baloo_Bhai_2({
-  subsets: ['latin'],
-  variable: '--font-baloo',
-  display: 'swap',
-  preload: false,
-})
-
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-manrope',
   display: 'swap',
-  preload: false,
 })
 
 const nunito = Nunito_Sans({
@@ -36,8 +27,8 @@ const nunito = Nunito_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'REFLA – ОТРАЖЕНИЕ В ВАШ ДОМ',
-  description: 'REFLA — установка зеркал на входные двери. Красиво, безопасно, быстро.',
+  title: 'REFLA — зеркала на входные двери',
+  description: 'REFLA — установка зеркал на входные двери. Аккуратно, безопасно, быстро.',
   icons: {
     icon: [
       {
@@ -49,13 +40,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ru' data-theme='dark'>
-      <body className={`${manrope.variable} ${nunito.variable} ${baloo.variable} ${play.variable}`}>
+    <html lang='ru' suppressHydrationWarning>
+      <body className={[play.variable, manrope.variable, nunito.variable, 'font-sans brand-bg'].join(' ')}>
         <Header />
-        {children}
+        <main>{children}</main>
         <Footer />
-        <SpeedInsights />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

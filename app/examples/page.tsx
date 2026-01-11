@@ -1,17 +1,25 @@
 import dynamic from 'next/dynamic'
 
-// Динамический импорт галереи (чтобы SSR был включён)
-const Gallery = dynamic(() => import('components/Gallery/Gallery'), { ssr: true })
+const Gallery = dynamic(() => import('components/Gallery/Gallery'), { ssr: false })
 
-// Страница "Примеры наших работ"
-export default function Examples() {
+export const metadata = {
+  title: 'Примеры — REFLA',
+}
+
+export default function ExamplesPage() {
   return (
-    <section>
-      {/* Заголовок страницы */}
-      <h1 className='examples__title'>Примеры наших работ</h1>
-
-      {/* Компонент галереи */}
-      <Gallery />
+    <section className='section'>
+      <div className='container'>
+        <div className='flex items-end justify-between gap-6 flex-wrap'>
+          <div>
+            <h1 className='text-3xl md:text-4xl font-black tracking-tight'>Примеры работ</h1>
+            <p className='mt-3 text-base-content/70'>Несколько фото установок. Нажмите, чтобы увеличить.</p>
+          </div>
+        </div>
+        <div className='mt-8'>
+          <Gallery />
+        </div>
+      </div>
     </section>
   )
 }

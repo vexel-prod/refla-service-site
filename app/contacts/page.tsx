@@ -1,120 +1,71 @@
-import type { Metadata } from 'next'
-import styles from './page.module.css'
-import TiltCard from 'components/TiltCard/TiltCard'
-import ButtonCTA from 'components/ButtonCTA/ButtonCTA'
+import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'REFLA – КОНТАКТЫ',
-  description: 'REFLA — установка зеркал на входные двери. Красиво, безопасно, быстро.',
-  icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪞</text></svg>",
-      },
-    ],
-  },
+export const metadata = {
+  title: 'Контакты — REFLA',
 }
 
-export default function Contacts() {
+const CONTACTS = [
+  { title: 'Телефон', value: '+7 (995) 624‑55‑34', href: 'tel:+79956245534', note: 'Звонки и сообщения' },
+  { title: 'Telegram', value: '@refla_mirror', href: 'https://t.me/refla_mirror', note: 'Быстрые ответы' },
+  { title: 'Email', value: 'refla-mirror@mail.ru', href: 'mailto:refla-mirror@mail.ru', note: 'Документы и детали' },
+]
+
+export default function ContactsPage() {
   return (
-    <main>
-      {/* Шапка страницы */}
-      <section className='topSection'>
-        <h1 className='page-title'>Контакты</h1>
-        <p className='page-text'>
-          Связаться с нами можно по указанным каналам. Отвечаем обычно в течение 30 минут.
-        </p>
+    <section className='section'>
+      <div className='container'>
+        <div className='grid gap-10 lg:grid-cols-2 lg:items-start'>
+          <div>
+            <h1 className='text-3xl md:text-4xl font-black tracking-tight'>Контакты</h1>
+            <p className='mt-4 text-base-content/70 max-w-xl'>
+              Напишите в удобный канал — обычно отвечаем быстро. Для точного расчёта полезно прислать фото двери и адрес.
+            </p>
 
-        <div className={styles.badgeRow}>
-          <span className={styles.badge}>Телефон · Telegram · Почта</span>
-          <span className={styles.badge}>Консультация и предварительная оценка</span>
+            <div className='mt-7 flex flex-wrap gap-2'>
+              <span className='badge badge-outline'>Заявки: 10:00–21:00</span>
+              <span className='badge badge-outline'>Монтаж: 12:00–19:00</span>
+              <span className='badge badge-outline'>Пн–Пт</span>
+            </div>
+
+            <div className='mt-8 grid gap-4 sm:grid-cols-2'>
+              {CONTACTS.map((c) => (
+                <a key={c.title} href={c.href} className='glass-card p-6 hover:shadow-2xl transition-shadow focus-ring'>
+                  <div className='text-sm text-base-content/60'>{c.title}</div>
+                  <div className='mt-1 font-bold'>{c.value}</div>
+                  <div className='mt-2 text-sm text-base-content/70'>{c.note}</div>
+                </a>
+              ))}
+              <div className='glass-card p-6'>
+                <div className='text-sm text-base-content/60'>Адрес</div>
+                <div className='mt-1 font-bold'>Санкт‑Петербург</div>
+                <div className='mt-2 text-sm text-base-content/70'>Выезжаем по городу и области.</div>
+              </div>
+            </div>
+          </div>
+
+          <div className='glass-card p-7 md:p-10'>
+            <h2 className='text-xl md:text-2xl font-black tracking-tight'>Перед тем как писать</h2>
+            <p className='mt-3 text-sm text-base-content/70'>
+              Чтобы мы сразу дали точную смету, подготовьте:
+            </p>
+            <ul className='mt-4 space-y-2 text-sm text-base-content/70 list-disc pl-5'>
+              <li>Фото двери спереди (и крупно ручку/замок, если есть)</li>
+              <li>Желаемый размер зеркала</li>
+              <li>Нужны ли вырезы под фурнитуру</li>
+              <li>Предпочтения по кромке (полировка / фацет)</li>
+            </ul>
+
+            <div className='mt-8 flex gap-3 flex-wrap'>
+              <Link href='/request' className='btn btn-primary rounded-full'>
+                Оставить заявку
+              </Link>
+              <Link href='/pricing' className='btn btn-ghost rounded-full'>
+                Цены
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
-
-      {/* Основной блок контактов */}
-      <section>
-        {/* График работы */}
-        <div className={styles.chips}>
-          <span className='chip'>Заявки: 10:00–21:00</span>
-          <span className='chip'>Монтаж: 12:00–19:00</span>
-          <span className='chip'>Пн–Пт</span>
-        </div>
-
-        {/* Карточки каналов связи */}
-        <div className={styles.grid}>
-          {/* Телефон */}
-          <TiltCard as='a' href='tel:+79956245534' className={styles.item}>
-            <div className={styles.icon} aria-hidden>
-              <svg viewBox='0 0 24 24' width='22' height='22' fill='none'>
-                <path
-                  d='M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1.5 1.5 0 011.5-.37c1.63.48 3.39.75 5.1.75.55 0 1 .45 1 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.42c.55 0 1 .45 1 1 0 1.71.27 3.47.75 5.1.1.5-.06 1.03-.41 1.38L6.6 10.8z'
-                  fill='#38bdf8'
-                />
-              </svg>
-            </div>
-
-            <div className={styles.body}>
-              <div className={styles.label}>Телефон</div>
-              <div className='page-text'>+7 (995) 624-55-34</div>
-              <div className={styles.hint}>Быстрее всего — звонок с 10:00 до 21:00</div>
-            </div>
-          </TiltCard>
-
-          {/* Telegram */}
-          <TiltCard
-            as='a'
-            href='https://t.me/refla_mirror'
-            target='_blank'
-            rel='noopener noreferrer'
-            className={styles.item}
-          >
-            <div className={styles.icon} aria-hidden>
-              <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24'>
-                <circle cx='12' cy='12' r='12' fill='#0088cc' />
-                <path
-                  d='M19.285 6.709l-2.37 11.184c-.18.82-.663 1.02-1.34.634l-3.706-2.73-1.788 1.723c-.198.195-.364.364-.746.364l.268-3.79 6.902-6.227c.3-.264-.065-.412-.465-.148l-8.53 5.37-3.673-1.15c-.797-.249-.814-.797.167-1.18l14.327-5.53c.66-.24 1.24.16 1.03 1.158z'
-                  fill='#fff'
-                />
-              </svg>
-            </div>
-
-            <div className={styles.body}>
-              <div className={styles.label}>Telegram</div>
-              <div className='page-text'>@refla_mirror</div>
-              <div className={styles.hint}>Удобно отправить фото двери и получить варианты</div>
-            </div>
-          </TiltCard>
-
-          {/* Почта */}
-          <TiltCard as='a' href='mailto:refla-mirror@mail.ru' className={styles.item}>
-            <div className={styles.icon} aria-hidden>
-              <svg viewBox='0 0 24 24' width='22' height='22' fill='none'>
-                <path d='M1 6a2 2 0 012-2h16a2 2 0 012 2v.4l-10 6.25L2 6.4V6z' fill='#38bdf8' />
-                <path
-                  d='M22 8.1l-9.45 5.9a2 2 0 01-2.1 0L1 8.1V18a2 2 0 002 2h16a2 2 0 002-2V8.1z'
-                  fill='#5a5b5cff'
-                />
-              </svg>
-            </div>
-
-            <div className={styles.body}>
-              <div className={styles.label}>Почта</div>
-              <div className='page-text'>refla-mirror@mail.ru</div>
-              <div className={styles.hint}>Хорошо подходит для подробных запросов</div>
-            </div>
-          </TiltCard>
-        </div>
-
-        {/* Регион + кнопка */}
-        <div className={styles.footer}>
-          <p className={styles.region}>
-            Работаем по Санкт-Петербургу и Ленинградской области. Сроки и стоимость выезда — по
-            запросу.
-          </p>
-          <ButtonCTA />
-        </div>
-      </section>
-    </main>
+      </div>
+    </section>
   )
 }
