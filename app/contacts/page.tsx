@@ -29,13 +29,13 @@ export default function ContactsPage() {
 
             <div className='mt-8 grid gap-4 sm:grid-cols-2'>
               {CONTACTS.map((c) => (
-                <a key={c.title} href={c.href} className='glass-card p-6 hover:shadow-2xl transition-shadow focus-ring'>
+                <a key={c.title} href={c.href} className='card-surface p-6 hover:shadow-2xl transition-shadow focus-ring'>
                   <div className='text-sm text-base-content/60'>{c.title}</div>
                   <div className='mt-1 font-bold'>{c.value}</div>
                   <div className='mt-2 text-sm text-base-content/70'>{c.note}</div>
                 </a>
               ))}
-              <div className='glass-card p-6'>
+              <div className='card-surface p-6'>
                 <div className='text-sm text-base-content/60'>Адрес</div>
                 <div className='mt-1 font-bold'>Санкт‑Петербург</div>
                 <div className='mt-2 text-sm text-base-content/70'>Выезжаем по городу и области.</div>
@@ -43,7 +43,7 @@ export default function ContactsPage() {
             </div>
           </div>
 
-          <div className='glass-card p-7 md:p-10'>
+          <div className='card-surface gradient-border p-7 md:p-10'>
             <h2 className='text-xl md:text-2xl font-black tracking-tight'>Перед тем как писать</h2>
             <p className='mt-3 text-sm text-base-content/70'>
               Чтобы мы сразу дали точную смету, подготовьте:
@@ -56,10 +56,10 @@ export default function ContactsPage() {
             </ul>
 
             <div className='mt-8 flex gap-3 flex-wrap'>
-              <Link href='/request' className='btn btn-primary rounded-full'>
+              <Link href='/request' className='btn btn-primary rounded-full shimmer focus-ring'>
                 Оставить заявку
               </Link>
-              <Link href='/pricing' className='btn btn-ghost rounded-full'>
+              <Link href='/pricing' className='btn btn-ghost rounded-full focus-ring'>
                 Цены
               </Link>
             </div>

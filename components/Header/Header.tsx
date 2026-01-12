@@ -9,6 +9,7 @@ type NavItem = { href: string; label: string }
 
 const NAV: NavItem[] = [
   { href: '/', label: 'Главная' },
+  { href: '/examples', label: 'Примеры' },
   { href: '/pricing', label: 'Цены' },
   { href: '/about', label: 'О компании' },
   { href: '/contacts', label: 'Контакты' },
@@ -24,12 +25,29 @@ const isActiveFactory = (pathname: string) => {
   }
 }
 
+function LogoMark() {
+  return (
+    <svg width='26' height='26' viewBox='0 0 32 32' fill='none' aria-hidden='true'>
+      <defs>
+        <linearGradient id='g' x1='0' y1='0' x2='32' y2='32'>
+          <stop stopColor='rgb(var(--brand-a))' />
+          <stop offset='0.55' stopColor='rgb(var(--brand-b))' />
+          <stop offset='1' stopColor='rgb(var(--brand-c))' />
+        </linearGradient>
+      </defs>
+      <rect x='4' y='3' width='24' height='26' rx='8' stroke='url(#g)' strokeWidth='2' />
+      <path d='M11 9.5c3.8-2 6.2-2 10 0' stroke='url(#g)' strokeWidth='2' strokeLinecap='round' />
+      <path d='M12 22c3 1.7 5 1.7 8 0' stroke='url(#g)' strokeWidth='2' strokeLinecap='round' opacity='0.75' />
+      <path d='M18 7v18' stroke='rgba(255,255,255,.25)' strokeWidth='2' strokeLinecap='round' />
+    </svg>
+  )
+}
+
 export default function Header() {
   const pathname = usePathname() || '/'
   const isActive = useMemo(() => isActiveFactory(pathname), [pathname])
 
   const [scrolled, setScrolled] = useState(false)
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
@@ -41,28 +59,64 @@ export default function Header() {
     <header className='sticky top-0 z-50'>
       <div
         className={[
-          'w-full border-b border-base-content/10',
-          'bg-base-100/70 backdrop-blur supports-[backdrop-filter]:bg-base-100/55',
+          'border-b border-base-content/10',
+          'bg-base-100/60 supports-[backdrop-filter]:bg-base-100/40 backdrop-blur-xl',
           scrolled ? 'shadow-lg shadow-base-300/20' : '',
         ].join(' ')}
       >
         <div className='container'>
-          <div className='navbar min-h-[72px] px-0'>
-            <div className='navbar-start'>
-              <div className='dropdown'>
-                <label tabIndex={0} className='btn btn-ghost btn-sm md:hidden rounded-full focus-ring'>
+          <div className='flex items-center justify-between py-3'>
+            <div className='flex items-center gap-3'>
+              <Link href='/' className='flex items-center gap-2 rounded-2xl px-2 py-1 focus-ring'>
+                <LogoMark />
+                <div className='leading-tight'>
+                  <div className='font-black tracking-tight text-base md:text-lg'>REFLA</div>
+                  <div className='text-[11px] md:text-xs text-base-content/60 -mt-0.5'>зеркала на двери</div>
+                </div>
+              </Link>
+
+              <div className='hidden lg:flex items-center gap-1'>
+                {NAV.map((it) => (
+                  <Link
+                    key={it.href}
+                    href={it.href}
+                    className={[
+                      'relative px-3 py-2 rounded-2xl text-sm',
+                      'text-base-content/80 hover:text-base-content hover:bg-base-100/50',
+                      'transition',
+                      isActive(it.href) ? 'text-base-content bg-base-100/60' : '',
+                    ].join(' ')}
+                  >
+                    {it.label}
+                    {isActive(it.href) && (
+                      <span className='absolute left-3 right-3 -bottom-1 h-[2px] rounded-full bg-gradient-to-r from-sky-400 via-indigo-400 to-orange-400' />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className='flex items-center gap-2'>
+              <ThemeToggle />
+
+              <Link href='/request' className='btn btn-primary rounded-full shimmer focus-ring hidden sm:inline-flex'>
+                Рассчитать стоимость
+              </Link>
+
+              <div className='dropdown dropdown-end lg:hidden'>
+                <label tabIndex={0} className='btn btn-ghost btn-sm rounded-full focus-ring'>
                   <svg width='20' height='20' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
                     <path d='M4 7h16M4 12h16M4 17h16' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
                   </svg>
                 </label>
                 <ul
                   tabIndex={0}
-                  className='menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56 border border-base-content/10'
+                  className='menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-64 border border-base-content/10'
                 >
-                  {NAV.map((item) => (
-                    <li key={item.href}>
-                      <Link href={item.href} className={isActive(item.href) ? 'active font-semibold' : ''}>
-                        {item.label}
+                  {NAV.map((it) => (
+                    <li key={it.href}>
+                      <Link href={it.href} className={isActive(it.href) ? 'active font-semibold' : ''}>
+                        {it.label}
                       </Link>
                     </li>
                   ))}
@@ -73,36 +127,6 @@ export default function Header() {
                   </li>
                 </ul>
               </div>
-
-              <Link href='/' className='btn btn-ghost text-xl rounded-2xl px-3 focus-ring'>
-                <span className='font-black tracking-tight'>REFLA</span>
-                <span className='ml-2 hidden sm:inline text-base-content/60 text-sm font-medium'>зеркала на двери</span>
-              </Link>
-            </div>
-
-            <div className='navbar-center hidden md:flex'>
-              <ul className='menu menu-horizontal px-1 gap-1'>
-                {NAV.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={[
-                        'rounded-2xl focus-ring',
-                        isActive(item.href) ? 'font-semibold bg-base-200' : 'text-base-content/80',
-                      ].join(' ')}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className='navbar-end gap-1'>
-              <ThemeToggle />
-              <Link href='/request' className='btn btn-primary btn-sm rounded-full focus-ring hidden sm:inline-flex'>
-                Рассчитать стоимость
-              </Link>
             </div>
           </div>
         </div>

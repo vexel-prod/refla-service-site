@@ -72,8 +72,8 @@ export default function LeadForm({
 
   const shell =
     variant === 'inline'
-      ? 'bg-base-100/60 border border-base-content/10 rounded-3xl p-6 md:p-8 backdrop-blur'
-      : 'glass-card p-6 md:p-8'
+      ? 'card-surface p-6 md:p-8'
+      : 'card-surface gradient-border p-6 md:p-8'
 
   return (
     <form onSubmit={onSubmit} className={shell}>
@@ -82,7 +82,7 @@ export default function LeadForm({
           <div className='text-xl md:text-2xl font-black tracking-tight'>{title}</div>
           <p className='mt-2 text-sm text-base-content/70'>{subtitle}</p>
         </div>
-        <div className='badge badge-outline hidden sm:inline-flex' style={{width: '100%', maxWidth: 'max-content', color: 'green'}}>без спама</div>
+        <div className='badge badge-outline hidden sm:inline-flex w-full' style={{maxWidth: 'max-content', color: 'green'}}>без спама</div>
       </div>
 
       <div className='mt-6 grid gap-3'>
@@ -124,7 +124,7 @@ export default function LeadForm({
       </div>
 
       <div className='mt-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between'>
-        <button className='btn btn-primary rounded-full' disabled={!canSend}>
+        <button className='btn btn-primary rounded-full shimmer focus-ring' disabled={!canSend}>
           {loading ? <span className='loading loading-spinner' /> : 'Отправить'}
         </button>
         <div className='text-xs text-base-content/60'>

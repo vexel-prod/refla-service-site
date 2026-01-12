@@ -54,7 +54,7 @@ export default function Gallery() {
               setActive(idx)
               setOpen(true)
             }}
-            className='group glass-card overflow-hidden text-left focus-ring'
+            className='group card-surface overflow-hidden text-left focus-ring'
           >
             <div className='relative aspect-[4/3]'>
               <Image
@@ -77,7 +77,7 @@ export default function Gallery() {
 
       {/* Modal */}
       <dialog className={'modal ' + (open ? 'modal-open' : '')} onClose={() => setOpen(false)}>
-        <div className='modal-box max-w-4xl p-0 overflow-hidden glass-card'>
+        <div className='modal-box max-w-4xl p-0 overflow-hidden card-surface gradient-border'>
           <div className='relative aspect-[16/10]'>
             <Image src={item.image} alt={item.title} fill className='object-cover' sizes='80vw' />
             <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent' />

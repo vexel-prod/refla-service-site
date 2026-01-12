@@ -23,7 +23,7 @@ export default function AboutPage() {
                 ['Безопасный монтаж', 'Надёжные крепления и учёт особенностей вашей двери.'],
                 ['Сервис', 'Помогаем выбрать вариант под стиль прихожей и бюджет.'],
               ].map(([t, d]) => (
-                <div key={t} className='glass-card p-6'>
+                <div key={t} className='card-surface p-6'>
                   <div className='font-bold'>{t}</div>
                   <div className='mt-2 text-sm text-base-content/70'>{d}</div>
                 </div>
@@ -31,16 +31,16 @@ export default function AboutPage() {
             </div>
 
             <div className='mt-8 flex gap-3 flex-wrap'>
-              <Link href='/pricing' className='btn btn-primary rounded-full'>
+              <Link href='/pricing' className='btn btn-primary rounded-full shimmer focus-ring'>
                 Посмотреть цены
               </Link>
-              <Link href='/request' className='btn btn-ghost rounded-full'>
+              <Link href='/request' className='btn btn-ghost rounded-full focus-ring'>
                 Оставить заявку
               </Link>
             </div>
           </div>
 
-          <div className='glass-card p-7 md:p-10'>
+          <div className='card-surface gradient-border p-7 md:p-10'>
             <h2 className='text-xl md:text-2xl font-black tracking-tight'>Принципы работы</h2>
             <div className='mt-6 space-y-3'>
               {[

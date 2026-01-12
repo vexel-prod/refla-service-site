@@ -16,7 +16,7 @@ export default function RequestPage() {
               смету.
             </p>
 
-            <div className='mt-6 glass-card p-6'>
+            <div className='mt-6 card-surface gradient-border p-6'>
               <div className='text-sm font-semibold'>Что полезно указать</div>
               <ul className='mt-3 space-y-2 text-sm text-base-content/70 list-disc pl-5'>
                 <li>Адрес / район и удобное время</li>

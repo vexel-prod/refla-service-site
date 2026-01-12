@@ -1,96 +1,86 @@
 'use client'
 
 import Link from 'next/link'
-import Gallery from 'components/Gallery/Gallery'
+import dynamic from 'next/dynamic'
 import LeadForm from 'components/LeadForm/LeadForm'
 import TypingText from 'components/TypingText/TypingText'
-import TiltCard from 'components/TiltCard/TiltCard'
+import BeforeAfterSlider from 'components/BeforeAfterSlider/BeforeAfterSlider'
 
-const features: Array<{ title: string; text: string; icon: string }> = [
-  { title: 'Эстетика', text: 'Точные подрезы, аккуратная кромка, ровные зазоры.', icon: '✨' },
-  { title: 'Безопасность', text: 'Закалённое зеркало, надёжные крепления, аккуратный монтаж.', icon: '🛡️' },
-  { title: 'Чистая работа', text: 'Минимум пыли и шума. Бережём отделку и фурнитуру.', icon: '🧼' },
-  { title: 'Сроки', text: 'В большинстве случаев — установка за 1 день.', icon: '⏱️' },
-  { title: 'Гарантия', text: 'Даём гарантию на монтаж и материалы.', icon: '✅' },
-  { title: 'Смета заранее', text: 'Понятный расчёт стоимости до начала работ.', icon: '🧾' },
+const Gallery = dynamic(() => import('components/Gallery/Gallery'), { ssr: false })
+
+const FEATURES: Array<{ title: string; text: string; icon: string }> = [
+  { title: 'Аккуратный монтаж', text: 'Чистая работа и внимание к деталям: ровные зазоры, аккуратная кромка.', icon: '✨' },
+  { title: 'Безопасные материалы', text: 'Закалённое зеркало и крепления под нагрузку двери.', icon: '🛡️' },
+  { title: 'Прозрачная смета', text: 'Понятный расчёт до начала работ — без сюрпризов.', icon: '🧾' },
+  { title: 'В большинстве случаев — 1 день', text: 'От замера до установки: быстро и по делу.', icon: '⏱️' },
+  { title: 'Гарантия', text: 'На монтаж и материалы. Держим качество.', icon: '✅' },
+  { title: 'Рекомендации по дизайну', text: 'Подскажем кромку и формат, чтобы зеркало выглядело «дорого».', icon: '🎛️' },
 ]
 
-const steps: Array<{ title: string; text: string }> = [
-  { title: 'Заявка', text: 'Оставляете контакт — уточняем задачу и адрес.' },
-  { title: 'Замер', text: 'Приезжаем, измеряем, согласуем кромку и крепление.' },
-  { title: 'Изготовление', text: 'Подготовка под ваши размеры и требования.' },
-  { title: 'Монтаж', text: 'Аккуратно устанавливаем, проверяем, убираем рабочее место.' },
+const STEPS: Array<{ t: string; d: string }> = [
+  { t: 'Заявка', d: 'Оставляете контакт — уточняем задачу и адрес.' },
+  { t: 'Замер', d: 'Измеряем, согласуем кромку и крепление.' },
+  { t: 'Подготовка', d: 'Режем под размер, делаем обработку и вырезы при необходимости.' },
+  { t: 'Монтаж', d: 'Устанавливаем, проверяем, убираем рабочее место.' },
 ]
 
-const reviews: Array<{ name: string; rating: number; text: string }> = [
-  { name: 'Алексей, Санкт‑Петербург', rating: 5, text: 'Сделали аккуратно и за один день. Прихожая стала визуально больше.' },
-  { name: 'Екатерина, СПб', rating: 5, text: 'Помогли выбрать кромку и оттенок. Смотрится дорого и минималистично.' },
-  { name: 'Ирина, СПб', rating: 5, text: 'Очень чистый монтаж, без суеты и пыли. Внимание к деталям.' },
-  { name: 'Дмитрий, Колпино', rating: 4, text: 'Качественно. Установка заняла чуть больше времени, чем ожидал, но результат отличный.' },
-  { name: 'Марина, Гатчина', rating: 4, text: 'Ребята вежливые, зеркало стоит идеально. Цена выше ожиданий, но качество оправдало.' },
-  { name: 'Игорь, Всеволожск', rating: 5, text: 'Приехали вовремя, сделали быстро. Буду рекомендовать знакомым.' },
+const FAQ: Array<{ q: string; a: string }> = [
+  { q: 'Сколько занимает установка?', a: 'Обычно 1–3 часа после подготовки. Для нестандартных задач время может увеличиться — уточним на замере.' },
+  { q: 'Насколько это безопасно?', a: 'Используем закалённое зеркало и крепления под нагрузку двери. Монтаж выполняется с учётом фурнитуры и открывания.' },
+  { q: 'Можно ли зеркало «в пол»?', a: 'Да. Подберём размер под дверь, учтём ручки/замки и сделаем аккуратные вырезы.' },
+  { q: 'Какие есть варианты кромки?', a: 'Чаще всего — полировка или фацет. Подскажем лучший вариант по дизайну и практичности.' },
 ]
 
-const faqs: Array<{ q: string; a: string }> = [
-  {
-    q: 'Сколько занимает установка?',
-    a: 'Обычно 1–3 часа на монтаж после подготовки. Для нестандартных задач время может увеличиться — уточним на замере.',
-  },
-  {
-    q: 'Насколько это безопасно?',
-    a: 'Используем закалённое зеркало и крепления под нагрузку двери. Монтаж выполняется с учётом фурнитуры и открывания.',
-  },
-  {
-    q: 'Можно ли сделать зеркало «в пол»?',
-    a: 'Да. Подбираем размер под вашу дверь, учитываем ручки/замки и делаем аккуратные вырезы при необходимости.',
-  },
-  {
-    q: 'Какие есть варианты кромки?',
-    a: 'Чаще всего — полировка или фацет. Подскажем лучший вариант по дизайну и практичности.',
-  },
-]
+function Stars({ n }: { n: number }) {
+  return (
+    <div className='flex items-center gap-0.5 text-amber-400' aria-label={`Оценка ${n} из 5`}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <span key={i} className={i < n ? '' : 'opacity-25'}>★</span>
+      ))}
+    </div>
+  )
+}
 
 export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className='section'>
+      <section className='section pt-10 md:pt-16'>
         <div className='container'>
           <div className='grid gap-10 lg:grid-cols-2 lg:items-center'>
             <div>
               <div className='inline-flex items-center gap-2 rounded-full border border-base-content/10 bg-base-100/60 px-4 py-2 text-sm backdrop-blur'>
-                <span className='badge badge-primary badge-sm'>SPB</span>
+                <span className='badge badge-primary badge-sm'>СПБ</span>
                 <span className='text-base-content/70'>Зеркало на входную дверь • монтаж под ключ</span>
               </div>
 
-              <h1 className='mt-5 text-4xl md:text-5xl font-black tracking-tight leading-[1.02]'>
+              <h1 className='mt-6 text-4xl md:text-6xl font-black tracking-tight leading-[1.02]'>
                 Зеркало на входную дверь —{' '}
-                <span className='text-primary'>
-                  <TypingText phrases={['аккуратно', 'быстро', 'безопасно', 'с гарантией']} />
+                <span className='bg-gradient-to-r from-sky-400 via-indigo-400 to-orange-400 bg-clip-text text-transparent'>
+                  <TypingText phrases={['современно', 'аккуратно', 'быстро', 'с гарантией']} />
                 </span>
               </h1>
 
-              <p className='mt-5 text-base md:text-lg text-base-content/70 max-w-xl'>
-                Добавьте свет и глубину в прихожую. Мы подберём размер, кромку и крепление, сделаем точный монтаж и
-                оставим после себя чисто.
+              <p className='mt-6 text-base md:text-lg text-base-content/70 max-w-xl'>
+                Добавьте свет и глубину в прихожую. Подберём размер, кромку и крепление, сделаем точный монтаж и оставим после себя чисто.
               </p>
 
-              <div className='mt-7 flex flex-col sm:flex-row gap-3'>
-                <Link href='/request' className='btn btn-primary rounded-full'>
+              <div className='mt-8 flex flex-col sm:flex-row gap-3'>
+                <Link href='/request' className='btn btn-primary rounded-full shimmer focus-ring'>
                   Рассчитать стоимость
                 </Link>
-                <a href='#gallery' className='btn btn-ghost rounded-full'>
+                <a href='#examples' className='btn btn-ghost rounded-full focus-ring'>
                   Посмотреть примеры
                 </a>
               </div>
 
-              <div className='mt-8 grid grid-cols-3 gap-3 max-w-lg'>
+              <div className='mt-8 grid grid-cols-3 gap-3 max-w-xl'>
                 {[
                   ['1 день', 'часто хватает'],
-                  ['0 ₽', 'за консультацию'],
+                  ['0 ₽', 'консультация'],
                   ['5★', 'средняя оценка'],
                 ].map(([a, b]) => (
-                  <div key={a} className='glass-card p-4'>
+                  <div key={a} className='card-surface p-4'>
                     <div className='text-xl font-black'>{a}</div>
                     <div className='text-xs text-base-content/60 mt-1'>{b}</div>
                   </div>
@@ -98,20 +88,33 @@ export default function HomePage() {
               </div>
             </div>
 
-            <TiltCard className='glass-card overflow-hidden'>
-              <div className='p-6 md:p-8'>
-                <div className='flex items-center justify-between'>
-                  <div className='font-black text-lg'>Быстрый расчёт</div>
+            <div className='grid gap-5'>
+              <div className='card-surface gradient-border p-6 md:p-8'>
+                <div className='flex items-center justify-between gap-4'>
+                  <div>
+                    <div className='font-black text-lg md:text-xl'>Быстрый расчёт</div>
+                    <div className='mt-1 text-sm text-base-content/70'>Заполните форму — уточним детали и вернёмся с ценой и сроками.</div>
+                  </div>
                   <div className='badge badge-outline'>онлайн</div>
                 </div>
-                <p className='mt-2 text-sm text-base-content/70'>
-                  Заполните форму — мы уточним детали и вернёмся с ценой и сроками.
-                </p>
                 <div className='mt-5'>
                   <LeadForm variant='inline' title='Заявка' subtitle='Телефон или Telegram/WhatsApp — как удобно.' />
                 </div>
               </div>
-            </TiltCard>
+
+              <div className='card-surface p-6 md:p-8'>
+                <div className='flex items-end justify-between gap-4 flex-wrap'>
+                  <div>
+                    <div className='font-black text-lg md:text-xl'>Сравнение</div>
+                    <div className='mt-1 text-sm text-base-content/70'>Перетяните ползунок — как меняется ощущение пространства.</div>
+                  </div>
+                  <div className='badge badge-outline'>до / после</div>
+                </div>
+                <div className='mt-5'>
+                  <BeforeAfterSlider beforeSrc='/assets/7.jpg' afterSrc='/assets/12.jpg' />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -119,32 +122,30 @@ export default function HomePage() {
       {/* Features */}
       <section className='section pt-0'>
         <div className='container'>
-          <div className='glass-card p-7 md:p-10'>
-            <div className='flex items-end justify-between gap-6 flex-wrap'>
-              <div>
-                <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Почему REFLA</h2>
-                <p className='mt-2 text-base-content/70 max-w-xl'>
-                  Сочетаем «красиво» и «надёжно»: детали решают, когда зеркало становится частью интерьера.
-                </p>
-              </div>
-              <Link href='/pricing' className='btn btn-ghost rounded-full'>
-                Открыть прайс
-              </Link>
+          <div className='flex items-end justify-between gap-6 flex-wrap'>
+            <div>
+              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Почему REFLA</h2>
+              <p className='mt-2 text-base-content/70 max-w-xl'>
+                Сочетаем «красиво» и «надёжно»: детали решают, когда зеркало становится частью интерьера.
+              </p>
             </div>
+            <Link href='/pricing' className='btn btn-ghost rounded-full focus-ring'>
+              Открыть прайс
+            </Link>
+          </div>
 
-            <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              {features.map((f) => (
-                <div key={f.title} className='rounded-3xl border border-base-content/10 bg-base-100/50 p-6'>
-                  <div className='flex items-center gap-3'>
-                    <div className='h-10 w-10 rounded-2xl bg-primary/15 flex items-center justify-center text-lg'>
-                      {f.icon}
-                    </div>
-                    <div className='font-bold'>{f.title}</div>
+          <div className='mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+            {FEATURES.map((f) => (
+              <div key={f.title} className='card-surface p-6 hover:shadow-2xl transition-shadow'>
+                <div className='flex items-center gap-3'>
+                  <div className='h-10 w-10 rounded-2xl bg-primary/15 flex items-center justify-center text-lg'>
+                    {f.icon}
                   </div>
-                  <p className='mt-3 text-sm text-base-content/70'>{f.text}</p>
+                  <div className='font-semibold'>{f.title}</div>
                 </div>
-              ))}
-            </div>
+                <p className='mt-3 text-sm text-base-content/70'>{f.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -152,33 +153,31 @@ export default function HomePage() {
       {/* Steps */}
       <section className='section'>
         <div className='container'>
-          <div className='grid gap-8 lg:grid-cols-2 lg:items-center'>
+          <div className='grid gap-10 lg:grid-cols-2 lg:items-start'>
             <div>
               <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Как это происходит</h2>
-              <p className='mt-2 text-base-content/70 max-w-xl'>
-                Прозрачный процесс: вы понимаете стоимость, сроки и результат до начала работ.
-              </p>
+              <p className='mt-2 text-base-content/70 max-w-xl'>Прозрачный процесс: вы понимаете стоимость, сроки и результат до начала работ.</p>
 
-              <div className='mt-6 space-y-3'>
-                {steps.map((s, i) => (
-                  <div key={s.title} className='glass-card p-5 flex gap-4 items-start'>
+              <div className='mt-7 space-y-3'>
+                {STEPS.map((s, i) => (
+                  <div key={s.t} className='card-surface p-5 flex gap-4 items-start hover:translate-x-[2px] transition-transform'>
                     <div className='badge badge-primary badge-lg rounded-2xl px-4'>{i + 1}</div>
                     <div>
-                      <div className='font-bold'>{s.title}</div>
-                      <div className='text-sm text-base-content/70 mt-1'>{s.text}</div>
+                      <div className='font-semibold'>{s.t}</div>
+                      <div className='text-sm text-base-content/70 mt-1'>{s.d}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div id='gallery' className='glass-card p-6 md:p-8'>
+            <div id='examples' className='card-surface p-6 md:p-8'>
               <div className='flex items-end justify-between gap-4 flex-wrap'>
                 <div>
                   <h3 className='text-xl md:text-2xl font-black tracking-tight'>Примеры работ</h3>
                   <p className='mt-2 text-sm text-base-content/70'>Нажмите на фото, чтобы увеличить.</p>
                 </div>
-                <div className='badge badge-outline'>до / после</div>
+                <div className='badge badge-outline'>галерея</div>
               </div>
               <div className='mt-6'>
                 <Gallery />
@@ -194,33 +193,24 @@ export default function HomePage() {
           <div className='flex items-end justify-between gap-6 flex-wrap'>
             <div>
               <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Отзывы</h2>
-              <p className='mt-2 text-base-content/70'>Реальные впечатления клиентов (текстовые).</p>
+              <p className='mt-2 text-base-content/70'>Коротко и по делу — что отмечают клиенты чаще всего.</p>
             </div>
-            <div className='badge badge-primary badge-outline'>обновляем регулярно</div>
+            <div className='badge badge-primary badge-outline'>обновляем</div>
           </div>
 
-          <div className='mt-6 flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory'>
-            {reviews.map((r) => (
-              <div
-                key={r.name}
-                className='glass-card p-6 min-w-[320px] max-w-[420px] snap-start'
-              >
-                <div className='flex items-start justify-between gap-3'>
-                  <div className='font-bold'>{r.name}</div>
-                  <div className='rating rating-sm'>
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <input
-                        key={i}
-                        type='radio'
-                        name={'rating-' + r.name}
-                        className='mask mask-star-2 bg-orange-400'
-                        checked={i + 1 === r.rating}
-                        readOnly
-                      />
-                    ))}
-                  </div>
-                </div>
+          <div className='mt-8 grid gap-4 lg:grid-cols-3'>
+            {[
+              { name: 'Алексей, Санкт‑Петербург', rating: 5, text: 'Сделали аккуратно и за один день. Прихожая стала визуально больше.' },
+              { name: 'Екатерина, СПб', rating: 5, text: 'Помогли выбрать кромку и оттенок. Смотрится дорого и минималистично.' },
+              { name: 'Ирина, СПб', rating: 5, text: 'Очень чистый монтаж, без суеты и пыли. Внимание к деталям.' },
+              { name: 'Дмитрий, Колпино', rating: 4, text: 'Качественно. Установка заняла чуть больше времени, но результат отличный.' },
+              { name: 'Марина, Гатчина', rating: 4, text: 'Вежливые, зеркало стоит идеально. Цена выше ожиданий, но качество оправдало.' },
+              { name: 'Игорь, Всеволожск', rating: 5, text: 'Приехали вовремя, сделали быстро. Буду рекомендовать знакомым.' },
+            ].map((r) => (
+              <div key={r.name} className='card-surface p-6'>
+                <Stars n={r.rating} />
                 <p className='mt-3 text-sm text-base-content/70'>{r.text}</p>
+                <div className='mt-4 text-sm font-semibold'>{r.name}</div>
               </div>
             ))}
           </div>
@@ -228,34 +218,33 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section id='faq' className='section'>
+      <section className='section'>
         <div className='container'>
           <div className='grid gap-8 lg:grid-cols-2 lg:items-start'>
             <div>
-              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>FAQ</h2>
-              <p className='mt-2 text-base-content/70 max-w-xl'>Коротко отвечаем на популярные вопросы.</p>
-
-              <div className='mt-6 space-y-3'>
-                {faqs.map((f, i) => (
-                  <div key={i} className='collapse collapse-plus glass-card'>
-                    <input type='radio' name='faq' defaultChecked={i === 0} />
-                    <div className='collapse-title text-base font-semibold'>{f.q}</div>
-                    <div className='collapse-content text-sm text-base-content/70'>
-                      <p>{f.a}</p>
-                    </div>
-                  </div>
-                ))}
+              <h2 className='text-2xl md:text-3xl font-black tracking-tight'>Вопросы</h2>
+              <p className='mt-2 text-base-content/70 max-w-xl'>Ответы на самые частые вопросы — чтобы было спокойно и понятно.</p>
+              <div className='mt-6 card-surface p-6 md:p-8'>
+                <div className='text-sm text-base-content/70'>
+                  Если вопрос нестандартный — напишите, и мы подскажем решение.
+                </div>
+                <div className='mt-4 flex flex-wrap gap-2'>
+                  <Link href='/contacts' className='btn btn-ghost rounded-full focus-ring'>Контакты</Link>
+                  <Link href='/request' className='btn btn-primary rounded-full focus-ring'>Оставить заявку</Link>
+                </div>
               </div>
             </div>
 
-            <div className='glass-card p-6 md:p-8'>
-              <h3 className='text-xl md:text-2xl font-black tracking-tight'>Готовы?</h3>
-              <p className='mt-2 text-sm text-base-content/70'>
-                Оставьте заявку — рассчитаем стоимость и предложим оптимальные варианты под вашу дверь.
-              </p>
-              <div className='mt-6'>
-                <LeadForm />
-              </div>
+            <div className='space-y-3'>
+              {FAQ.map((f) => (
+                <div key={f.q} className='collapse collapse-arrow card-surface'>
+                  <input type='checkbox' />
+                  <div className='collapse-title font-semibold'>{f.q}</div>
+                  <div className='collapse-content text-sm text-base-content/70'>
+                    <p>{f.a}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ru' suppressHydrationWarning>
-      <body className={[play.variable, manrope.variable, nunito.variable, 'font-sans brand-bg'].join(' ')}>
+      <body className={[play.variable, manrope.variable, nunito.variable, 'font-sans site-bg noise'].join(' ')}>
         <Header />
         <main>{children}</main>
         <Footer />

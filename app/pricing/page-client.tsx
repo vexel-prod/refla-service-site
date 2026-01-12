@@ -73,7 +73,7 @@ export function PricingClient() {
 
         <div className='mt-8 grid gap-8 lg:grid-cols-2 lg:items-start'>
           {/* Calculator */}
-          <div className='glass-card p-6 md:p-8'>
+          <div className='card-surface gradient-border p-6 md:p-8'>
             <div className='flex items-center justify-between gap-4'>
               <div className='text-xl md:text-2xl font-black tracking-tight'>Калькулятор</div>
               <div className='badge badge-outline'>примерно</div>
@@ -175,7 +175,7 @@ export function PricingClient() {
 
           {/* Packages + form */}
           <div className='grid gap-6'>
-            <div className='glass-card p-6 md:p-8'>
+            <div className='card-surface p-6 md:p-8'>
               <div className='text-xl md:text-2xl font-black tracking-tight'>Что входит</div>
               <div className='mt-4 grid gap-3 sm:grid-cols-2'>
                 {[

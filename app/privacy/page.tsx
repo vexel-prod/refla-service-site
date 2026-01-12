@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <section className='section'>
       <div className='container'>
-        <div className='glass-card p-7 md:p-10'>
+        <div className='card-surface gradient-border p-7 md:p-10'>
           <h1 className='text-3xl md:text-4xl font-black tracking-tight'>Политика конфиденциальности</h1>
           <p className='mt-4 text-base-content/70'>
             На сайте используется форма заявки. Мы обрабатываем только те данные, которые вы вводите самостоятельно: имя,
