@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ru' suppressHydrationWarning>
       <body className={[play.variable, manrope.variable, nunito.variable, 'font-sans site-bg noise'].join(' ')}>
         <Header />
-        <main>{children}</main>
+        <main className='mt-5'>{children}</main>
         <Footer />
         <Analytics />
         <SpeedInsights />

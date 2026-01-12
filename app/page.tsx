@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import LeadForm from 'components/LeadForm/LeadForm'
 import TypingText from 'components/TypingText/TypingText'
 import BeforeAfterSlider from 'components/BeforeAfterSlider/BeforeAfterSlider'
 
@@ -98,9 +97,10 @@ export default function HomePage() {
 
               <h1 className='mt-6 text-4xl font-black tracking-tight leading-[1.02]'>
                 Зеркало на входную дверь —{' '}
-                <span className='bg-gradient-to-r from-sky-400 via-indigo-400 to-orange-400 bg-clip-text text-transparent'>
-                  <TypingText phrases={['современно', 'аккуратно', 'быстро', 'с гарантией']} />
-                </span>
+                <TypingText
+                  phrases={['современно', 'аккуратно', 'быстро', 'с гарантией']}
+                  className='bg-gradient-to-r from-sky-400 via-indigo-400 to-orange-400 bg-clip-text text-transparent [-webkit-text-fill-color:transparent]'
+                />
               </h1>
 
               <p className='mt-6 text-base md:text-lg text-base-content/70 max-w-xl'>

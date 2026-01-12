@@ -56,7 +56,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className='sticky top-0 z-50'>
+    <header className='fixed top-0 left-0 right-0 z-50'>
       <div
         className={[
           'border-b border-base-content/10',
@@ -67,11 +67,16 @@ export default function Header() {
         <div className='container'>
           <div className='flex items-center justify-between py-3'>
             <div className='flex items-center gap-3'>
-              <Link href='/' className='flex items-center gap-2 rounded-2xl px-2 py-1 focus-ring'>
+              <Link
+                href='/'
+                className='flex items-center gap-2 rounded-2xl px-2 py-1 focus-ring'
+              >
                 <LogoMark />
                 <div className='leading-tight'>
                   <div className='font-black tracking-tight text-base md:text-lg'>REFLA</div>
-                  <div className='text-[11px] md:text-xs text-base-content/60 -mt-0.5'>зеркала на двери</div>
+                  <div className='text-[11px] md:text-xs text-base-content/60 -mt-0.5'>
+                    зеркала на двери
+                  </div>
                 </div>
               </Link>
 
@@ -99,14 +104,31 @@ export default function Header() {
             <div className='flex items-center gap-2'>
               <ThemeToggle />
 
-              <Link href='/request' className='btn btn-primary rounded-full shimmer focus-ring hidden sm:inline-flex'>
+              <Link
+                href='/request'
+                className='btn btn-primary rounded-full shimmer focus-ring hidden sm:inline-flex'
+              >
                 Рассчитать стоимость
               </Link>
 
               <div className='dropdown dropdown-end lg:hidden'>
-                <label tabIndex={0} className='btn btn-ghost btn-sm rounded-full focus-ring'>
-                  <svg width='20' height='20' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
-                    <path d='M4 7h16M4 12h16M4 17h16' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+                <label
+                  tabIndex={0}
+                  className='btn btn-ghost btn-sm rounded-full focus-ring'
+                >
+                  <svg
+                    width='20'
+                    height='20'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    aria-hidden='true'
+                  >
+                    <path
+                      d='M4 7h16M4 12h16M4 17h16'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                    />
                   </svg>
                 </label>
                 <ul
@@ -115,13 +137,19 @@ export default function Header() {
                 >
                   {NAV.map((it) => (
                     <li key={it.href}>
-                      <Link href={it.href} className={isActive(it.href) ? 'active font-semibold' : ''}>
+                      <Link
+                        href={it.href}
+                        className={isActive(it.href) ? 'active font-semibold' : ''}
+                      >
                         {it.label}
                       </Link>
                     </li>
                   ))}
                   <li className='mt-2'>
-                    <Link href='/request' className='btn btn-primary btn-sm w-full'>
+                    <Link
+                      href='/request'
+                      className='btn btn-primary btn-sm w-full'
+                    >
                       Заказать замер
                     </Link>
                   </li>
