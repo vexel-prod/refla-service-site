@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import styles from './QuoteLeadForm.module.css'
-import PricingCalculator from 'components/PricingCalculator/PricingCalculator'
+import { PricingClient } from 'app/pricing/page-client'
 
 type Region = 'spb' | 'area'
 
@@ -43,9 +43,6 @@ type QuoteLeadFormProps = {
 
 export default function QuoteLeadForm({
   quote,
-  calcState,
-  setCalcState,
-  calcResult,
 }: QuoteLeadFormProps) {
   const [name, setName] = React.useState('')
   const [contact, setContact] = React.useState('')
@@ -57,7 +54,7 @@ export default function QuoteLeadForm({
   const [error, setError] = React.useState<string | null>(null)
   const [hp, setHp] = React.useState('') // honeypot
 
-  const [copyToast, setCopyToast] = React.useState<string | null>(null)
+  const [setCopyToast] = React.useState<string | null>(null)
 
   const contactValid = React.useMemo(() => {
     const v = contact.trim()
@@ -99,39 +96,6 @@ export default function QuoteLeadForm({
     ]
     return lines.filter(Boolean).join('\n')
   }, [quote])
-
-  const handleCopyEstimate = React.useCallback(() => {
-    if (!estimate) return
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(estimate)
-        .then(() => {
-          setCopyToast('Смета скопирована в буфер обмена.')
-          setTimeout(() => setCopyToast(null), 2000)
-        })
-        .catch(() => {
-          setCopyToast('Не удалось скопировать смету.')
-          setTimeout(() => setCopyToast(null), 2000)
-        })
-      return
-    }
-
-    try {
-      const textarea = document.getElementById('estimate') as HTMLTextAreaElement | null
-      if (textarea) {
-        textarea.focus()
-        textarea.select()
-        document.execCommand('copy')
-        window.getSelection()?.removeAllRanges()
-        setCopyToast('Смета скопирована в буфер обмена.')
-        setTimeout(() => setCopyToast(null), 2000)
-      }
-    } catch {
-      setCopyToast('Не удалось скопировать смету.')
-      setTimeout(() => setCopyToast(null), 2000)
-    }
-  }, [estimate])
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -235,13 +199,7 @@ export default function QuoteLeadForm({
 
         <div className={styles.layout}>
           <div className={styles.left}>
-            <PricingCalculator
-              region={quote.region}
-              state={calcState}
-              setState={setCalcState}
-              result={calcResult}
-              fmt={fmtMoney}
-            />
+            <PricingClient />
             <div className={styles.summaryCard}>
               <div className={styles.summaryLabel}>Черновой расчёт</div>
               <div className={styles.summaryTotal}>{fmtMoney(quote.total)}</div>
@@ -284,7 +242,10 @@ export default function QuoteLeadForm({
           <div className={styles.right}>
             <div className={styles.grid}>
               <div>
-                <label className='label' htmlFor='name'>
+                <label
+                  className='label'
+                  htmlFor='name'
+                >
                   Ваше имя *
                 </label>
                 <input
@@ -299,7 +260,10 @@ export default function QuoteLeadForm({
               </div>
 
               <div>
-                <label className='label' htmlFor='contact'>
+                <label
+                  className='label'
+                  htmlFor='contact'
+                >
                   Контакт (телефон или e-mail) *
                 </label>
                 <input
@@ -313,14 +277,20 @@ export default function QuoteLeadForm({
                   aria-invalid={contact.trim() !== '' && !contactValid}
                 />
                 {!contactValid && contact.trim() !== '' && (
-                  <div className='error' style={{ marginTop: 6 }}>
+                  <div
+                    className='error'
+                    style={{ marginTop: 6 }}
+                  >
                     Укажите телефон или e-mail.
                   </div>
                 )}
               </div>
 
               <div className={styles.addressField}>
-                <label className='label' htmlFor='address'>
+                <label
+                  className='label'
+                  htmlFor='address'
+                >
                   Адрес установки *
                 </label>
                 <input
@@ -368,7 +338,10 @@ export default function QuoteLeadForm({
             </div> */}
 
             <div>
-              <label className='label' htmlFor='notes'>
+              <label
+                className='label'
+                htmlFor='notes'
+              >
                 Ваши пожелания
               </label>
               <textarea
@@ -400,7 +373,10 @@ export default function QuoteLeadForm({
 
             <div className={styles.policy}>
               Нажимая «Оформить заявку», вы соглашаетесь с{' '}
-              <a href='/privacy/' className={styles.policyLink}>
+              <a
+                href='/privacy/'
+                className={styles.policyLink}
+              >
                 политикой обработки персональных данных
               </a>
               .

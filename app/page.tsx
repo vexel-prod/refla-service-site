@@ -153,8 +153,8 @@ export default function HomePage() {
                 </div>
                 <div className='mt-5'>
                   <BeforeAfterSlider
-                    beforeSrc='/assets/7.jpg'
-                    afterSrc='/assets/12.jpg'
+                    beforeSrc='/assets/before.jpg'
+                    afterSrc='/assets/after.png'
                   />
                 </div>
               </div>

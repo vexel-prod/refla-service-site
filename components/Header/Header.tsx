@@ -38,7 +38,6 @@ function LogoMark() {
       <rect x='4' y='3' width='24' height='26' rx='8' stroke='url(#g)' strokeWidth='2' />
       <path d='M11 9.5c3.8-2 6.2-2 10 0' stroke='url(#g)' strokeWidth='2' strokeLinecap='round' />
       <path d='M12 22c3 1.7 5 1.7 8 0' stroke='url(#g)' strokeWidth='2' strokeLinecap='round' opacity='0.75' />
-      <path d='M18 7v18' stroke='rgba(255,255,255,.25)' strokeWidth='2' strokeLinecap='round' />
     </svg>
   )
 }

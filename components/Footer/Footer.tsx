@@ -1,9 +1,17 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import { CONTACTS } from 'app/contacts/page'
 
 const year = new Date().getFullYear()
 
 function SocialIcon({ name }: { name: 'tg' | 'wa' | 'call' }) {
-  const common = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', 'aria-hidden': true as const }
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    'aria-hidden': true as const,
+  }
   if (name === 'call')
     return (
       <svg {...common}>
@@ -41,7 +49,12 @@ function SocialIcon({ name }: { name: 'tg' | 'wa' | 'call' }) {
         strokeWidth='2'
         strokeLinejoin='round'
       />
-      <path d='M9 14l10-7' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
+      <path
+        d='M9 14l10-7'
+        stroke='currentColor'
+        strokeWidth='2'
+        strokeLinecap='round'
+      />
     </svg>
   )
 }
@@ -50,85 +63,51 @@ export default function Footer() {
   return (
     <footer className='mt-10'>
       <div className='container'>
-        <div className='card-surface gradient-border p-7 md:p-10'>
-          <div className='grid gap-8 md:grid-cols-2'>
+        <div className='card-surface p-7 md:p-10'>
+          <div className='flex justify-between'>
             <div>
               <div className='font-black text-xl tracking-tight'>REFLA</div>
               <p className='mt-3 text-sm text-base-content/70 max-w-md'>
-                Зеркала на входные двери под ключ: замер, подготовка, монтаж. Аккуратно, безопасно и с гарантией.
+                Зеркала на входные двери под ключ: замер, подготовка, монтаж. Аккуратно, безопасно и
+                с гарантией.
               </p>
-
-              <div className='mt-5 flex flex-wrap gap-2'>
-                <Link href='/request' className='btn btn-primary rounded-full shimmer focus-ring'>
-                  Рассчитать стоимость
-                </Link>
-                <Link href='/examples' className='btn btn-ghost rounded-full focus-ring'>
-                  Примеры работ
-                </Link>
-              </div>
-
-              <div className='mt-5 flex items-center gap-3 text-sm text-base-content/70'>
-                <span className='inline-flex items-center gap-2'>
-                  <span className='h-2 w-2 rounded-full bg-success animate-pulse' aria-hidden='true' />
-                  Отвечаем в рабочее время
-                </span>
-              </div>
             </div>
 
-            <div className='grid gap-6 sm:grid-cols-2'>
-              <div>
-                <div className='text-sm font-semibold'>Навигация</div>
-                <ul className='mt-3 space-y-2 text-sm text-base-content/70'>
-                  <li>
-                    <Link className='link link-hover' href='/pricing'>Цены</Link>
-                  </li>
-                  <li>
-                    <Link className='link link-hover' href='/about'>О компании</Link>
-                  </li>
-                  <li>
-                    <Link className='link link-hover' href='/contacts'>Контакты</Link>
-                  </li>
-                  <li>
-                    <Link className='link link-hover' href='/privacy'>Политика конфиденциальности</Link>
-                  </li>
-                </ul>
+            <div className='flex flex-col items-center'>
+              <div className='flex gap-4'>
+                {CONTACTS.map((c) => (
+                  <a
+                    key={c.title}
+                    href={c.href}
+                    className='flex flex-row gap-5 items-center'
+                  >
+                    {/* Иконка */}
+                    <div className='shrink-0 h-11 w-11 rounded-2xl bg-base-100/70 border border-base-content/10 grid place-items-center group-hover:scale-105 transition'>
+                      <Image
+                        src={c.icon.src}
+                        alt={c.icon.title}
+                        width={22}
+                        height={22}
+                        className='opacity-80'
+                      />
+                    </div>
+                  </a>
+                ))}
               </div>
-
-              <div>
-                <div className='text-sm font-semibold'>Связь</div>
-                <div className='mt-3 space-y-2 text-sm text-base-content/70'>
-                  <div className='flex items-center gap-2'>
-                    <SocialIcon name='tg' />
-                    <span>Telegram</span>
-                    <span className='text-xs text-base-content/50'>(по запросу)</span>
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    <SocialIcon name='wa' />
-                    <span>WhatsApp</span>
-                    <span className='text-xs text-base-content/50'>(по запросу)</span>
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    <SocialIcon name='call' />
-                    <span>Звонок</span>
-                    <span className='text-xs text-base-content/50'>(по запросу)</span>
-                  </div>
-                </div>
-
-                <div className='mt-5 rounded-2xl border border-base-content/10 bg-base-100/50 p-4 text-sm'>
-                  <div className='font-semibold'>Санкт‑Петербург и область</div>
-                  <div className='mt-1 text-base-content/70'>Выезд на замер • монтаж • гарантия</div>
-                </div>
+              <div className='mt-5 flex items-center gap-3 text-sm text-base-content/70'>
+                <span className='inline-flex items-center gap-2'>
+                  <span
+                    className='h-2 w-2 rounded-full bg-success animate-pulse'
+                    aria-hidden='true'
+                  />
+                  Отвечаем в рабочее время
+                </span>
               </div>
             </div>
           </div>
 
           <div className='mt-8 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between border-t border-base-content/10 pt-6 text-xs text-base-content/60'>
             <div>© {year} REFLA. Все права защищены.</div>
-            <div className='flex items-center gap-3'>
-              <Link href='/privacy' className='link link-hover'>Политика</Link>
-              <span className='opacity-50'>•</span>
-              <span>Сайт обновлён: v2 UI</span>
-            </div>
           </div>
         </div>
       </div>
