@@ -114,7 +114,7 @@ function calcPrice({
   const measurePart = measureBase
 
   // сборка по услугам (чтобы выбор услуги реально менял итог)
-  let parts = {
+  const parts = {
     glass: 0,
     edge: 0,
     options: 0,
@@ -304,7 +304,6 @@ export function PricingClient() {
                   h={h}
                   setW={setW}
                   setH={setH}
-                  presets={SIZE_PRESETS}
                   imageSrc='/assets/door.png'
                 />
 

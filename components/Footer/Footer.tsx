@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import Image from 'next/image'
 import { CONTACTS } from 'app/contacts/page'
+import MetrikaInformer from 'components/YaMetrika/MetrikaInformer'
 
 const year = new Date().getFullYear()
 
@@ -79,6 +79,7 @@ export default function Footer() {
                   <a
                     key={c.title}
                     href={c.href}
+                    target='_blank'
                     className='flex flex-row gap-5 items-center'
                   >
                     {/* Иконка */}
@@ -108,6 +109,8 @@ export default function Footer() {
 
           <div className='mt-8 flex flex-col md:flex-row gap-3 items-start md:items-center justify-between border-t border-base-content/10 pt-6 text-xs text-base-content/60'>
             <div>© {year} REFLA. Все права защищены.</div>
+
+            <MetrikaInformer />
           </div>
         </div>
       </div>

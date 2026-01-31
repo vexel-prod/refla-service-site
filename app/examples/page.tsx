@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import Gallery from 'components/Gallery/Gallery'
 
 export const metadata = {

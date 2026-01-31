@@ -11,7 +11,6 @@ type Props = {
   setW: (n: number) => void
   setH: (n: number) => void
   imageSrc?: string
-  presets?: { w: number; h: number; label: string }[]
 }
 
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
@@ -22,7 +21,6 @@ export default function PricingDoorVizPhoto({
   setW,
   setH,
   imageSrc = '/assets/door.png',
-  presets = [],
 }: Props) {
   const [focus, setFocus] = React.useState<Focus>('none')
   const [draftW, setDraftW] = React.useState<string>(String(w))
@@ -140,61 +138,6 @@ export default function PricingDoorVizPhoto({
             />
           )}
         </div>
-
-        {/* Панель ввода (оставил как дубль + пресеты; можно убрать) */}
-        {/* <div className='space-y-3 min-w-0'>
-
-          <div className='rounded-3xl border border-base-content/10 bg-base-100/50 p-4'>
-            <div className='grid grid-cols-2 gap-3'>
-              <label className='form-control'>
-                <div className='label'>
-                  <span className='label-text'>Ширина (см)</span>
-                </div>
-                <input
-                  type='number'
-                  className='input input-bordered rounded-2xl focus-ring'
-                  value={w}
-                  min={30}
-                  max={120}
-                  onChange={(e) => setW(clamp(Number(e.target.value || 0), 30, 120))}
-                />
-              </label>
-
-              <label className='form-control'>
-                <div className='label'>
-                  <span className='label-text'>Высота (см)</span>
-                </div>
-                <input
-                  type='number'
-                  className='input input-bordered rounded-2xl focus-ring'
-                  value={h}
-                  min={60}
-                  max={220}
-                  onChange={(e) => setH(clamp(Number(e.target.value || 0), 60, 220))}
-                />
-              </label>
-            </div>
-
-            {presets.length > 0 && (
-              <div className='mt-3 flex flex-wrap gap-2'>
-                {presets.map((p) => (
-                  <button
-                    key={p.label}
-                    type='button'
-                    className='btn btn-sm btn-ghost rounded-full'
-                    onClick={() => {
-                      setW(p.w)
-                      setH(p.h)
-                      setFocus('none')
-                    }}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div> */}
       </div>
     </div>
   )

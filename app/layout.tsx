@@ -6,6 +6,9 @@ import 'app/globals.css'
 import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
 
+import Metrika from 'components/YaMetrika/YaMetrika'
+import MetrikaRouteTracker from 'components/YaMetrika/MetrikaRouteTracker'
+
 const play = Play({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '700'],
@@ -23,7 +26,6 @@ const nunito = Nunito_Sans({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-nunito',
   display: 'swap',
-  preload: false,
 })
 
 export const metadata: Metadata = {
@@ -40,11 +42,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ru' suppressHydrationWarning>
-      <body className={[play.variable, manrope.variable, nunito.variable, 'font-sans site-bg noise'].join(' ')}>
+    <html
+      lang='ru'
+      suppressHydrationWarning
+    >
+      <body
+        className={[
+          play.variable,
+          manrope.variable,
+          nunito.variable,
+          'font-sans site-bg noise',
+        ].join(' ')}
+      >
         <Header />
         <main className='mt-5'>{children}</main>
         <Footer />
+        <Metrika />
+        <MetrikaRouteTracker />
         <Analytics />
         <SpeedInsights />
       </body>

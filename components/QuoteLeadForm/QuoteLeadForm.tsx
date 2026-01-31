@@ -41,9 +41,7 @@ type QuoteLeadFormProps = {
   calcResult: any
 }
 
-export default function QuoteLeadForm({
-  quote,
-}: QuoteLeadFormProps) {
+export default function QuoteLeadForm({ quote }: QuoteLeadFormProps) {
   const [name, setName] = React.useState('')
   const [contact, setContact] = React.useState('')
   const [address, setAddress] = React.useState('')
@@ -53,8 +51,6 @@ export default function QuoteLeadForm({
   const [success, setSuccess] = React.useState<string | null>(null)
   const [error, setError] = React.useState<string | null>(null)
   const [hp, setHp] = React.useState('') // honeypot
-
-  const [setCopyToast] = React.useState<string | null>(null)
 
   const contactValid = React.useMemo(() => {
     const v = contact.trim()
@@ -81,8 +77,8 @@ export default function QuoteLeadForm({
         quote.edgeType === 'polish'
           ? 'полировка'
           : quote.edgeType === 'facet'
-          ? 'фацет'
-          : 'без обработки'
+            ? 'фацет'
+            : 'без обработки'
       }`,
       `Монтаж: ${quote.includeMount ? 'да' : 'нет'}, Демонтаж: ${
         quote.includeDemount ? 'да' : 'нет'
@@ -225,8 +221,8 @@ export default function QuoteLeadForm({
                     {quote.edgeType === 'polish'
                       ? 'Полировка'
                       : quote.edgeType === 'facet'
-                      ? 'Фацет'
-                      : 'Без обработки'}
+                        ? 'Фацет'
+                        : 'Без обработки'}
                   </dd>
                 </div>
                 {quote.region === 'area' && (

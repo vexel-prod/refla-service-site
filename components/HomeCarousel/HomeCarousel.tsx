@@ -56,13 +56,17 @@ export default function HomeCarousel() {
       dragging = false
       el.style.transition = ''
       const width = el.clientWidth
-      if (Math.abs(diff) > width * 0.15) diff < 0 ? next() : prev()
-      else {
+
+      if (Math.abs(diff) > width * 0.15) {
+        if (diff < 0) next()
+        else prev()
+      } else {
         el.style.transform = ''
         el.getBoundingClientRect() // reflow
         el.style.transform = `translateX(${-index * 100}%)`
       }
     }
+
 
     el.addEventListener('touchstart', onTouchStart, { passive: true })
     el.addEventListener('touchmove', onTouchMove, { passive: true })
