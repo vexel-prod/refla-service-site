@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/next'
 import { Manrope, Nunito_Sans, Play } from 'next/font/google'
+import { Suspense } from 'react'
 import 'app/globals.css'
 import Header from 'components/Header/Header'
 import Footer from 'components/Footer/Footer'
@@ -58,7 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className='mt-5'>{children}</main>
         <Footer />
         <Metrika />
-        <MetrikaRouteTracker />
+        <Suspense>
+          <MetrikaRouteTracker />
+        </Suspense>
         <Analytics />
         <SpeedInsights />
       </body>
