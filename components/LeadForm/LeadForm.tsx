@@ -30,13 +30,24 @@ export default function LeadForm({
   const [err, setErr] = useState<string | null>(null)
 
   const ftRef = useRef<number>(0)
+
+  // timestamp старта заполнения (анти-бот)
   useEffect(() => {
     if (!ftRef.current) ftRef.current = Date.now()
   }, [])
 
+  // автоподстановка сметы из прайса (sessionStorage)
+  useEffect(() => {
+    const v = sessionStorage.getItem('lead_prefill_comment')
+    if (v && v.trim()) {
+      setComment((prev) => (prev ? `${prev}\n\n${v}` : v))
+      sessionStorage.removeItem('lead_prefill_comment')
+    }
+  }, [])
+
+  // cleanup object URLs на размонтирование
   useEffect(() => {
     return () => {
-      // cleanup object URLs
       for (const p of photos) URL.revokeObjectURL(p.url)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,19 +119,17 @@ export default function LeadForm({
       fd.set('address', address.trim())
       fd.set('comment', comment.trim())
       fd.set('hp', hp)
-      // анти-бот тайминг: отправляем timestamp начала заполнения (как число)
       fd.set('ft', String(ftRef.current || Date.now()))
 
-      // multiple photos: photo[] (важно имя)
       for (const p of photos) fd.append('photo[]', p.file)
 
-      const res = await fetch('/api/lead.php', { method: 'POST', body: fd })
-      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+      const res = await fetch('/api/lead.php', {
+        method: 'POST',
+        body: fd,
+      })
 
-      if (!res.ok || !data?.ok) {
-        console.error('lead_error', res.status, data)
-        throw new Error(data?.error || 'send_failed')
-      }
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+      if (!res.ok || !data?.ok) throw new Error(data?.error || 'send_failed')
 
       setOk('Заявка отправлена. Мы свяжемся с вами в ближайшее время.')
       setName('')
@@ -128,7 +137,6 @@ export default function LeadForm({
       setAddress('')
       setComment('')
       setHp('')
-      // cleanup previews
       for (const p of photos) URL.revokeObjectURL(p.url)
       setPhotos([])
       ftRef.current = Date.now()
@@ -207,7 +215,6 @@ export default function LeadForm({
             className='file-input file-input-bordered w-full rounded-2xl focus-ring'
             onChange={(e) => {
               addFiles(e.target.files)
-              // чтобы можно было выбрать те же файлы повторно
               e.currentTarget.value = ''
             }}
             disabled={photos.length >= MAX_PHOTOS}

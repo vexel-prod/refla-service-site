@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
 import PricingDoorVizPhoto from 'components/PricingDoorViz/PricingDoorVizPhoto'
 
 type Region = 'spb' | 'area'
@@ -82,7 +81,6 @@ function calcPrice({
 }) {
   const areaM2 = calcAreaM2(w, h)
 
-  // База (оставил вашу логику, но сделал коэффициенты материал/толщина)
   const baseGlass = 6900
   const perM2 = 5200
 
@@ -99,9 +97,7 @@ function calcPrice({
   const materialK = MATERIALS.find((m) => m.id === material)?.k ?? 1
   const thicknessK = THICKNESS.find((t) => t.id === thickness)?.k ?? 1
 
-  // стекло
   let glass = baseGlass + Math.max(0, areaM2 - 0.8) * perM2
-
   glass *= materialK
   glass *= thicknessK
 
@@ -113,7 +109,6 @@ function calcPrice({
   const mountPart = mountBase
   const measurePart = measureBase
 
-  // сборка по услугам (чтобы выбор услуги реально менял итог)
   const parts = {
     glass: 0,
     edge: 0,
@@ -151,13 +146,10 @@ function calcPrice({
     parts.edge = edgePart
     parts.options = cutoutsPart + safetyPart
     parts.mount = mountPart
-    parts.demount = demountPart // если oldMirror включён
+    parts.demount = demountPart
     parts.travel = delivery
-    parts.measure = 0 // при желании можно включить
+    parts.measure = 0
   }
-
-  // если выбран не "delivery", но регион область — можно учитывать выезд как часть услуги.
-  // Для простоты: добавляем delivery только в 'turnkey' и 'delivery'. При желании расширим.
 
   let subtotal =
     parts.glass +
@@ -182,26 +174,21 @@ function calcPrice({
 
 export function PricingClient() {
   const [region, setRegion] = React.useState<Region>('spb')
-
-  // выбор услуги/параметров
   const [service, setService] = React.useState<Service>('turnkey')
 
-  // размеры
-  const [w, setW] = React.useState(60) // см
-  const [h, setH] = React.useState(120) // см
+  const [w, setW] = React.useState(60)
+  const [h, setH] = React.useState(120)
 
-  // материал/толщина
   const [material, setMaterial] = React.useState<Material>('silver')
   const [thickness, setThickness] = React.useState<Thickness>(4)
 
-  // опции
   const [edge, setEdge] = React.useState<'polish' | 'facet'>('polish')
   const [cutouts, setCutouts] = React.useState(false)
   const [oldMirror, setOldMirror] = React.useState(false)
   const [safetyFilm, setSafetyFilm] = React.useState(false)
   const [urgent, setUrgent] = React.useState(false)
 
-  const [km, setKm] = React.useState(10) // для области
+  const [km, setKm] = React.useState(10)
 
   const { areaM2, parts, total, delivery } = React.useMemo(
     () =>
@@ -224,6 +211,71 @@ export function PricingClient() {
 
   const showMirrorParams = service === 'mirror' || service === 'turnkey'
   const showDeliveryKm = region === 'area' && (service === 'turnkey' || service === 'delivery')
+
+  const buildEstimate = React.useCallback(() => {
+    const serviceLabel = SERVICES.find((x) => x.id === service)?.label ?? service
+    const materialLabel = MATERIALS.find((x) => x.id === material)?.label ?? material
+    const thicknessLabel = THICKNESS.find((x) => x.id === thickness)?.label ?? `${thickness} мм`
+
+    const lines: string[] = []
+    lines.push('Смета с калькулятора:')
+    lines.push(`Услуга: ${serviceLabel}`)
+    lines.push(`Регион: ${region === 'spb' ? 'СПб' : 'Область'}`)
+    lines.push(`Размер: ${w}×${h} см (≈ ${areaM2.toFixed(2)} м²)`)
+
+    if (showMirrorParams) {
+      lines.push(`Материал: ${materialLabel}`)
+      lines.push(`Толщина: ${thicknessLabel}`)
+      lines.push(`Кромка: ${edge === 'facet' ? 'Фацет' : 'Полировка'}`)
+      if (cutouts) lines.push('Опция: Вырезы под фурнитуру')
+      if (safetyFilm) lines.push('Опция: Защитная плёнка')
+      if (oldMirror) lines.push('Опция: Демонтаж старого зеркала')
+      if (urgent) lines.push('Опция: Срочно (+12%)')
+    }
+
+    if (showDeliveryKm) {
+      lines.push(`Удалённость: ${km} км от КАД (доставка: ${money(delivery)})`)
+    }
+
+    lines.push('')
+    lines.push('Разбивка:')
+    if (parts.glass) lines.push(`— Зеркало: ${money(parts.glass)}`)
+    if (parts.edge) lines.push(`— Кромка: ${money(parts.edge)}`)
+    if (parts.options) lines.push(`— Опции: ${money(parts.options)}`)
+    if (parts.mount) lines.push(`— Монтаж: ${money(parts.mount)}`)
+    if (parts.demount) lines.push(`— Демонтаж: ${money(parts.demount)}`)
+    if (parts.measure) lines.push(`— Замер: ${money(parts.measure)}`)
+    if (parts.travel) lines.push(`— Доставка: ${money(parts.travel)}`)
+
+    lines.push('')
+    lines.push(`Итого: ${money(total)}`)
+
+    return lines.join('\n')
+  }, [
+    service,
+    region,
+    w,
+    h,
+    areaM2,
+    showMirrorParams,
+    material,
+    thickness,
+    edge,
+    cutouts,
+    safetyFilm,
+    oldMirror,
+    urgent,
+    showDeliveryKm,
+    km,
+    delivery,
+    parts,
+    total,
+  ])
+
+  const goToRequest = React.useCallback(() => {
+    sessionStorage.setItem('lead_prefill_comment', buildEstimate())
+    window.location.href = '/request'
+  }, [buildEstimate])
 
   return (
     <section className='section'>
@@ -259,14 +311,12 @@ export function PricingClient() {
         </div>
 
         <div className='flex flex-col gap-5 mt-5'>
-          {/* Calculator */}
           <div className='card-surface gradient-border p-6 md:p-8'>
             <div className='flex items-center justify-between gap-4'>
               <div className='text-xl md:text-2xl font-black tracking-tight'>Калькулятор</div>
               <div className='badge badge-outline'>live</div>
             </div>
 
-            {/* Услуги */}
             <div className='mt-6'>
               <div className='text-sm text-base-content/70 mb-2'>Выберите услугу</div>
               <div className='grid gap-2 sm:grid-cols-2'>
@@ -295,10 +345,8 @@ export function PricingClient() {
               </div>
             </div>
 
-            {/* Параметры зеркала */}
             {showMirrorParams && (
               <div className='flex flex-col gap-6 mt-2'>
-                {/* Визуальный замер (реальная дверь картинкой) */}
                 <PricingDoorVizPhoto
                   w={w}
                   h={h}
@@ -307,7 +355,6 @@ export function PricingClient() {
                   imageSrc='/assets/door.png'
                 />
 
-                {/* Поля размеров + пресеты (для быстрого ввода) */}
                 <div className='grid gap-4'>
                   <div className='grid grid-cols-2 gap-3'>
                     <label className='form-control'>
@@ -476,7 +523,6 @@ export function PricingClient() {
               </div>
             )}
 
-            {/* Доставка для области */}
             {showDeliveryKm && (
               <div className='mt-6 form-control'>
                 <div className='label'>
@@ -500,7 +546,6 @@ export function PricingClient() {
 
             <div className='divider my-6' />
 
-            {/* Итог + breakdown */}
             <div className='grid gap-4'>
               <div className='flex items-end justify-between gap-6'>
                 <div>
@@ -510,12 +555,14 @@ export function PricingClient() {
                     Точная цена — после замера
                   </div>
                 </div>
-                <Link
-                  href='/request'
+
+                <button
+                  type='button'
+                  onClick={goToRequest}
                   className='btn btn-primary rounded-full'
                 >
                   Заказать замер
-                </Link>
+                </button>
               </div>
 
               <details className='rounded-3xl border border-base-content/10 bg-base-100/50 p-4'>
@@ -561,62 +608,23 @@ export function PricingClient() {
             </div>
           </div>
 
-          {/* <div className='grid gap-6'>
-            <div className='card-surface p-6 md:p-8'>
-              <div className='text-xl md:text-2xl font-black tracking-tight'>Что входит</div>
-              <div className='mt-4 grid gap-3 sm:grid-cols-2'>
-                {[
-                  ['Замер и консультация', 'Подскажем размер, кромку, крепление.'],
-                  ['Подготовка зеркала', 'Кромка, вырезы (если нужны).'],
-                  ['Монтаж', 'Аккуратно, с проверкой и уборкой.'],
-                  ['Гарантия', 'На монтаж и материалы.'],
-                ].map(([t, d]) => (
-                  <div
-                    key={t}
-                    className='rounded-3xl border border-base-content/10 bg-base-100/50 p-5'
-                  >
-                    <div className='font-semibold'>{t}</div>
-                    <div className='mt-2 text-sm text-base-content/70'>{d}</div>
-                  </div>
-                ))}
+          {/* Sticky итог на мобилке — БЕЗ горизонтального скролла */}
+          <div className='lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-full max-w-[520px] px-4'>
+            <div className='rounded-3xl border border-base-content/10 bg-base-100/80 supports-[backdrop-filter]:bg-base-100/60 backdrop-blur-xl p-4 shadow-lg shadow-base-300/30 overflow-hidden'>
+              <div className='flex items-center justify-between gap-3 min-w-0'>
+                <div className='text-sm text-base-content/70'>Итого</div>
+                <div className='text-xl font-black whitespace-nowrap'>{money(total)}</div>
               </div>
 
-              <div className='mt-6 alert'>
-                <span className='text-sm'>
-                  Нужны нестандартные решения? Напишите в{' '}
-                  <Link
-                    href='/contacts'
-                    className='link'
-                  >
-                    контакты
-                  </Link>{' '}
-                  — подскажем.
-                </span>
+              <div className='mt-2'>
+                <button
+                  type='button'
+                  onClick={goToRequest}
+                  className='btn btn-primary rounded-full w-full'
+                >
+                  Оставить заявку
+                </button>
               </div>
-            </div>
-
-            <LeadForm
-              title='Получить точную смету'
-              subtitle='Укажите адрес и удобный способ связи — уточним детали.'
-            />
-          </div> */}
-        </div>
-
-        {/* Sticky итог на мобилке — БЕЗ горизонтального скролла */}
-        <div className='lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-full max-w-[520px] px-4'>
-          <div className='rounded-3xl border border-base-content/10 bg-base-100/80 supports-[backdrop-filter]:bg-base-100/60 backdrop-blur-xl p-4 shadow-lg shadow-base-300/30 overflow-hidden'>
-            <div className='flex items-center justify-between gap-3 min-w-0'>
-              <div className='text-sm text-base-content/70'>Итого</div>
-              <div className='text-xl font-black whitespace-nowrap'>{money(total)}</div>
-            </div>
-
-            <div className='mt-2'>
-              <Link
-                href='/request'
-                className='btn btn-primary rounded-full w-full'
-              >
-                Оставить заявку
-              </Link>
             </div>
           </div>
         </div>
